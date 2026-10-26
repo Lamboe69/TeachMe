@@ -54,7 +54,14 @@ export function SessionActions({
     const updated = await complete(session);
     setPending(null);
     if (updated) {
-      toast.success('Session marked as completed', 'The student can now leave a review.');
+      if (updated.status === 'COMPLETED') {
+        toast.success('Session completed', 'Both parties confirmed. The tutor has been paid.');
+      } else {
+        toast.success(
+          'Confirmation recorded',
+          'Waiting for the other party to confirm before payment is released.',
+        );
+      }
     }
   };
 
@@ -103,7 +110,7 @@ export function SessionActions({
             disabled={busy}
             onClick={() => setPending('complete')}
           >
-            Mark completed
+            Confirm session happened
           </Button>
         ) : null}
 
@@ -133,9 +140,9 @@ export function SessionActions({
 
       <ConfirmDialog
         open={pending === 'complete'}
-        title="Mark this session as completed?"
-        description="Only do this once the lesson has actually taken place. The student will then be able to leave a review."
-        confirmLabel="Yes, mark completed"
+        title="Confirm this session took place?"
+        description="Only confirm once the lesson has actually happened. Both you and the other party must confirm before TutorUG releases the payment."
+        confirmLabel="Yes, it took place"
         confirmVariant="success"
         loading={pendingAction === 'complete'}
         onConfirm={handleComplete}

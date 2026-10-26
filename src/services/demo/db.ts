@@ -1,6 +1,9 @@
+import { WEEK_DAYS } from '@/utils/availability';
 import type {
+  AvailabilitySlot,
   Review,
   Session,
+  SessionMessage,
   SessionStatus,
   TutorSummary,
   User,
@@ -39,6 +42,7 @@ export interface DemoDb {
   tutors: TutorSummary[];
   reviews: Review[];
   sessions: Session[];
+  messages: SessionMessage[];
   wallets: Record<string, Wallet>;
   transactions: WalletTransaction[];
   escrows: Record<string, DemoEscrow>;
@@ -49,7 +53,7 @@ export const DEMO_STUDENT_EMAIL = 'mary.demo@tutorug.ug';
 export const DEMO_TUTOR_EMAIL = 'sarah.demo@tutorug.ug';
 export const DEMO_PASSWORD = 'Demo1234';
 
-const STORAGE_KEY = 'tutorug.demo.db.v1';
+const STORAGE_KEY = 'tutorug.demo.db.v3';
 
 function at(daysFromNow: number, hour: number, minute = 0): string {
   const date = new Date();
@@ -64,7 +68,7 @@ function at(daysFromNow: number, hour: number, minute = 0): string {
 
 const TUTORS: TutorSummary[] = [
   {
-    id: 'tutor-sarah',
+    id: 'tutor-001',
     fullName: 'Sarah Namutebi',
     email: DEMO_TUTOR_EMAIL,
     subjects: ['Mathematics', 'Further Mathematics', 'Physics'],
@@ -78,7 +82,7 @@ const TUTORS: TutorSummary[] = [
     avatarUrl: null,
   },
   {
-    id: 'tutor-brian',
+    id: 'tutor-002',
     fullName: 'Brian Odong',
     email: 'brian.demo@tutorug.ug',
     subjects: ['Mathematics', 'ICT', 'Computer Studies'],
@@ -92,7 +96,7 @@ const TUTORS: TutorSummary[] = [
     avatarUrl: null,
   },
   {
-    id: 'tutor-grace',
+    id: 'tutor-003',
     fullName: 'Grace Nakimera',
     email: 'grace.demo@tutorug.ug',
     subjects: ['English Literature', 'Kiswahili', 'Creative Writing'],
@@ -106,7 +110,7 @@ const TUTORS: TutorSummary[] = [
     avatarUrl: null,
   },
   {
-    id: 'tutor-isaac',
+    id: 'tutor-004',
     fullName: 'Isaac Mugisha',
     email: 'isaac.demo@tutorug.ug',
     subjects: ['Physics', 'Chemistry'],
@@ -120,7 +124,7 @@ const TUTORS: TutorSummary[] = [
     avatarUrl: null,
   },
   {
-    id: 'tutor-juliet',
+    id: 'tutor-005',
     fullName: 'Juliet Achieng',
     email: 'juliet.demo@tutorug.ug',
     subjects: ['Biology', 'Chemistry', 'Agriculture'],
@@ -134,7 +138,7 @@ const TUTORS: TutorSummary[] = [
     avatarUrl: null,
   },
   {
-    id: 'tutor-peter',
+    id: 'tutor-006',
     fullName: 'Peter Wasswa',
     email: 'peter.demo@tutorug.ug',
     subjects: ['Mathematics', 'Further Mathematics'],
@@ -148,7 +152,7 @@ const TUTORS: TutorSummary[] = [
     avatarUrl: null,
   },
   {
-    id: 'tutor-christine',
+    id: 'tutor-007',
     fullName: 'Christine Atuhaire',
     email: 'christine.demo@tutorug.ug',
     subjects: ['Chemistry', 'Biology'],
@@ -162,7 +166,7 @@ const TUTORS: TutorSummary[] = [
     avatarUrl: null,
   },
   {
-    id: 'tutor-daniel',
+    id: 'tutor-008',
     fullName: 'Daniel Kizito',
     email: 'daniel.demo@tutorug.ug',
     subjects: ['ICT', 'Computer Studies', 'Programming'],
@@ -190,7 +194,7 @@ const USERS: DemoUser[] = [
     password: DEMO_PASSWORD,
   },
   {
-    id: 'tutor-sarah',
+    id: 'tutor-001',
     fullName: 'Sarah Namutebi',
     email: DEMO_TUTOR_EMAIL,
     role: 'TUTOR',
@@ -288,7 +292,7 @@ function buildSessions(): Session[] {
     {
       id: 'session-001',
       student: userById('student-mary'),
-      tutor: tutorById('tutor-sarah'),
+      tutor: tutorById('tutor-001'),
       subject: 'Mathematics',
       scheduledAt: at(2, 10, 0),
       durationMinutes: 60,
@@ -296,6 +300,8 @@ function buildSessions(): Session[] {
       message: 'I am stuck on quadratic equations and my CAT is next week. Could we focus on completing the square?',
       fee: 85000,
       notes: null,
+      studentConfirmedAt: null,
+      tutorConfirmedAt: null,
       hasReview: false,
       reviewId: null,
       createdAt: at(-1, 18, 12),
@@ -304,7 +310,7 @@ function buildSessions(): Session[] {
     {
       id: 'session-002',
       student: userById('student-mary'),
-      tutor: tutorById('tutor-grace'),
+      tutor: tutorById('tutor-003'),
       subject: 'English Literature',
       scheduledAt: at(-6, 14, 0),
       durationMinutes: 60,
@@ -312,6 +318,8 @@ function buildSessions(): Session[] {
       message: 'Please help me structure my poetry analysis essay.',
       fee: 50000,
       notes: 'Reviewed the introduction and outline.',
+      studentConfirmedAt: at(-6, 15, 30),
+      tutorConfirmedAt: at(-6, 15, 35),
       hasReview: true,
       reviewId: 'review-001',
       createdAt: at(-9, 12, 5),
@@ -320,7 +328,7 @@ function buildSessions(): Session[] {
     {
       id: 'session-003',
       student: userById('student-mary'),
-      tutor: tutorById('tutor-brian'),
+      tutor: tutorById('tutor-002'),
       subject: 'ICT',
       scheduledAt: at(5, 15, 30),
       durationMinutes: 60,
@@ -328,6 +336,8 @@ function buildSessions(): Session[] {
       message: 'We are covering databases in class and I need help with normalisation.',
       fee: 45000,
       notes: null,
+      studentConfirmedAt: null,
+      tutorConfirmedAt: null,
       hasReview: false,
       reviewId: null,
       createdAt: at(-2, 9, 40),
@@ -336,7 +346,7 @@ function buildSessions(): Session[] {
     {
       id: 'session-004',
       student: userById('student-isaac-k'),
-      tutor: tutorById('tutor-sarah'),
+      tutor: tutorById('tutor-001'),
       subject: 'Physics',
       scheduledAt: at(1, 8, 0),
       durationMinutes: 90,
@@ -344,6 +354,8 @@ function buildSessions(): Session[] {
       message: 'I need help with rotational dynamics before our physics test on Friday.',
       fee: 127500,
       notes: null,
+      studentConfirmedAt: null,
+      tutorConfirmedAt: null,
       hasReview: false,
       reviewId: null,
       createdAt: at(-1, 20, 15),
@@ -352,7 +364,7 @@ function buildSessions(): Session[] {
     {
       id: 'session-005',
       student: userById('student-racheal'),
-      tutor: tutorById('tutor-sarah'),
+      tutor: tutorById('tutor-001'),
       subject: 'Mathematics',
       scheduledAt: at(-10, 16, 0),
       durationMinutes: 60,
@@ -360,6 +372,8 @@ function buildSessions(): Session[] {
       message: 'Help with integration by parts.',
       fee: 85000,
       notes: 'Completed a full past paper walkthrough.',
+      studentConfirmedAt: at(-10, 17, 10),
+      tutorConfirmedAt: at(-10, 17, 20),
       hasReview: true,
       reviewId: 'review-002',
       createdAt: at(-14, 8, 20),
@@ -368,7 +382,7 @@ function buildSessions(): Session[] {
     {
       id: 'session-006',
       student: userById('student-peace'),
-      tutor: tutorById('tutor-sarah'),
+      tutor: tutorById('tutor-001'),
       subject: 'Chemistry',
       scheduledAt: at(3, 12, 0),
       durationMinutes: 60,
@@ -376,6 +390,8 @@ function buildSessions(): Session[] {
       message: 'Balancing chemical equations is confusing me. Could we do a revision session?',
       fee: 85000,
       notes: null,
+      studentConfirmedAt: null,
+      tutorConfirmedAt: null,
       hasReview: false,
       reviewId: null,
       createdAt: at(-1, 21, 30),
@@ -384,7 +400,7 @@ function buildSessions(): Session[] {
     {
       id: 'session-007',
       student: userById('student-daniel-o'),
-      tutor: tutorById('tutor-sarah'),
+      tutor: tutorById('tutor-001'),
       subject: 'Further Mathematics',
       scheduledAt: at(-20, 11, 0),
       durationMinutes: 60,
@@ -392,6 +408,8 @@ function buildSessions(): Session[] {
       message: 'Vectors and matrices.',
       fee: 60000,
       notes: null,
+      studentConfirmedAt: null,
+      tutorConfirmedAt: null,
       hasReview: false,
       reviewId: null,
       createdAt: at(-25, 10, 0),
@@ -405,7 +423,7 @@ function buildReviews(): Review[] {
     {
       id: 'review-001',
       sessionId: 'session-002',
-      tutorId: 'tutor-grace',
+      tutorId: 'tutor-003',
       studentId: 'student-mary',
       studentName: 'Mary Namutebi',
       rating: 5,
@@ -416,7 +434,7 @@ function buildReviews(): Review[] {
     {
       id: 'review-002',
       sessionId: 'session-005',
-      tutorId: 'tutor-sarah',
+      tutorId: 'tutor-001',
       studentId: 'student-racheal',
       studentName: 'Racheal Nabbosa',
       rating: 5,
@@ -427,7 +445,7 @@ function buildReviews(): Review[] {
     {
       id: 'review-003',
       sessionId: null,
-      tutorId: 'tutor-sarah',
+      tutorId: 'tutor-001',
       studentId: null,
       studentName: 'Brian Kaggwa',
       rating: 5,
@@ -437,7 +455,7 @@ function buildReviews(): Review[] {
     {
       id: 'review-004',
       sessionId: null,
-      tutorId: 'tutor-sarah',
+      tutorId: 'tutor-001',
       studentId: null,
       studentName: 'Nadia Ssewanyana',
       rating: 4,
@@ -447,7 +465,7 @@ function buildReviews(): Review[] {
     {
       id: 'review-005',
       sessionId: null,
-      tutorId: 'tutor-grace',
+      tutorId: 'tutor-003',
       studentId: null,
       studentName: 'Ernest Lubowa',
       rating: 5,
@@ -457,7 +475,7 @@ function buildReviews(): Review[] {
     {
       id: 'review-006',
       sessionId: null,
-      tutorId: 'tutor-brian',
+      tutorId: 'tutor-002',
       studentId: null,
       studentName: 'Fiona Namazzi',
       rating: 4,
@@ -467,7 +485,7 @@ function buildReviews(): Review[] {
     {
       id: 'review-007',
       sessionId: null,
-      tutorId: 'tutor-juliet',
+      tutorId: 'tutor-005',
       studentId: null,
       studentName: 'Samuel Okot',
       rating: 5,
@@ -477,7 +495,7 @@ function buildReviews(): Review[] {
     {
       id: 'review-008',
       sessionId: null,
-      tutorId: 'tutor-daniel',
+      tutorId: 'tutor-008',
       studentId: null,
       studentName: 'Annika Nsubuga',
       rating: 5,
@@ -498,8 +516,8 @@ function seedWallets(): Record<string, Wallet> {
       currency: 'UGX',
       updatedAt: now,
     },
-    'tutor-sarah': {
-      userId: 'tutor-sarah',
+    'tutor-001': {
+      userId: 'tutor-001',
       availableBalance: 185000,
       escrowBalance: 0,
       currency: 'UGX',
@@ -535,7 +553,7 @@ function seedTransactions(): WalletTransaction[] {
     },
     {
       id: 'txn-seed-003',
-      userId: 'tutor-sarah',
+      userId: 'tutor-001',
       type: 'SESSION_EARNING',
       amount: 72250,
       balanceAfter: 72250,
@@ -546,7 +564,7 @@ function seedTransactions(): WalletTransaction[] {
     },
     {
       id: 'txn-seed-004',
-      userId: 'tutor-sarah',
+      userId: 'tutor-001',
       type: 'SESSION_EARNING',
       amount: 72250,
       balanceAfter: 144500,
@@ -557,7 +575,7 @@ function seedTransactions(): WalletTransaction[] {
     },
     {
       id: 'txn-seed-005',
-      userId: 'tutor-sarah',
+      userId: 'tutor-001',
       type: 'SESSION_EARNING',
       amount: 40500,
       balanceAfter: 185000,
@@ -584,6 +602,10 @@ export function ensureWalletRecords(db: DemoDb): void {
     db.escrows = {};
     changed = true;
   }
+  if (!Array.isArray(db.messages)) {
+    db.messages = [];
+    changed = true;
+  }
   if (Object.keys(db.wallets).length === 0) {
     db.wallets = seedWallets();
     db.transactions = seedTransactions();
@@ -593,19 +615,38 @@ export function ensureWalletRecords(db: DemoDb): void {
     db.wallets['student-mary'] = seedWallets()['student-mary'];
     changed = true;
   }
-  if (!db.wallets['tutor-sarah']) {
-    db.wallets['tutor-sarah'] = seedWallets()['tutor-sarah'];
+  if (!db.wallets['tutor-001']) {
+    db.wallets['tutor-001'] = seedWallets()['tutor-001'];
     changed = true;
   }
   if (changed) writeStorage(db);
 }
 
+const AVAILABILITY_START = ['08:00', '09:00', '10:00', '14:00'];
+const AVAILABILITY_END = ['17:00', '18:00', '19:00', '20:00'];
+
+/** Give every demo tutor a realistic weekly schedule out of the box. */
+function buildAvailability(index: number): AvailabilitySlot[] {
+  const start = AVAILABILITY_START[index % AVAILABILITY_START.length];
+  const end = AVAILABILITY_END[index % AVAILABILITY_END.length];
+  return WEEK_DAYS.map((day, dayIndex) => ({
+    day,
+    enabled: dayIndex < 5 || (dayIndex === 5 && index % 2 === 0),
+    start,
+    end,
+  }));
+}
+
 function seed(): DemoDb {
   return {
     users: USERS.map((user) => ({ ...user })),
-    tutors: TUTORS.map((tutor) => ({ ...tutor })),
+    tutors: TUTORS.map((tutor, index) => ({
+      ...tutor,
+      availability: buildAvailability(index),
+    })),
     reviews: buildReviews(),
     sessions: buildSessions(),
+    messages: [],
     wallets: seedWallets(),
     transactions: seedTransactions(),
     escrows: {},
@@ -696,6 +737,8 @@ export function makeSession(
     message,
     fee,
     notes: null,
+    studentConfirmedAt: null,
+    tutorConfirmedAt: null,
     hasReview: false,
     reviewId: null,
     createdAt: new Date().toISOString(),

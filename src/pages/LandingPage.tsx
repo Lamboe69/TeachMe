@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 import {
   ArrowRight,
   Calendar,
   GraduationCap,
   Heart,
+  LayoutDashboard,
   Menu,
   Search,
   Shield,
@@ -29,6 +31,9 @@ function Logo() {
 function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { user, status } = useAuth();
+  const isSignedIn = status === 'authenticated' && !!user;
+  const dashboardPath = user?.role === 'TUTOR' ? '/tutor/dashboard' : '/student/dashboard';
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -51,8 +56,20 @@ function Navbar() {
           <a href="#faq" className="text-sm font-semibold text-ink-700 transition hover:text-green-700">FAQ</a>
         </div>
         <div className="hidden items-center gap-3 lg:flex">
-          <Link to="/login" className="px-4 py-2 text-sm font-semibold text-ink-700 transition hover:text-green-700">Log in</Link>
-          <Link to="/register" className="rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-2.5 text-sm font-bold text-white shadow-lg transition hover:shadow-xl hover:scale-105">Get started</Link>
+          {isSignedIn ? (
+            <Link
+              to={dashboardPath}
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-2.5 text-sm font-bold text-white shadow-lg transition hover:shadow-xl hover:scale-105"
+            >
+              <LayoutDashboard className="h-4 w-4" />
+              Dashboard
+            </Link>
+          ) : (
+            <>
+              <Link to="/login" className="px-4 py-2 text-sm font-semibold text-ink-700 transition hover:text-green-700">Log in</Link>
+              <Link to="/register" className="rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-2.5 text-sm font-bold text-white shadow-lg transition hover:shadow-xl hover:scale-105">Get started</Link>
+            </>
+          )}
         </div>
         <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="grid h-11 w-11 place-items-center rounded-xl text-ink-700 lg:hidden" aria-label="Menu">
           {mobileMenuOpen ? <X /> : <Menu />}
@@ -69,8 +86,20 @@ function Navbar() {
             <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 font-semibold">How it works</a>
             <a href="#become-tutor" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 font-semibold">Become a tutor</a>
             <div className="mt-4 flex flex-col gap-3 border-t pt-4">
-              <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-center font-semibold">Log in</Link>
-              <Link to="/register" onClick={() => setMobileMenuOpen(false)} className="rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-3 text-center font-bold text-white">Get started</Link>
+              {isSignedIn ? (
+                <Link
+                  to={dashboardPath}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-3 text-center font-bold text-white"
+                >
+                  Go to dashboard
+                </Link>
+              ) : (
+                <>
+                  <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 text-center font-semibold">Log in</Link>
+                  <Link to="/register" onClick={() => setMobileMenuOpen(false)} className="rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-3 text-center font-bold text-white">Get started</Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -150,9 +179,9 @@ function Hero() {
                 <g transform="translate(50, 80)">
                   <rect width="400" height="100" rx="20" fill="white" filter="drop-shadow(0 20px 40px rgb(0 0 0 / 0.1))"/>
                   <circle cx="50" cy="50" r="30" fill="#16a34a"/>
-                  <text x="50" y="58" fontSize="20" fontWeight="800" fill="white" textAnchor="middle">SN</text>
-                  <text x="100" y="38" fontFamily="Bricolage Grotesque" fontSize="22" fontWeight="800" fill="#111827">Sarah Namutebi</text>
-                  <text x="100" y="62" fontSize="13" fill="#6b7280">Verified • Makerere University</text>
+                  <text x="50" y="58" fontSize="20" fontWeight="800" fill="white" textAnchor="middle">VT</text>
+                  <text x="100" y="38" fontFamily="Bricolage Grotesque" fontSize="22" fontWeight="800" fill="#111827">Verified tutor</text>
+                  <text x="100" y="62" fontSize="13" fill="#6b7280">Verified peer tutor</text>
                   <rect x="320" y="35" width="60" height="30" rx="15" fill="#dcfce7"/>
                   <text x="350" y="54" fontSize="13" fontWeight="700" fill="#166534" textAnchor="middle">★ 4.9</text>
                 </g>
@@ -277,6 +306,9 @@ function CTA() {
 }
 
 function Footer() {
+  const { user, status } = useAuth();
+  const isSignedIn = status === 'authenticated' && !!user;
+  const dashboardPath = user?.role === 'TUTOR' ? '/tutor/dashboard' : '/student/dashboard';
   return (
     <footer className="border-t border-green-200 bg-white">
       <div className="container-page py-12">
@@ -287,7 +319,9 @@ function Footer() {
             <Link to="/tutors" className="text-ink-700 hover:text-green-700">Find tutors</Link>
             <a href="#how-it-works" className="text-ink-700 hover:text-green-700">How it works</a>
             <a href="#become-tutor" className="text-ink-700 hover:text-green-700">Become a tutor</a>
-            <Link to="/login" className="text-ink-700 hover:text-green-700">Log in</Link>
+            <Link to={isSignedIn ? dashboardPath : '/login'} className="text-ink-700 hover:text-green-700">
+              {isSignedIn ? 'Dashboard' : 'Log in'}
+            </Link>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <span className="rounded-lg bg-green-50 px-4 py-2 text-sm font-semibold text-green-800 ring-1 ring-green-200">MTN MoMo</span>

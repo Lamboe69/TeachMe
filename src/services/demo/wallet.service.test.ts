@@ -1,13 +1,36 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { PLATFORM_FEE_PERCENT } from '@/app/config';
+import { WEEK_DAYS } from '@/utils/availability';
 import { getDb, resetDb, saveDb } from './db';
 import * as sessions from './sessions.service';
 import * as wallet from './wallet.service';
+
+function openEveryDay() {
+  const db = getDb();
+  for (const tutor of db.tutors) {
+    tutor.availability = WEEK_DAYS.map((day) => ({
+      day,
+      enabled: true,
+      start: '08:00',
+      end: '21:00',
+    }));
+  }
+  saveDb();
+}
 
 function signInAs(userId: string) {
   const db = getDb();
   db.currentUserId = userId;
   saveDb();
+}
+
+function moveSessionIntoPast(sessionId: string) {
+  const db = getDb();
+  const session = db.sessions.find((entry) => entry.id === sessionId);
+  if (session) {
+    session.scheduledAt = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    saveDb();
+  }
 }
 
 function tomorrowAt(hour: number): string {
@@ -19,6 +42,7 @@ function tomorrowAt(hour: number): string {
 
 beforeEach(() => {
   resetDb();
+  openEveryDay();
   signInAs('student-mary');
 });
 
@@ -54,7 +78,7 @@ describe('demo wallet', () => {
 
   it('holds the session fee in escrow and refunds it on cancellation', async () => {
     const session = await sessions.create({
-      tutorId: 'tutor-sarah',
+      tutorId: 'tutor-001',
       subject: 'Mathematics',
       scheduledAt: tomorrowAt(14),
       message: 'Quadratic equations please.',
@@ -74,15 +98,25 @@ describe('demo wallet', () => {
 
   it('releases earnings to the tutor minus the platform fee on completion', async () => {
     const session = await sessions.create({
-      tutorId: 'tutor-sarah',
+      tutorId: 'tutor-001',
       subject: 'Mathematics',
       scheduledAt: tomorrowAt(15),
     });
 
-    signInAs('tutor-sarah');
+    signInAs('tutor-001');
     await sessions.updateStatus(session.id, 'ACCEPTED');
-    await sessions.updateStatus(session.id, 'COMPLETED');
+    moveSessionIntoPast(session.id);
+    const afterTutorConfirmation = await sessions.updateStatus(session.id, 'COMPLETED');
+    expect(afterTutorConfirmation.status).toBe('ACCEPTED');
+    expect(afterTutorConfirmation.tutorConfirmedAt).toBeTruthy();
+    expect(afterTutorConfirmation.studentConfirmedAt).toBeNull();
 
+    signInAs('student-mary');
+    const completed = await sessions.updateStatus(session.id, 'COMPLETED');
+    expect(completed.status).toBe('COMPLETED');
+    expect(completed.studentConfirmedAt).toBeTruthy();
+
+    signInAs('tutor-001');
     const tutorWallet = await wallet.getWallet();
     const net = 85000 - Math.round((85000 * PLATFORM_FEE_PERCENT) / 100);
     expect(tutorWallet.escrowBalance).toBe(0);

@@ -38,7 +38,9 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBound
   }
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
-    console.error('Tutor UG encountered an unexpected error:', error, info.componentStack);
+    const safeMessage = String(error?.message ?? error).replace(/[\r\n]/g, ' ');
+    const safeStack = String(info.componentStack ?? '').replace(/[\r\n\t]/g, ' ').slice(0, 500);
+    console.error('Tutor UG encountered an unexpected error:', safeMessage, safeStack);
   }
 
   render() {

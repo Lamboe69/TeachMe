@@ -26,11 +26,11 @@ const NO_ACTIONS: SessionActions = {
 };
 
 export function isTutorOwner(session: Session, user: User | null): boolean {
-  return user?.role === 'TUTOR' && session.tutor?.id === user.id;
+  return !!user && session.tutor?.id === user.id;
 }
 
 export function isStudentOwner(session: Session, user: User | null): boolean {
-  return user?.role === 'STUDENT' && session.student?.id === user.id;
+  return !!user && session.student?.id === user.id;
 }
 
 export function getSessionActions(session: Session, user: User | null): SessionActions {
@@ -43,7 +43,11 @@ export function getSessionActions(session: Session, user: User | null): SessionA
       case 'REQUESTED':
         return { ...NO_ACTIONS, canAccept: true, canReject: true };
       case 'ACCEPTED':
-        return { ...NO_ACTIONS, canComplete: true, canCancel: true };
+        return {
+          ...NO_ACTIONS,
+          canComplete: !session.tutorConfirmedAt && isPast(session),
+          canCancel: true,
+        };
       default:
         return NO_ACTIONS;
     }
@@ -58,8 +62,8 @@ export function getSessionActions(session: Session, user: User | null): SessionA
           ...NO_ACTIONS,
           canCancel: true,
           canMessage: true,
-          // A student may confirm a session that has already taken place.
-          canComplete: isPast(session),
+          // Both parties confirm independently once the session has taken place.
+          canComplete: !session.studentConfirmedAt && isPast(session),
         };
       case 'COMPLETED':
         return {

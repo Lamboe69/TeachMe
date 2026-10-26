@@ -71,10 +71,10 @@ export function BrandStage({ mode = 'login', role = 'learner' }: { mode?: 'login
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <p className="font-bold text-ink-950">Sarah Namutebi</p>
+                  <p className="font-bold text-ink-950">Verified tutor</p>
                   <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-800">Verified</span>
                 </div>
-                <p className="text-xs text-ink-600">Makerere • Calculus I</p>
+                <p className="text-xs text-ink-600">Calculus I</p>
                 <div className="mt-1 flex items-center gap-1">
                   <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
                   <span className="text-xs font-semibold">4.9</span>

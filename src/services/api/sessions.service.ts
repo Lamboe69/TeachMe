@@ -1,8 +1,8 @@
 import { apiClient } from './client';
 import { API_ENDPOINTS } from './endpoints';
-import { mapList, mapSession } from './mappers';
+import { mapList, mapSession, mapSessionMessage } from './mappers';
 import type { CreateSessionRequest, UpdateSessionStatusRequest } from '@/types/api';
-import type { Session } from '@/types';
+import type { Session, SessionMessage } from '@/types';
 
 /** All sessions that belong to the authenticated user (student or tutor). */
 export async function listMine(): Promise<Session[]> {
@@ -42,4 +42,18 @@ export async function updateStatus(
   const record = (data ?? {}) as Record<string, unknown>;
   const nested = (record['data'] ?? record['session'] ?? record) as Record<string, unknown>;
   return mapSession(nested);
+}
+
+/** Messages for a paid session. Only participants can read them. */
+export async function listMessages(sessionId: string): Promise<SessionMessage[]> {
+  const { data } = await apiClient.get(API_ENDPOINTS.sessions.messages(sessionId));
+  return mapList(data, mapSessionMessage);
+}
+
+/** Send a message to the other party after the session fee is paid. */
+export async function sendMessage(sessionId: string, body: string): Promise<SessionMessage> {
+  const { data } = await apiClient.post(API_ENDPOINTS.sessions.messages(sessionId), { body });
+  const record = (data ?? {}) as Record<string, unknown>;
+  const nested = (record['data'] ?? record['message'] ?? record) as Record<string, unknown>;
+  return mapSessionMessage(nested);
 }

@@ -48,6 +48,13 @@ export const TutorDashboardPage = lazy(() =>
 export const TutorSessionsPage = lazy(() =>
   import('@/pages/TutorSessionsPage').then((m) => ({ default: m.TutorSessionsPage })),
 );
+export const TutorProfileEditPage = lazy(() =>
+  import('@/pages/TutorProfileEditPage').then((m) => ({ default: m.TutorProfileEditPage })),
+);
+export const TutorAvailabilityPage = lazy(() =>
+  import('@/pages/TutorAvailabilityPage').then((m) => ({ default: m.TutorAvailabilityPage })),
+);
+
 export const WalletPage = lazy(() =>
   import('@/pages/WalletPage').then((m) => ({ default: m.WalletPage })),
 );

@@ -31,6 +31,7 @@ export const API_ENDPOINTS = {
     byId: (id: string) => `/api/sessions/${id}`,
     status: (id: string) => `/api/sessions/${id}/status`,
     reviews: (id: string) => `/api/sessions/${id}/reviews`,
+    messages: (id: string) => `/api/sessions/${id}/messages`,
   },
   users: {
     me: '/api/users/me',

@@ -111,6 +111,8 @@ describe('sessionPermissions', () => {
       message: null,
       fee: 85000,
       notes: null,
+      studentConfirmedAt: null,
+      tutorConfirmedAt: null,
       hasReview: false,
       reviewId: null,
       createdAt: null,

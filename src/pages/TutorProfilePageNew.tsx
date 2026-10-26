@@ -19,6 +19,7 @@ import {
 import { useAsyncData } from '@/hooks/useAsyncData';
 import { useAuth } from '@/context/AuthContext';
 import { services } from '@/services';
+import { expandAvailabilitySlot, WEEK_DAYS } from '@/utils/availability';
 import { firstName, formatDate, formatRate } from '@/utils/format';
 
 function Shell({ children }: { children: React.ReactNode }) {
@@ -140,7 +141,7 @@ export function TutorProfilePageNew() {
   const { data: tutor, error, loading } = useAsyncData(() => services.tutors.get(id), [id]);
 
   const isSignedIn = status === 'authenticated' && !!user;
-  const isTutor = user?.role === 'TUTOR';
+  const isOwnProfile = !!user && !!tutor && user.id === tutor.id;
 
   if (loading) {
     return (
@@ -223,12 +224,12 @@ export function TutorProfilePageNew() {
                       {tutor.rating ? tutor.rating.toFixed(1) : '—'}
                       <span className="font-normal text-ink-600">({tutor.reviewCount} reviews)</span>
                     </span>
-                    {tutor.location && (
+                    {tutor.location ? (
                       <span className="inline-flex items-center gap-1.5 text-ink-600">
                         <MapPin className="h-4 w-4" />
                         {tutor.location}
                       </span>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -282,8 +283,42 @@ export function TutorProfilePageNew() {
             </div>
           </section>
 
+          {tutor.availability?.some((slot) => slot.enabled) ? (
+            <section className="rounded-2xl bg-white p-6 shadow-lg ring-1 ring-green-200 sm:p-8">
+              <div className="flex items-center justify-between gap-3">
+                <h2 className="text-xl font-bold text-ink-950">Weekly availability</h2>
+                <span className="rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700 ring-1 ring-green-200">
+                  East Africa Time
+                </span>
+              </div>
+              <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                {WEEK_DAYS.map((day) => {
+                  const times = (tutor.availability ?? [])
+                    .filter((slot) => slot.day === day)
+                    .flatMap(expandAvailabilitySlot);
+                  return (
+                    <div
+                      key={day}
+                      className="flex items-center justify-between gap-3 rounded-xl bg-green-50/60 px-4 py-3 ring-1 ring-green-100"
+                    >
+                      <span className="text-sm font-semibold text-ink-900">{day}</span>
+                      <span className={`text-right text-sm ${times.length > 0 ? 'text-green-700' : 'text-ink-400'}`}>
+                        {times.length > 0 ? times.join(', ') : 'Unavailable'}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="mt-3 text-xs text-ink-500">
+                Bookings are limited to these times. Times may be adjusted by the tutor.
+              </p>
+            </section>
+          ) : null}
+
           <section className="rounded-2xl bg-white p-6 shadow-lg ring-1 ring-green-200 sm:p-8">
-            <h2 className="text-xl font-bold text-ink-950">About {firstName(tutor.fullName)}</h2>
+            <h2 className="text-xl font-bold text-ink-950">
+              About {firstName(tutor.fullName)}
+            </h2>
             {tutor.bio ? (
               <p className="mt-3 whitespace-pre-line leading-relaxed text-ink-700">{tutor.bio}</p>
             ) : (
@@ -372,13 +407,13 @@ export function TutorProfilePageNew() {
               ))}
             </div>
 
-            {isSignedIn && !isTutor && (
+            {isSignedIn && !isOwnProfile && (
               <button
                 onClick={() => navigate(`/sessions/book/${tutor.id}`)}
                 className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-3.5 font-bold text-white shadow-lg transition hover:shadow-xl"
               >
                 <CalendarClock className="h-5 w-5" />
-                Book a session
+                Pay & book this tutor
               </button>
             )}
 
@@ -400,11 +435,15 @@ export function TutorProfilePageNew() {
               </div>
             )}
 
-            {isSignedIn && isTutor && (
+            {isSignedIn && isOwnProfile && (
               <div className="mt-6 rounded-xl bg-amber-50 p-4 text-sm text-amber-900 ring-1 ring-amber-200">
-                Tutors cannot book sessions. Switch to a student account to request a lesson.
+                This is your public profile. Update your details or availability from your dashboard.
               </div>
             )}
+
+            <p className="mt-4 rounded-xl bg-white/10 px-3 py-2 text-xs text-white/85">
+              Paying holds the session fee in escrow and unlocks chat with this tutor.
+            </p>
 
             <div className="mt-6 space-y-2 border-t border-green-100 pt-4 text-xs text-ink-600">
               <p className="flex items-center gap-2">

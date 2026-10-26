@@ -1,8 +1,10 @@
 import { throwAppError } from '@/utils/apiError';
+import { availabilityForDay, weekdayForDate } from '@/utils/availability';
 import type { CreateSessionRequest, UpdateSessionStatusRequest } from '@/types/api';
 import type { Session, SessionStatus } from '@/types';
 import { findTutorById, findUserById, getDb, makeSession, saveDb, toSafeUser } from './db';
 import { holdSessionFunds, refundSessionFunds, releaseSessionEarnings } from './wallet.service';
+export { listMessages, sendMessage } from './messages.service';
 
 function delay(ms = 400): Promise<void> {
   return new Promise((resolve) => {
@@ -54,13 +56,12 @@ export async function create(payload: CreateSessionRequest): Promise<Session> {
   if (!student) {
     throwAppError(401, 'Your session has expired. Please sign in again.');
   }
-  if (student.role !== 'STUDENT') {
-    throwAppError(403, 'Only student accounts can request tutoring sessions.');
-  }
-
   const tutor = findTutorById(payload.tutorId);
   if (!tutor) {
     throwAppError(404, 'We could not find that tutor.');
+  }
+  if (tutor.id === student.id) {
+    throwAppError(400, 'You cannot book a session with yourself.');
   }
 
   const scheduled = new Date(payload.scheduledAt);
@@ -72,6 +73,24 @@ export async function create(payload: CreateSessionRequest): Promise<Session> {
   if (scheduled.getTime() <= Date.now()) {
     throwAppError(400, 'Please choose a date and time in the future.', {
       scheduledAt: 'Please choose a date and time in the future.',
+    });
+  }
+
+  const hasAvailability = tutor.availability?.some((slot) => slot.enabled);
+  if (!hasAvailability) {
+    throwAppError(400, 'This tutor has not published any available times yet.', {
+      scheduledAt: 'Booking opens once the tutor publishes their availability.',
+    });
+  }
+
+  const availableTimes = availabilityForDay(
+    tutor.availability,
+    weekdayForDate(payload.scheduledAt.slice(0, 10)),
+  );
+  const requestedTime = payload.scheduledAt.slice(11, 16);
+  if (!availableTimes.includes(requestedTime)) {
+    throwAppError(400, 'That time is outside the tutor’s availability.', {
+      scheduledAt: 'Choose a time the tutor has marked as available.',
     });
   }
 
@@ -145,10 +164,6 @@ export async function updateStatus(
     }
   }
 
-  if (next === 'COMPLETED' && !isTutor) {
-    throwAppError(403, 'Only the tutor can mark a session as completed.');
-  }
-
   if (next === 'CANCELLED' && session.status === 'COMPLETED') {
     throwAppError(409, 'A completed session cannot be cancelled.');
   }
@@ -161,16 +176,41 @@ export async function updateStatus(
     );
   }
 
+  if (next === 'COMPLETED') {
+    if (new Date(session.scheduledAt).getTime() > Date.now()) {
+      throwAppError(400, 'You can only confirm after the scheduled session time.');
+    }
+    // Both parties must confirm the session happened before money moves.
+    const alreadyConfirmed = isTutor ? session.tutorConfirmedAt : session.studentConfirmedAt;
+    if (alreadyConfirmed) {
+      throwAppError(409, 'You have already confirmed this session.');
+    }
+
+    const now = new Date().toISOString();
+    if (isTutor) {
+      session.tutorConfirmedAt = now;
+    } else {
+      session.studentConfirmedAt = now;
+    }
+    session.updatedAt = now;
+
+    if (session.studentConfirmedAt && session.tutorConfirmedAt) {
+      session.status = 'COMPLETED';
+      // Release the escrowed fee to the tutor, minus the platform fee.
+      releaseSessionEarnings(session);
+    }
+
+    saveDb();
+    return session;
+  }
+
   session.status = next;
   session.updatedAt = new Date().toISOString();
   if (next === 'CANCELLED' && reason?.trim()) {
     session.notes = reason.trim();
   }
 
-  if (next === 'COMPLETED') {
-    // Release the escrowed fee to the tutor, minus the platform fee.
-    releaseSessionEarnings(session);
-  } else if (next === 'CANCELLED' || next === 'REJECTED') {
+  if (next === 'CANCELLED' || next === 'REJECTED') {
     // Give the student their money back.
     refundSessionFunds(session);
   }

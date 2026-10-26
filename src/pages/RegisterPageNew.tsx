@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen, Mail, Phone, User, Wallet } from 'lucide-react';
+import { PLATFORM_FEE_PERCENT } from '@/app/config';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { toAppError } from '@/utils/apiError';
@@ -30,6 +31,7 @@ export function RegisterPageNew() {
     handleSubmit,
     watch,
     setValue,
+    trigger,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -47,31 +49,65 @@ export function RegisterPageNew() {
   const password = watch('password', '');
   const confirmPassword = watch('confirmPassword', '');
 
+  useEffect(() => {
+    if (status === 'authenticated' && user) {
+      navigate(user.role === 'TUTOR' ? '/tutor/dashboard' : '/student/dashboard', {
+        replace: true,
+      });
+    }
+  }, [status, user, navigate]);
+
   if (status === 'authenticated' && user) {
-    navigate(user.role === 'TUTOR' ? '/tutor/dashboard' : '/student/dashboard', { replace: true });
     return null;
   }
 
-  const nextStep = () => {
+  const nextStep = async () => {
     if (currentStep === 0) {
       setValue('role', role);
+      setCurrentStep(1);
+      return;
+    }
+    if (currentStep === 1) {
+      const detailsAreValid = await trigger(
+        ['fullName', 'email', 'password', 'confirmPassword'],
+        { shouldFocus: true },
+      );
+      if (!detailsAreValid) return;
     }
     setCurrentStep((s) => Math.min(s + 1, steps.length - 1));
   };
 
   const prevStep = () => setCurrentStep((s) => Math.max(s - 1, 0));
 
-  const onSubmit = handleSubmit(async (values) => {
-    setSubmitError(null);
-    try {
-      await registerUser(values);
-      toast.success('Account created successfully!');
-      navigate(values.role === 'TUTOR' ? '/tutor/dashboard' : '/student/dashboard', { replace: true });
-    } catch (error) {
-      const appError = toAppError(error);
-      setSubmitError(appError.message);
-    }
-  });
+  const onSubmit = handleSubmit(
+    async (values) => {
+      setSubmitError(null);
+      try {
+        await registerUser(values);
+        toast.success('Account created successfully!');
+        navigate(values.role === 'TUTOR' ? '/tutor/dashboard' : '/student/dashboard', {
+          replace: true,
+        });
+      } catch (error) {
+        const appError = toAppError(error);
+        setSubmitError(appError.message);
+      }
+    },
+    (invalidFields) => {
+      const detailsNeedFixing = ['fullName', 'email', 'password', 'confirmPassword'].some(
+        (field) => field in invalidFields,
+      );
+      if (detailsNeedFixing) {
+        setCurrentStep(1);
+        setSubmitError('Please check your account details and try again.');
+        return;
+      }
+      if (invalidFields.acceptTerms) {
+        setCurrentStep(3);
+        setSubmitError('Please accept the terms to continue.');
+      }
+    },
+  );
 
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-2">
@@ -187,9 +223,21 @@ export function RegisterPageNew() {
                     </div>
                   </div>
 
-                  <PasswordField label="Password" placeholder="Create a password" register={register('password')} showStrength value={password} />
-                  <PasswordField label="Confirm password" placeholder="Confirm your password" register={register('confirmPassword')} value={confirmPassword} />
-                  {errors.confirmPassword && <p className="text-sm text-red-600">{errors.confirmPassword.message}</p>}
+                  <PasswordField
+                    label="Password"
+                    placeholder="Create a password"
+                    register={register('password')}
+                    error={errors.password?.message}
+                    showStrength
+                    value={password}
+                  />
+                  <PasswordField
+                    label="Confirm password"
+                    placeholder="Confirm your password"
+                    register={register('confirmPassword')}
+                    error={errors.confirmPassword?.message}
+                    value={confirmPassword}
+                  />
 
                   <div className="flex gap-3">
                     <button type="button" onClick={prevStep} className="h-12 flex-1 rounded-xl border-2 border-ink-300 font-bold text-ink-700">
@@ -257,7 +305,9 @@ export function RegisterPageNew() {
                       {...register('acceptTerms')}
                     />
                     <span className="text-sm text-ink-700">
-                      I agree to the Terms and Privacy Policy. I understand that all payments go through TutorUG, which keeps a [X]% service fee on tutor earnings.
+                      I agree to the Terms and Privacy Policy. I understand that all payments go
+                      through TutorUG, which keeps a {PLATFORM_FEE_PERCENT}% service fee on tutor
+                      earnings.
                     </span>
                   </label>
                   {errors.acceptTerms && <p className="text-sm text-red-600">{errors.acceptTerms.message}</p>}

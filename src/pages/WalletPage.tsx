@@ -1,24 +1,19 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import {
   ArrowDownLeft,
   ArrowUpRight,
   Banknote,
-  Calendar,
   CheckCircle2,
   Clock,
-  GraduationCap,
-  Home,
   Info,
   Landmark,
   Plus,
   Receipt,
-  Search,
   Shield,
   Smartphone,
-  User,
   Wallet as WalletIcon,
 } from 'lucide-react';
+import { AppShell } from '@/components/layout/AppShell';
 import { Dialog } from '@/components/ui/Dialog';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
@@ -129,85 +124,7 @@ export function WalletPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fefdfb]">
-      <div className="flex">
-        <aside className="hidden lg:flex lg:w-72 lg:flex-col lg:fixed lg:inset-y-0 bg-white border-r border-green-100">
-          <div className="flex h-20 items-center px-6 border-b border-green-100">
-            <Link to="/" className="flex items-center gap-2.5">
-              <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-green-600 to-emerald-600 shadow-lg">
-                <GraduationCap className="h-6 w-6 text-white" />
-              </div>
-              <span className="font-display text-xl font-extrabold text-ink-950">TutorUG</span>
-            </Link>
-          </div>
-          <nav className="flex-1 px-4 py-6 space-y-1">
-            <Link
-              to={isTutor ? '/tutor/dashboard' : '/student/dashboard'}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-ink-700 hover:bg-green-50 hover:text-green-700 transition"
-            >
-              <Home className="h-5 w-5" />
-              Dashboard
-            </Link>
-            <Link
-              to="/tutors"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-ink-700 hover:bg-green-50 hover:text-green-700 transition"
-            >
-              <Search className="h-5 w-5" />
-              Find tutors
-            </Link>
-            <Link
-              to="/sessions"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-ink-700 hover:bg-green-50 hover:text-green-700 transition"
-            >
-              <Calendar className="h-5 w-5" />
-              Sessions
-            </Link>
-            <Link
-              to="/wallet"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 font-bold"
-            >
-              <WalletIcon className="h-5 w-5" />
-              Wallet
-            </Link>
-            <Link
-              to={isTutor ? '/tutor/profile/edit' : '/student/profile'}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-ink-700 hover:bg-green-50 hover:text-green-700 transition"
-            >
-              <User className="h-5 w-5" />
-              Profile
-            </Link>
-          </nav>
-          <div className="p-4">
-            <div className="rounded-2xl bg-gradient-to-br from-amber-50 to-yellow-50 p-4 ring-1 ring-amber-200">
-              <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-amber-700" />
-                <p className="text-xs font-bold text-amber-900">Escrow protected</p>
-              </div>
-              <p className="mt-1 text-xs text-amber-800">
-                Your money is held by TutorUG until a session is complete.
-              </p>
-            </div>
-          </div>
-        </aside>
-
-        <div className="lg:pl-72 w-full">
-          <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-green-100">
-            <div className="flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
-              <h1 className="text-lg font-bold text-ink-950">Wallet</h1>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-3 rounded-xl bg-green-50 px-3 py-2">
-                  <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-green-600 to-emerald-600 text-sm font-bold text-white">
-                    {user?.fullName?.charAt(0)}
-                  </div>
-                  <span className="hidden text-sm font-semibold text-ink-900 sm:inline">
-                    {user?.fullName}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </header>
-
-          <main className="px-4 py-8 sm:px-6 lg:px-8">
+    <AppShell title="Wallet">
             <div className="mb-8">
               <h2 className="text-3xl font-black tracking-tight text-ink-950 sm:text-4xl">
                 My wallet
@@ -246,20 +163,18 @@ export function WalletPage() {
                       </p>
                       <p className="mt-2 text-sm text-white/75">
                         {isTutor
-                          ? 'Ready to withdraw to your mobile money account.'
+                          ? 'Withdraw your earnings, or top up to book sessions with another tutor.'
                           : 'Use this balance to pay for tutoring sessions.'}
                       </p>
 
                       <div className="mt-7 flex flex-wrap gap-3">
-                        {!isTutor && (
-                          <button
-                            onClick={() => openModal('topup')}
-                            className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-bold text-green-800 shadow-lg transition hover:shadow-xl"
-                          >
-                            <Plus className="h-5 w-5" />
-                            Top up
-                          </button>
-                        )}
+                        <button
+                          onClick={() => openModal('topup')}
+                          className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-bold text-green-800 shadow-lg transition hover:shadow-xl"
+                        >
+                          <Plus className="h-5 w-5" />
+                          Top up
+                        </button>
                         <button
                           onClick={() => openModal('withdraw')}
                           className="inline-flex items-center gap-2 rounded-xl border-2 border-white/60 px-6 py-3 font-bold text-white transition hover:bg-white/10"
@@ -335,7 +250,9 @@ export function WalletPage() {
                           </li>
                           <li className="flex items-start gap-2">
                             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-700" />
-                            Withdraw your available balance back to MTN MoMo or Airtel Money at any time.
+                            {isTutor
+                              ? 'You can also learn from other tutors — top up and book using this same wallet.'
+                              : 'Withdraw your available balance back to MTN MoMo or Airtel Money at any time.'}
                           </li>
                         </ul>
                       </div>
@@ -389,7 +306,7 @@ export function WalletPage() {
                       <p className="mt-4 font-semibold text-ink-900">No transactions yet</p>
                       <p className="mt-1 text-sm text-ink-600">
                         {isTutor
-                          ? 'Earnings from completed sessions will appear here.'
+                          ? 'Top up to book another tutor, or complete sessions to earn. Transactions will appear here.'
                           : 'Top up your wallet to start booking sessions.'}
                       </p>
                     </div>
@@ -431,10 +348,6 @@ export function WalletPage() {
                 </section>
               </>
             )}
-          </main>
-        </div>
-      </div>
-
       <Dialog
         open={mode !== null}
         onClose={closeModal}
@@ -563,6 +476,6 @@ export function WalletPage() {
           </div>
         </form>
       </Dialog>
-    </div>
+    </AppShell>
   );
 }

@@ -14,7 +14,9 @@ import {
   SessionsPage,
   StudentDashboardPage,
   StudentProfilePage,
+  TutorAvailabilityPage,
   TutorDashboardPage,
+  TutorProfileEditPage,
   TutorProfilePage,
   TutorSessionsPage,
   TutorsPage,
@@ -73,11 +75,51 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: '/tutor/profile/edit',
+        element: (
+          <RequireAuth>
+            <RequireRole role="TUTOR">
+              <TutorProfileEditPage />
+            </RequireRole>
+          </RequireAuth>
+        ),
+      },
+      {
+        path: '/tutor/availability',
+        element: (
+          <RequireAuth>
+            <RequireRole role="TUTOR">
+              <TutorAvailabilityPage />
+            </RequireRole>
+          </RequireAuth>
+        ),
+      },
+      {
         path: '/tutor/sessions',
         element: (
           <RequireAuth>
             <RequireRole role="TUTOR">
               <TutorSessionsPage />
+            </RequireRole>
+          </RequireAuth>
+        ),
+      },
+      {
+        path: '/tutor/profile/edit',
+        element: (
+          <RequireAuth>
+            <RequireRole role="TUTOR">
+              <TutorProfileEditPage />
+            </RequireRole>
+          </RequireAuth>
+        ),
+      },
+      {
+        path: '/tutor/availability',
+        element: (
+          <RequireAuth>
+            <RequireRole role="TUTOR">
+              <TutorAvailabilityPage />
             </RequireRole>
           </RequireAuth>
         ),
@@ -114,7 +156,7 @@ export const router = createBrowserRouter([
         path: '/sessions/book/:tutorId',
         element: (
           <RequireAuth>
-            <RequireRole role="STUDENT">
+            <RequireRole role={['STUDENT', 'TUTOR']}>
               <BookSessionPage />
             </RequireRole>
           </RequireAuth>

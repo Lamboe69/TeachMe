@@ -12,6 +12,7 @@ import type {
   Page,
   Review,
   Session,
+  SessionMessage,
   Tutor,
   TutorQuery,
   TutorSummary,
@@ -46,6 +47,9 @@ export interface SessionsService {
   get(id: string): Promise<Session>;
   create(payload: CreateSessionRequest): Promise<Session>;
   updateStatus(id: string, status: string, reason?: string): Promise<Session>;
+  /** Chat available to both parties once the session fee has been paid. */
+  listMessages(sessionId: string): Promise<SessionMessage[]>;
+  sendMessage(sessionId: string, body: string): Promise<SessionMessage>;
 }
 
 export interface ReviewsService {

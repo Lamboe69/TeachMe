@@ -19,6 +19,15 @@ export interface User {
   createdAt: string | null;
 }
 
+export interface AvailabilitySlot {
+  day: string;
+  enabled: boolean;
+  start: string;
+  end: string;
+  /** Exact bookable start times when a day has non-contiguous slots. */
+  slots?: string[];
+}
+
 export interface TutorSummary {
   id: string;
   fullName: string;
@@ -33,6 +42,8 @@ export interface TutorSummary {
   yearsExperience: number | null;
   location: string | null;
   avatarUrl: string | null;
+  /** Weekly teaching windows shown on the tutor's profile. */
+  availability?: AvailabilitySlot[] | null;
 }
 
 export interface Tutor extends TutorSummary {
@@ -62,10 +73,23 @@ export interface Session {
   fee: number | null;
   /** Tutor-only notes attached to the session. */
   notes: string | null;
+  /** When the student confirmed the session took place. */
+  studentConfirmedAt: string | null;
+  /** When the tutor confirmed the session took place. */
+  tutorConfirmedAt: string | null;
   hasReview: boolean;
   reviewId: string | null;
   createdAt: string | null;
   updatedAt: string | null;
+}
+
+export interface SessionMessage {
+  id: string;
+  sessionId: string;
+  senderId: string;
+  senderName: string;
+  body: string;
+  createdAt: string | null;
 }
 
 export interface Review {

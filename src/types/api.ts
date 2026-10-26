@@ -51,6 +51,12 @@ export interface UpdateProfileRequest {
   fullName?: string;
   phone?: string;
   bio?: string;
+  /** Tutor-only profile fields. */
+  subjects?: string[];
+  hourlyRate?: number;
+  location?: string;
+  yearsExperience?: number | null;
+  availability?: import('@/types').AvailabilitySlot[];
 }
 
 export interface MobileMoneyRequest {

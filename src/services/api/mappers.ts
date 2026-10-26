@@ -1,5 +1,15 @@
 import type { JsonRecord } from '@/types/api';
-import type { Page, Review, Session, SessionStatus, Tutor, TutorSummary, User, UserRole } from '@/types';
+import type {
+  Page,
+  Review,
+  Session,
+  SessionMessage,
+  SessionStatus,
+  Tutor,
+  TutorSummary,
+  User,
+  UserRole,
+} from '@/types';
 
 /**
  * DTO -> domain mapping.
@@ -211,10 +221,25 @@ export function mapSession(dto: unknown): Session {
     message: asString(pick(d, 'message', 'note', 'studentMessage', 'requestMessage', 'notes')),
     fee: asNumber(pick(d, 'fee', 'price', 'amount', 'totalPrice', 'cost')),
     notes: asString(pick(d, 'notes', 'tutorNotes', 'tutor_notes')),
+    studentConfirmedAt: asString(pick(d, 'studentConfirmedAt', 'student_confirmed_at')),
+    tutorConfirmedAt: asString(pick(d, 'tutorConfirmedAt', 'tutor_confirmed_at')),
     hasReview: hasReviewFlag ?? (Boolean(reviewDto) || Boolean(reviewId)),
     reviewId: reviewId ?? asString(asRecord(reviewDto)['id']),
     createdAt: asString(pick(d, 'createdAt', 'created_at')),
     updatedAt: asString(pick(d, 'updatedAt', 'updated_at')),
+  };
+}
+
+export function mapSessionMessage(dto: unknown): SessionMessage {
+  const d = asRecord(dto);
+  return {
+    id: asString(pick(d, 'id', 'messageId', 'message_id')) ?? '',
+    sessionId: asString(pick(d, 'sessionId', 'session_id')) ?? '',
+    senderId: asString(pick(d, 'senderId', 'sender_id', 'userId', 'user_id')) ?? '',
+    senderName:
+      asString(pick(d, 'senderName', 'sender_name', 'fullName', 'full_name')) ?? 'TutorUG user',
+    body: asString(pick(d, 'body', 'message', 'text', 'content')) ?? '',
+    createdAt: asString(pick(d, 'createdAt', 'created_at', 'sentAt', 'sent_at')),
   };
 }
 

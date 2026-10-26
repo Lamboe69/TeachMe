@@ -34,7 +34,7 @@ export function RequireRole({
   role,
   children,
 }: {
-  role: UserRole;
+  role: UserRole | UserRole[];
   children: ReactNode;
 }) {
   const { status, user } = useAuth();
@@ -51,7 +51,8 @@ export function RequireRole({
     return <Navigate to="/login" replace />;
   }
 
-  if (user.role !== role) {
+  const allowed = Array.isArray(role) ? role : [role];
+  if (!allowed.includes(user.role)) {
     return <Navigate to="/unauthorized" replace />;
   }
 

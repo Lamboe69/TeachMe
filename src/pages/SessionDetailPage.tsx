@@ -16,6 +16,7 @@ import { Button, ButtonLink } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Skeleton } from '@/components/ui/Spinner';
 import { SessionActions } from '@/components/session/SessionActions';
+import { SessionChat } from '@/components/session/SessionChat';
 import { SessionStatusBadge } from '@/components/session/SessionStatusBadge';
 import { StarRating } from '@/components/ui/StarRating';
 import { useAsyncData } from '@/hooks/useAsyncData';
@@ -79,8 +80,10 @@ export function SessionDetailPage() {
   if (!session) return null;
 
   const actions = getSessionActions(session, user);
-  const isTutor = user?.role === 'TUTOR';
+  const isTutor = session.tutor.id === user?.id;
   const counterpart = isTutor ? session.student : session.tutor;
+  const myConfirmed = isTutor ? !!session.tutorConfirmedAt : !!session.studentConfirmedAt;
+  const otherConfirmed = isTutor ? !!session.studentConfirmedAt : !!session.tutorConfirmedAt;
 
   return (
     <div className="container-page py-8 sm:py-12">
@@ -175,6 +178,10 @@ export function SessionDetailPage() {
             ) : null}
           </Card>
 
+          <div className="mt-6">
+            <SessionChat sessionId={session.id} />
+          </div>
+
           <section aria-labelledby="actions-heading" className="mt-6">
             <Card className="p-6 sm:p-8">
               <h2 id="actions-heading" className="text-lg font-bold text-ink-900">
@@ -190,15 +197,31 @@ export function SessionDetailPage() {
               ) : null}
 
               {session.status === 'ACCEPTED' ? (
-                <Alert tone="info" className="mt-4">
-                  This session is confirmed. Your fee is held securely by TutorUG and will be
-                  released to your tutor after the session.
-                </Alert>
+                myConfirmed ? (
+                  <Alert tone="success" className="mt-4" title="Your confirmation is in">
+                    Waiting for {counterpart.fullName} to confirm the session took place. The fee
+                    stays in escrow until both of you confirm.
+                  </Alert>
+                ) : otherConfirmed ? (
+                  <Alert tone="info" className="mt-4" title={`${counterpart.fullName} confirmed`}>
+                    If the session took place, confirm it too. Payment is released to the tutor as
+                    soon as both of you approve.
+                  </Alert>
+                ) : (
+                  <Alert tone="info" className="mt-4">
+                    This session is confirmed and the fee is held securely in escrow. After it takes
+                    place, both you and {isTutor ? 'the student' : 'the tutor'} must confirm before
+                    TutorUG releases payment.
+                  </Alert>
+                )
               ) : null}
 
               {session.status === 'COMPLETED' ? (
                 <Alert tone="success" className="mt-4">
-                  This session is complete.
+                  Both parties confirmed this session.
+                  {isTutor
+                    ? ' Your earnings have been released to your wallet, minus the TutorUG fee.'
+                    : ' The tutor has been paid. Your fee is no longer held in escrow.'}
                   {actions.canReview
                     ? ' Share how it went to help other learners.'
                     : ' Thanks for taking part.'}
@@ -245,7 +268,14 @@ export function SessionDetailPage() {
             <dl className="mt-4 space-y-3">
               {[
                 { label: 'Subject', value: session.subject },
-                { label: 'Status', value: session.status.toLowerCase() },
+                {
+                  label: 'Status',
+                  value:
+                    session.status === 'ACCEPTED' &&
+                    (session.studentConfirmedAt || session.tutorConfirmedAt)
+                      ? 'awaiting both confirmations'
+                      : session.status.toLowerCase(),
+                },
                 { label: 'Duration', value: formatDuration(session.durationMinutes) },
                 { label: 'Fee', value: formatUGX(session.fee) },
               ].map((item) => (
@@ -255,6 +285,22 @@ export function SessionDetailPage() {
                 </div>
               ))}
             </dl>
+
+            {session.status === 'ACCEPTED' || session.status === 'COMPLETED' ? (
+              <div className="mt-4 space-y-2 border-t border-ink-100 pt-4">
+                {[
+                  { label: 'Your confirmation', done: myConfirmed },
+                  { label: `${isTutor ? 'Student' : 'Tutor'} confirmation`, done: otherConfirmed },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-center justify-between gap-3">
+                    <span className="text-sm text-ink-500">{item.label}</span>
+                    <span className={`text-xs font-bold ${item.done ? 'text-green-700' : 'text-amber-700'}`}>
+                      {item.done ? 'Confirmed' : 'Pending'}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : null}
           </Card>
 
           {!isTutor ? (
@@ -298,13 +344,14 @@ export function SessionDetailPage() {
           )}
 
           <Card className="p-6">
-            <h2 className="text-sm font-bold text-ink-900">Need to change plans?</h2>
+            <h2 className="text-sm font-bold text-ink-900">Payment protection</h2>
             <p className="mt-2 text-sm text-ink-600">
-              Contact the other person directly, then update the session here so both sides agree
-              on the arrangement.
+              Your fee stays in escrow until both you and {isTutor ? 'the student' : 'the tutor'}{' '}
+              confirm the session took place. If a request is declined or cancelled, the fee is
+              refunded.
             </p>
-            <Badge tone="neutral" className="mt-3">
-              No in-app chat in this release
+            <Badge tone="accepted" className="mt-3">
+              In-app chat enabled
             </Badge>
           </Card>
         </aside>

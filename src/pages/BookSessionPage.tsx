@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { ArrowLeft, CalendarClock, Info, Wallet } from 'lucide-react';
+import { ArrowLeft, CalendarClock, Info, Lock, Wallet } from 'lucide-react';
 import { Alert } from '@/components/ui/Alert';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
@@ -17,6 +17,7 @@ import { services } from '@/services';
 import { toAppError } from '@/utils/apiError';
 import { buildBookingSchema } from '@/utils/schemas';
 import type { BookingFormValues } from '@/utils/schemas';
+import { availabilityForDay, weekdayForDate } from '@/utils/availability';
 import { firstName, formatRate, formatUGX, toDateInputValue } from '@/utils/format';
 
 /** Half-hour slots from 08:00 to 20:00 East Africa Time. */
@@ -62,6 +63,15 @@ export function BookSessionPage() {
   });
 
   const subject = watch('subject');
+  const date = watch('date');
+  const selectedTime = watch('time');
+
+  const hasSchedule = !!tutor?.availability?.some((slot) => slot.enabled);
+  const availableTimes = useMemo(() => {
+    if (!tutor || !hasSchedule || !date) return [];
+    const times = availabilityForDay(tutor.availability, weekdayForDate(date));
+    return TIME_SLOTS.filter((time) => times.includes(time));
+  }, [tutor, date, hasSchedule]);
 
   // Default the subject to the tutor's first one.
   useEffect(() => {
@@ -71,8 +81,25 @@ export function BookSessionPage() {
     }
   }, [tutor, subject, setValue]);
 
+  useEffect(() => {
+    if (!date || availableTimes.length === 0) return;
+    if (!availableTimes.includes(selectedTime)) {
+      setValue('time', availableTimes[0]);
+    }
+  }, [date, availableTimes, selectedTime, setValue]);
+
   const onSubmit = handleSubmit(async (values) => {
     setSubmitError(null);
+
+    if (!hasSchedule) {
+      setSubmitError('This tutor has not published any available times yet.');
+      return;
+    }
+
+    if (!availableTimes.includes(values.time)) {
+      setError('time', { message: "Choose one of the tutor's available times." });
+      return;
+    }
 
     try {
       const session = await services.sessions.create({
@@ -132,6 +159,11 @@ export function BookSessionPage() {
 
   if (!tutor) return null;
 
+  const displayName = tutor.fullName;
+  const shortName = firstName(tutor.fullName);
+  const noSchedule = !!tutor && !hasSchedule;
+  const noTimesForDate = hasSchedule && !!date && availableTimes.length === 0;
+
   return (
     <div className="container-page py-8 sm:py-12">
       <nav aria-label="Breadcrumb" className="mb-6">
@@ -140,7 +172,7 @@ export function BookSessionPage() {
           className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-600 transition hover:text-brand-700"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          Back to {tutor.fullName}
+          Back to {displayName}
         </Link>
       </nav>
 
@@ -149,8 +181,8 @@ export function BookSessionPage() {
         <Card className="p-6 sm:p-8">
           <h1 className="text-2xl font-bold tracking-tight text-ink-900">Request a session</h1>
           <p className="mt-2 text-sm text-ink-600">
-            Choose when you would like to meet {firstName(tutor.fullName)}. You will only be
-            notified once the tutor accepts.
+            Choose one of {shortName}&apos;s available times. Paying holds the session fee in escrow
+            and unlocks chat with {shortName}.
           </p>
 
           <form onSubmit={onSubmit} noValidate className="mt-7 space-y-5">
@@ -183,10 +215,31 @@ export function BookSessionPage() {
                 label="Time"
                 error={errors.time?.message}
                 required
-                options={TIME_SLOTS.map((time) => ({ value: time, label: time }))}
+                disabled={!date || noSchedule}
+                placeholder={hasSchedule && !date ? 'Pick a date first' : undefined}
+                options={availableTimes.map((time) => ({ value: time, label: time }))}
                 {...register('time')}
               />
             </div>
+
+            {noSchedule ? (
+              <Alert tone="warning" title="Availability not published">
+                {firstName(tutor.fullName)} has not published any available times yet, so booking
+                is not open. Check back later.
+              </Alert>
+            ) : date && tutor.availability && tutor.availability.length > 0 ? (
+              availableTimes.length > 0 ? (
+                <p className="flex items-start gap-2 text-xs text-green-700">
+                  <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                  Showing only times {shortName} is available on this day.
+                </p>
+              ) : (
+                <Alert tone="warning" title="Not available on this day">
+                  {firstName(tutor.fullName)} has not set any times for this day. Pick another
+                  date.
+                </Alert>
+              )
+            ) : null}
 
             <Textarea
               label="What would you like help with?"
@@ -208,14 +261,18 @@ export function BookSessionPage() {
                 type="submit"
                 size="lg"
                 loading={isSubmitting}
-                disabled={needsTopUp || walletState.loading}
+                disabled={needsTopUp || walletState.loading || noSchedule || noTimesForDate}
                 leftIcon={CalendarClock}
               >
                 {needsTopUp
                   ? 'Top up to book'
-                  : isSubmitting
-                    ? 'Sending request…'
-                    : 'Request this session'}
+                  : noSchedule
+                    ? 'Not accepting bookings'
+                    : noTimesForDate
+                      ? 'Choose another date'
+                      : isSubmitting
+                        ? 'Processing payment…'
+                        : 'Pay & request session'}
               </Button>
             </div>
           </form>
@@ -227,8 +284,12 @@ export function BookSessionPage() {
             <div className="flex items-start gap-4">
               <Avatar name={tutor.fullName} src={tutor.avatarUrl} size="lg" />
               <div className="min-w-0">
-                <p className="truncate text-base font-bold text-ink-900">{tutor.fullName}</p>
+                <p className="truncate text-base font-bold text-ink-900">{displayName}</p>
                 <StarRating value={tutor.rating} size="xs" className="mt-1" />
+                <p className="mt-1 flex items-center gap-1 text-xs font-medium text-amber-700">
+                  <Lock className="h-3 w-3" />
+                  Chat unlocks after payment
+                </p>
               </div>
             </div>
 
@@ -269,8 +330,8 @@ export function BookSessionPage() {
             <ol className="mt-5 space-y-3 border-t border-ink-100 pt-4">
               {[
                 'You send this request and your wallet is charged.',
-                `${firstName(tutor.fullName)} accepts or declines.`,
-                'TutorUG releases the fee after the session is completed.',
+                'The tutor accepts or declines.',
+                'TutorUG releases the fee after you both confirm the session.',
               ].map((step, index) => (
                 <li key={step} className="flex gap-3 text-sm text-ink-600">
                   <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand-50 text-xs font-bold text-brand-700">

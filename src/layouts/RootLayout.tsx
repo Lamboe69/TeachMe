@@ -13,6 +13,7 @@ const APP_SHELL_PATHS = new Set([
   '/student/dashboard',
   '/student/profile',
   '/tutor/dashboard',
+  '/tutor/availability',
   '/sessions',
   '/wallet',
 ]);
