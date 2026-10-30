@@ -75,8 +75,10 @@
 
   body {
     @apply bg-white text-ink-900 font-sans antialiased;
-    /* Prevents horizontal overflow from long unbreakable strings */
     overflow-wrap: break-word;
+    overflow-x: hidden;
+    /* Prevent horizontal scrollbar from appearing at any viewport width */
+    max-width: 100vw;
   }
 
   /* Consistent, visible keyboard focus across the app */
@@ -113,6 +115,8 @@
   /* Never let a wide child break the mobile layout */
   #root {
     @apply min-h-screen flex flex-col;
+    overflow-x: hidden;
+    width: 100%;
   }
 }
 

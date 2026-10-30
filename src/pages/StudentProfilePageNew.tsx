@@ -7,6 +7,10 @@ import { services } from '@/services';
 import { toAppError } from '@/utils/apiError';
 import { formatDate } from '@/utils/format';
 
+const inputClass = 'h-12 w-full rounded-xl px-4 text-sm font-medium text-white placeholder-white/25 outline-none transition focus:ring-2 focus:ring-[#1558C9]';
+const inputStyle = { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(21,88,201,0.4)' };
+const cardStyle = { background: 'rgba(21,88,201,0.08)', border: '1px solid rgba(21,88,201,0.25)' };
+
 export function StudentProfilePageNew() {
   const { user, setUser } = useAuth();
   const toast = useToast();
@@ -36,102 +40,106 @@ export function StudentProfilePageNew() {
   };
 
   return (
-    <AppShell title="Account">
+    <AppShell title="Profile">
       <div className="mb-8">
-        <h2 className="text-3xl font-black tracking-tight text-ink-950 sm:text-4xl">My profile</h2>
-        <p className="mt-2 text-lg text-ink-700">Keep your contact details up to date</p>
+        <p className="mb-1 text-sm font-semibold" style={{ color: '#D4FF24' }}>Account</p>
+        <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl">My profile</h2>
+        <p className="mt-2 text-white/55">Keep your contact details up to date</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-1 space-y-6">
-          <div className="rounded-2xl bg-white p-8 shadow-lg ring-1 ring-green-200 text-center">
-            <div className="mx-auto grid h-24 w-24 place-items-center rounded-full bg-gradient-to-br from-green-600 to-emerald-600 text-3xl font-bold text-white">
+        {/* Left — avatar card */}
+        <div className="space-y-5">
+          <div className="rounded-2xl p-8 text-center" style={cardStyle}>
+            <div className="mx-auto grid h-24 w-24 place-items-center rounded-full text-3xl font-black" style={{ background: '#1558C9', color: '#D4FF24' }}>
               {user?.fullName?.charAt(0)}
             </div>
-            <h3 className="mt-4 text-xl font-bold text-ink-950">{user?.fullName}</h3>
-            <p className="mt-1 text-ink-600">{user?.email}</p>
-            <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-1.5">
-              <span className="text-sm font-semibold text-green-700">Student</span>
+            <h3 className="mt-4 text-lg font-bold text-white">{user?.fullName}</h3>
+            <p className="mt-1 text-sm text-white/50">{user?.email}</p>
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5" style={{ background: 'rgba(212,255,36,0.12)', border: '1px solid rgba(212,255,36,0.25)' }}>
+              <span className="text-sm font-bold" style={{ color: '#D4FF24' }}>Student</span>
             </div>
-            <p className="mt-4 text-sm text-ink-600">Member since {formatDate(user?.createdAt)}</p>
+            <p className="mt-4 text-xs text-white/35">Member since {formatDate(user?.createdAt)}</p>
           </div>
 
-          <div className="rounded-2xl bg-gradient-to-br from-amber-50 to-yellow-50 p-6 ring-1 ring-amber-200">
-            <p className="font-bold text-amber-900">Privacy note</p>
-            <p className="mt-2 text-sm text-amber-800">
+          <div className="rounded-2xl p-5" style={{ background: 'rgba(212,255,36,0.06)', border: '1px solid rgba(212,255,36,0.2)' }}>
+            <p className="font-bold text-sm" style={{ color: '#D4FF24' }}>Privacy note</p>
+            <p className="mt-2 text-xs text-white/50">
               Tutors see your name and booking message. Your email is never shown to other learners.
             </p>
           </div>
         </div>
 
+        {/* Right — form */}
         <div className="lg:col-span-2">
-          <div className="rounded-2xl bg-white shadow-lg ring-1 ring-green-200">
-            <div className="border-b border-green-100 px-6 py-5">
-              <h3 className="text-lg font-bold text-ink-950">Edit your details</h3>
-              <p className="mt-1 text-sm text-ink-600">Update your personal information</p>
+          <div className="rounded-2xl overflow-hidden" style={cardStyle}>
+            <div className="px-6 py-5" style={{ borderBottom: '1px solid rgba(21,88,201,0.2)' }}>
+              <h3 className="text-lg font-bold text-white">Edit your details</h3>
+              <p className="mt-1 text-sm text-white/50">Update your personal information</p>
             </div>
-            <form onSubmit={handleSave} className="p-6 space-y-6">
+            <form onSubmit={handleSave} className="p-6 space-y-5">
               <div>
-                <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-ink-900">
-                  <User className="h-4 w-4" />
-                  Full name *
+                <label className="mb-1.5 flex items-center gap-2 text-sm font-semibold text-white/80">
+                  <User className="h-4 w-4" /> Full name *
                 </label>
                 <input
                   type="text"
                   value={formData.fullName}
                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                  className="h-12 w-full rounded-xl border border-ink-300 px-4 text-ink-900 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-100"
+                  className={inputClass}
+                  style={inputStyle}
                   required
                 />
               </div>
 
               <div>
-                <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-ink-900">
-                  <Mail className="h-4 w-4" />
-                  Email address
+                <label className="mb-1.5 flex items-center gap-2 text-sm font-semibold text-white/80">
+                  <Mail className="h-4 w-4" /> Email address
                 </label>
                 <input
                   type="email"
                   value={user?.email ?? ''}
                   disabled
-                  className="h-12 w-full rounded-xl border border-ink-300 bg-ink-50 px-4 text-ink-600"
+                  className="h-12 w-full rounded-xl px-4 text-sm text-white/30 outline-none"
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
                 />
-                <p className="mt-1 text-xs text-ink-500">Your email address cannot be changed</p>
+                <p className="mt-1 text-xs text-white/30">Your email address cannot be changed</p>
               </div>
 
               <div>
-                <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-ink-900">
-                  <Phone className="h-4 w-4" />
-                  Phone number (optional)
+                <label className="mb-1.5 flex items-center gap-2 text-sm font-semibold text-white/80">
+                  <Phone className="h-4 w-4" /> Phone number (optional)
                 </label>
                 <input
                   type="tel"
                   placeholder="+256 7XX XXX XXX"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="h-12 w-full rounded-xl border border-ink-300 px-4 text-ink-900 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-100"
+                  className={inputClass}
+                  style={inputStyle}
                 />
               </div>
 
               <div>
-                <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-ink-900">
-                  <FileText className="h-4 w-4" />
-                  Short bio (optional)
+                <label className="mb-1.5 flex items-center gap-2 text-sm font-semibold text-white/80">
+                  <FileText className="h-4 w-4" /> Short bio (optional)
                 </label>
                 <textarea
                   placeholder="Tell tutors which subjects and course units you're studying"
                   rows={4}
                   value={formData.bio}
                   onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                  className="w-full rounded-xl border border-ink-300 px-4 py-3 text-ink-900 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-100"
+                  className="w-full rounded-xl px-4 py-3 text-sm font-medium text-white placeholder-white/25 outline-none transition focus:ring-2 focus:ring-[#1558C9]"
+                  style={inputStyle}
                 />
               </div>
 
-              <div className="flex justify-end border-t border-green-100 pt-6">
+              <div className="flex justify-end pt-4" style={{ borderTop: '1px solid rgba(21,88,201,0.2)' }}>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-3 font-bold text-white shadow-lg transition hover:shadow-xl disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-xl px-8 py-3 text-sm font-bold transition hover:opacity-90 disabled:opacity-60"
+                  style={{ background: '#D4FF24', color: '#030407' }}
                 >
                   <Save className="h-4 w-4" />
                   {saving ? 'Saving…' : 'Save changes'}

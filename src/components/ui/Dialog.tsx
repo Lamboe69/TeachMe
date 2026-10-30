@@ -101,18 +101,19 @@ export function Dialog({
         aria-label={title}
         aria-describedby={description ? 'dialog-description' : undefined}
         tabIndex={-1}
+        style={{ background: '#0d1526', border: '1px solid rgba(21,88,201,0.4)' }}
         className={cn(
-          'relative z-10 w-full rounded-t-2xl bg-white shadow-xl outline-none sm:rounded-2xl',
+          'relative z-10 w-full rounded-t-2xl shadow-2xl outline-none sm:rounded-2xl',
           size === 'sm' && 'sm:max-w-sm',
           size === 'md' && 'sm:max-w-lg',
           size === 'lg' && 'sm:max-w-2xl',
         )}
       >
-        <div className="flex items-start justify-between gap-4 border-b border-ink-100 px-5 py-4">
+        <div className="flex items-start justify-between gap-4 px-5 py-4" style={{ borderBottom: '1px solid rgba(21,88,201,0.25)' }}>
           <div className="min-w-0">
-            <h2 className="text-base font-semibold text-ink-900">{title}</h2>
+            <h2 className="text-base font-semibold text-white">{title}</h2>
             {description ? (
-              <p id="dialog-description" className="mt-1 text-sm text-ink-500">
+              <p id="dialog-description" className="mt-1 text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>
                 {description}
               </p>
             ) : null}
@@ -120,7 +121,8 @@ export function Dialog({
           <button
             type="button"
             onClick={onClose}
-            className="shrink-0 rounded-lg p-1.5 text-ink-500 transition hover:bg-ink-100 hover:text-ink-800"
+            className="shrink-0 rounded-lg p-1.5 transition"
+            style={{ color: 'rgba(255,255,255,0.4)' }}
             aria-label="Close dialog"
           >
             <X className="h-5 w-5" aria-hidden="true" />
@@ -130,7 +132,7 @@ export function Dialog({
         {children ? <div className="max-h-[65vh] overflow-y-auto px-5 py-4">{children}</div> : null}
 
         {footer ? (
-          <div className="flex flex-col-reverse gap-2 border-t border-ink-100 px-5 py-4 sm:flex-row sm:justify-end">
+          <div className="flex flex-col-reverse gap-2 px-5 py-4 sm:flex-row sm:justify-end" style={{ borderTop: '1px solid rgba(21,88,201,0.25)' }}>
             {footer}
           </div>
         ) : null}
