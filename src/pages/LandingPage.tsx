@@ -191,12 +191,12 @@ function Navbar() {
         </button>
       </nav>
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden" style={{ background: '#030407' }}>
-          <div className="flex h-16 items-center justify-between px-4">
+        <div className="fixed inset-0 z-50 flex flex-col overflow-y-auto lg:hidden" style={{ background: '#030407' }}>
+          <div className="flex h-16 shrink-0 items-center justify-between px-4">
             <Logo />
             <button onClick={() => setMobileMenuOpen(false)} className="grid h-11 w-11 place-items-center text-white"><X /></button>
           </div>
-          <div className="flex flex-col gap-2 px-4 py-6">
+          <div className="flex flex-1 flex-col gap-2 px-4 py-6">
             <Link to="/tutors" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 font-semibold text-white/80">Find tutors</Link>
             <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 font-semibold text-white/80">How it works</a>
             <a href="#become-tutor" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 font-semibold text-white/80">Become a tutor</a>
@@ -236,13 +236,13 @@ function Hero() {
       <div className="absolute left-0 top-40 h-[400px] w-[400px] rounded-full blur-[120px] pointer-events-none" style={{ background: 'rgba(21,88,201,0.18)' }} />
       <div className="absolute right-0 bottom-20 h-[300px] w-[300px] rounded-full blur-[120px] pointer-events-none" style={{ background: 'rgba(212,255,36,0.06)' }} />
       <div ref={ref} className="container-page relative transition-all duration-700" style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(32px)' }}>
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
           <div>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full px-5 py-2" style={{ background: 'rgba(21,88,201,0.2)', border: '1px solid rgba(21,88,201,0.4)' }}>
-              <Sparkles className="h-4 w-4" style={{ color: '#D4FF24' }} />
-              <span className="text-sm font-bold" style={{ color: '#D4FF24' }}>Peer-to-Peer for University Students in Uganda</span>
+            <div className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full px-3 py-1.5 text-center sm:px-5 sm:py-2" style={{ background: 'rgba(21,88,201,0.2)', border: '1px solid rgba(21,88,201,0.4)' }}>
+              <Sparkles className="h-4 w-4 shrink-0" style={{ color: '#D4FF24' }} />
+              <span className="text-xs font-bold leading-snug sm:text-sm" style={{ color: '#D4FF24' }}>Peer-to-Peer for University Students in Uganda</span>
             </div>
-            <h1 className="text-5xl font-black leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl text-white">
+            <h1 className="text-4xl font-black leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl text-white">
               Ace your{' '}
               <span className="relative inline-block">
                 <span style={{ color: '#D4FF24' }}>course units</span>
@@ -252,14 +252,14 @@ function Hero() {
               </span>
               <br />with a fellow student
             </h1>
-            <p className="mt-6 max-w-xl text-xl leading-relaxed text-white/70">
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-white/70 sm:mt-6 sm:text-xl">
               TutorUG connects university students to help each other succeed. Learn from someone who aced it, or earn by teaching what you know. All payments secured by MTN & Airtel Money.
             </p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <Link to="/tutors" className="group inline-flex items-center justify-center gap-3 rounded-xl px-8 py-4 text-lg font-bold shadow-xl transition hover:opacity-90 hover:scale-105" style={{ background: '#D4FF24', color: '#030407' }}>
+            <div className="mt-8 flex flex-col gap-4 sm:mt-10 sm:flex-row">
+              <Link to="/tutors" className="group inline-flex items-center justify-center gap-3 rounded-xl px-6 py-3.5 text-base font-bold shadow-xl transition hover:opacity-90 hover:scale-105 sm:px-8 sm:py-4 sm:text-lg" style={{ background: '#D4FF24', color: '#030407' }}>
                 Find a tutor <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
               </Link>
-              <a href="#become-tutor" className="inline-flex items-center justify-center gap-3 rounded-xl border-2 px-8 py-4 text-lg font-bold transition hover:scale-105" style={{ borderColor: '#1558C9', color: 'white', background: 'rgba(21,88,201,0.15)' }}>
+              <a href="#become-tutor" className="inline-flex items-center justify-center gap-3 rounded-xl border-2 px-6 py-3.5 text-base font-bold transition hover:scale-105 sm:px-8 sm:py-4 sm:text-lg" style={{ borderColor: '#1558C9', color: 'white', background: 'rgba(21,88,201,0.15)' }}>
                 Start earning <Wallet className="h-5 w-5" />
               </a>
             </div>
@@ -400,7 +400,7 @@ function HowItWorks() {
         </div>
         <div ref={ref} className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-4 transition-all duration-700" style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(32px)' }}>
           {steps.map((step, idx) => (
-            <div key={idx} className="group relative overflow-hidden rounded-3xl p-8 transition-all duration-300 hover:-translate-y-2"
+            <div key={idx} className="group relative overflow-hidden rounded-3xl p-6 transition-all duration-300 hover:-translate-y-2 sm:p-8"
               style={{ background: 'rgba(21,88,201,0.12)', border: '1px solid rgba(21,88,201,0.35)', transitionDelay: `${idx * 80}ms` }}
               onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 0 32px rgba(21,88,201,0.4)')}
               onMouseLeave={e => (e.currentTarget.style.boxShadow = 'none')}
@@ -442,7 +442,7 @@ function BeforeAfter() {
     <section className="py-20 sm:py-24" style={{ background: '#030407' }}>
       <div className="container-page">
         <div className="mx-auto max-w-2xl text-center mb-14">
-          <h2 className="text-4xl font-black tracking-tight sm:text-5xl text-white">
+          <h2 className="text-3xl font-black tracking-tight sm:text-5xl text-white">
             Life <span style={{ color: '#D4FF24' }}>before</span> vs{' '}
             <span style={{ color: '#1558C9' }}>after</span> TutorUG
           </h2>
@@ -454,7 +454,7 @@ function BeforeAfter() {
           style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(32px)' }}
         >
           {/* Before */}
-          <div className="rounded-3xl p-8" style={{ background: 'rgba(255,60,60,0.06)', border: '1px solid rgba(255,60,60,0.2)' }}>
+          <div className="rounded-3xl p-6 sm:p-8" style={{ background: 'rgba(255,60,60,0.06)', border: '1px solid rgba(255,60,60,0.2)' }}>
             <div className="mb-6 flex items-center gap-3">
               <div className="grid h-12 w-12 place-items-center rounded-2xl" style={{ background: 'rgba(255,60,60,0.15)' }}>
                 <XCircle className="h-6 w-6" style={{ color: '#ff4444' }} />
@@ -473,7 +473,7 @@ function BeforeAfter() {
             </ul>
           </div>
           {/* After */}
-          <div className="rounded-3xl p-8" style={{ background: 'rgba(21,88,201,0.1)', border: '1px solid rgba(212,255,36,0.25)' }}>
+          <div className="rounded-3xl p-6 sm:p-8" style={{ background: 'rgba(21,88,201,0.1)', border: '1px solid rgba(212,255,36,0.25)' }}>
             <div className="mb-6 flex items-center gap-3">
               <div className="grid h-12 w-12 place-items-center rounded-2xl" style={{ background: 'rgba(212,255,36,0.15)' }}>
                 <TrendingUp className="h-6 w-6" style={{ color: '#D4FF24' }} />

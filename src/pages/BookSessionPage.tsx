@@ -131,12 +131,10 @@ export function BookSessionPage() {
   if (tutorLoading) {
     return (
       <AppShell title="Book a session">
-        <div className="container-page py-10 sm:py-14">
-          <Skeleton className="h-4 w-32" />
-          <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_360px]">
-            <Skeleton className="h-96 w-full" />
-            <Skeleton className="h-56 w-full" />
-          </div>
+        <Skeleton className="h-4 w-32" />
+        <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_360px]">
+          <Skeleton className="h-96 w-full" />
+          <Skeleton className="h-56 w-full" />
         </div>
       </AppShell>
     );
@@ -145,7 +143,6 @@ export function BookSessionPage() {
   if (tutorError) {
     return (
       <AppShell title="Book a session">
-      <div className="container-page py-10 sm:py-14">
         <Alert
           tone="error"
           title={tutorError.isNotFound ? 'Tutor not found' : 'We could not load this tutor'}
@@ -157,7 +154,6 @@ export function BookSessionPage() {
             Back to all tutors
           </ButtonLink>
         </div>
-      </div>
       </AppShell>
     );
   }
@@ -171,7 +167,7 @@ export function BookSessionPage() {
 
   return (
     <AppShell title="Book a session">
-    <div className="container-page py-8 sm:py-12">
+    <div className="pb-8">
       <nav aria-label="Breadcrumb" className="mb-6">
         <Link
           to={`/tutors/${tutor.id}`}
@@ -184,7 +180,7 @@ export function BookSessionPage() {
 
       <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
         {/* ------------------------------------------------------- Form */}
-        <Card className="p-6 sm:p-8">
+        <Card className="min-w-0 p-5 sm:p-8">
           <h1 className="text-2xl font-bold tracking-tight text-white">Request a session</h1>
           <p className="mt-2 text-sm text-white/60">
             Choose one of {shortName}&apos;s available times. Paying holds the session fee in escrow
@@ -269,6 +265,7 @@ export function BookSessionPage() {
                 loading={isSubmitting}
                 disabled={needsTopUp || walletState.loading || noSchedule || noTimesForDate}
                 leftIcon={CalendarClock}
+                className="w-full sm:w-auto"
               >
                 {needsTopUp
                   ? 'Top up to book'
@@ -285,7 +282,7 @@ export function BookSessionPage() {
         </Card>
 
         {/* -------------------------------------------------- Tutor card */}
-        <aside className="lg:sticky lg:top-24 lg:self-start">
+        <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
           <Card className="p-6">
             <div className="flex items-start gap-4">
               <Avatar name={tutor.fullName} src={tutor.avatarUrl} size="lg" />

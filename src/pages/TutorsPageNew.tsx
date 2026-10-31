@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/Button';
 import { Alert } from '@/components/ui/Alert';
 import type { TutorSummary } from '@/types';
 
-const SUBJECTS = ['All','Mathematics','Physics','Chemistry','Biology','ICT','Computer Studies','English Literature','Economics'];
+const SUBJECTS = ['All','Calculus','Linear Algebra','Statistics','Organic Chemistry','Biochemistry','Microeconomics','Macroeconomics','Database Systems','Data Structures','Operating Systems','Computer Networks','Accounting','Business Law','Anatomy','Pharmacology','Thermodynamics','Fluid Mechanics','Genetics','Programming'];
 const AVATAR_COLORS = ['#1558C9','#7c3aed','#0891b2','#b45309','#be185d','#065f46'];
 const cardStyle = { background: 'rgba(21,88,201,0.08)', border: '1px solid rgba(21,88,201,0.25)' };
 
@@ -49,7 +49,7 @@ export function TutorsPageNew() {
           Find your perfect tutor
         </h2>
         <p className="mt-2 text-white/55">
-          Browse fellow students offering tutoring for course units. All payments secured by TutorUG.
+          Browse fellow university students offering tutoring for course units. All payments secured by TutorUG.
         </p>
       </div>
 

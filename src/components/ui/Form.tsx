@@ -1,6 +1,6 @@
 import { useId } from 'react';
 import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
-import { AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { AlertCircle, ChevronDown, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/utils/cn';
 
@@ -77,17 +77,17 @@ function describedBy(id: string, hint?: string, error?: string): string | undefi
 }
 
 const inputBase =
-  'block w-full rounded-xl border px-3.5 py-2.5 text-sm shadow-sm transition duration-200 ' +
-  'focus:outline-none focus:ring-4 disabled:cursor-not-allowed';
+  'block w-full rounded-xl border px-4 py-3 text-sm shadow-sm transition duration-200 ' +
+  'focus:outline-none focus:ring-2 disabled:cursor-not-allowed';
 
 const inputTheme = (dark: boolean, error?: string) => {
   if (dark) {
     return cn(
-      'bg-white/[0.05] text-white placeholder:text-white/25 scheme-dark',
+      'text-white placeholder:text-white/30 scheme-dark',
       error
-        ? 'border-red-500/60 focus:border-red-400 focus:ring-red-500/15'
-        : 'border-[rgba(21,88,201,0.4)] focus:border-cobalt-400 focus:ring-cobalt-500/25',
-      'disabled:bg-white/[0.03] disabled:text-white/35',
+        ? 'border-red-500/60 bg-red-500/5 focus:border-red-400 focus:ring-red-500/20'
+        : 'border-[rgba(21,88,201,0.45)] bg-[rgba(21,88,201,0.08)] focus:border-[#1558C9] focus:ring-[rgba(21,88,201,0.25)] focus:bg-[rgba(21,88,201,0.12)]',
+      'disabled:opacity-40',
     );
   }
   return cn(
@@ -301,12 +301,12 @@ export function Select({
   containerClassName,
   className,
   required,
+  disabled,
   ...rest
 }: SelectProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const dark = theme === 'dark';
-  const arrowColor = dark ? '%23c7d6ef' : '%2364748b';
 
   return (
     <Field
@@ -319,31 +319,39 @@ export function Select({
       theme={theme}
       className={containerClassName}
     >
-      <select
-        id={inputId}
-        required={required}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={describedBy(inputId, hint, error)}
-        className={cn(
-          inputBase,
-          inputTheme(dark, error),
-          'appearance-none bg-[length:1rem] bg-[right_0.75rem_center] bg-no-repeat pr-10',
-          className,
-        )}
-        style={{
-          backgroundColor: dark ? '#0d1526' : undefined,
-          backgroundImage:
-            `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='${arrowColor}'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E")`,
-        }}
-        {...rest}
-      >
-        {placeholder ? <option value="">{placeholder}</option> : null}
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+      <div className="relative">
+        <select
+          id={inputId}
+          required={required}
+          disabled={disabled}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={describedBy(inputId, hint, error)}
+          className={cn(
+            inputBase,
+            inputTheme(dark, error),
+            'appearance-none pr-10 cursor-pointer',
+            disabled && 'cursor-not-allowed',
+            className,
+          )}
+          {...rest}
+        >
+          {placeholder ? <option value="">{placeholder}</option> : null}
+          {options.map((option) => (
+            <option key={option.value} value={option.value}
+              style={{ background: '#0d1526', color: dark ? '#fff' : '#0d1526' }}
+            >
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <ChevronDown
+          className={cn(
+            'pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors',
+            disabled ? 'text-white/20' : error ? 'text-red-400' : 'text-[#1558C9]',
+          )}
+          aria-hidden="true"
+        />
+      </div>
     </Field>
   );
 }
