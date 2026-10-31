@@ -104,27 +104,6 @@ export const router = createBrowserRouter([
           </RequireAuth>
         ),
       },
-      {
-        path: '/tutor/profile/edit',
-        element: (
-          <RequireAuth>
-            <RequireRole role="TUTOR">
-              <TutorProfileEditPage />
-            </RequireRole>
-          </RequireAuth>
-        ),
-      },
-      {
-        path: '/tutor/availability',
-        element: (
-          <RequireAuth>
-            <RequireRole role="TUTOR">
-              <TutorAvailabilityPage />
-            </RequireRole>
-          </RequireAuth>
-        ),
-      },
-
       /* ------------------------------------------------------- Wallet */
       {
         path: '/wallet',

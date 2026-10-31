@@ -29,16 +29,16 @@ export function SessionCard({
   return (
     <article
       data-testid="session-card"
-      className={`min-w-0 rounded-card border border-ink-200/80 bg-white p-5 shadow-card ${className ?? ''}`}
+      className={`min-w-0 rounded-card border border-[rgba(21,88,201,0.25)] bg-[rgba(21,88,201,0.08)] p-5 shadow-[0_18px_50px_-28px_rgba(0,0,0,0.85)] ${className ?? ''}`}
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 items-start gap-3">
           <Avatar name={other.fullName} src={other.avatarUrl} size="md" />
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-ink-900">
+            <p className="truncate text-sm font-semibold text-white">
               {perspective === 'student' ? 'Tutor' : 'Student'}: {other.fullName}
             </p>
-            <p className="mt-0.5 text-sm font-medium text-brand-700">{session.subject}</p>
+            <p className="mt-0.5 text-sm font-medium text-[#7eb3ff]">{session.subject}</p>
           </div>
         </div>
         <SessionStatusBadge status={session.status} />
@@ -46,42 +46,42 @@ export function SessionCard({
 
       <dl className="mt-4 grid gap-3 sm:grid-cols-3">
         <div className="flex items-start gap-2">
-          <CalendarClock className="mt-0.5 h-4 w-4 shrink-0 text-ink-400" aria-hidden="true" />
+          <CalendarClock className="mt-0.5 h-4 w-4 shrink-0 text-white/35" aria-hidden="true" />
           <div>
-            <dt className="text-xs text-ink-500">Date</dt>
-            <dd className="text-sm font-medium text-ink-800">{formatDayLabel(session.scheduledAt)}</dd>
+            <dt className="text-xs text-white/45">Date</dt>
+            <dd className="text-sm font-medium text-white/90">{formatDayLabel(session.scheduledAt)}</dd>
           </div>
         </div>
         <div className="flex items-start gap-2">
-          <Clock className="mt-0.5 h-4 w-4 shrink-0 text-ink-400" aria-hidden="true" />
+          <Clock className="mt-0.5 h-4 w-4 shrink-0 text-white/35" aria-hidden="true" />
           <div>
-            <dt className="text-xs text-ink-500">Time</dt>
-            <dd className="text-sm font-medium text-ink-800">
+            <dt className="text-xs text-white/45">Time</dt>
+            <dd className="text-sm font-medium text-white/90">
               {formatTime(session.scheduledAt)}
-              <span className="font-normal text-ink-500"> · {formatDuration(session.durationMinutes)}</span>
+              <span className="font-normal text-white/45"> · {formatDuration(session.durationMinutes)}</span>
             </dd>
           </div>
         </div>
         <div className="flex items-start gap-2">
-          <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-ink-400" aria-hidden="true" />
+          <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-white/35" aria-hidden="true" />
           <div>
-            <dt className="text-xs text-ink-500">Fee</dt>
-            <dd className="text-sm font-medium text-ink-800">{formatUGX(session.fee)}</dd>
+            <dt className="text-xs text-white/45">Fee</dt>
+            <dd className="text-sm font-medium text-white/90">{formatUGX(session.fee)}</dd>
           </div>
         </div>
       </dl>
 
       {session.message ? (
-        <p className="mt-4 flex gap-2 rounded-lg bg-ink-50 p-3 text-sm text-ink-600">
-          <MessageSquare className="mt-0.5 h-4 w-4 shrink-0 text-ink-400" aria-hidden="true" />
+        <p className="mt-4 flex gap-2 rounded-lg bg-white/[0.04] p-3 text-sm text-white/60">
+          <MessageSquare className="mt-0.5 h-4 w-4 shrink-0 text-white/35" aria-hidden="true" />
           <span className="min-w-0 break-words">{session.message}</span>
         </p>
       ) : null}
 
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-ink-100 pt-4">
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[rgba(21,88,201,0.2)] pt-4">
         <Link
           to={`/sessions/${session.id}`}
-          className="text-sm font-semibold text-brand-700 transition hover:text-brand-800 hover:underline"
+          className="text-sm font-semibold text-[#7eb3ff] transition hover:text-white hover:underline"
         >
           View session details
         </Link>

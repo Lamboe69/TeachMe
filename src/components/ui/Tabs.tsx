@@ -16,14 +16,17 @@ export function Tabs({
   value,
   onChange,
   ariaLabel,
+  theme = 'dark',
   className,
 }: {
   items: TabItem[];
   value: string;
   onChange: (value: string) => void;
   ariaLabel: string;
+  theme?: 'dark' | 'light';
   className?: string;
 }) {
+  const dark = theme === 'dark';
   const baseId = useId();
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -49,7 +52,8 @@ export function Tabs({
       aria-label={ariaLabel}
       onKeyDown={handleKeyDown}
       className={cn(
-        'no-scrollbar -mx-1 flex gap-1 overflow-x-auto border-b border-ink-200 px-1',
+        'no-scrollbar -mx-1 flex gap-1 overflow-x-auto border-b px-1',
+        dark ? 'border-[rgba(21,88,201,0.25)]' : 'border-ink-200',
         className,
       )}
     >
@@ -68,8 +72,12 @@ export function Tabs({
             className={cn(
               'shrink-0 whitespace-nowrap border-b-2 px-3.5 py-2.5 text-sm font-semibold transition',
               selected
-                ? 'border-brand-700 text-brand-800'
-                : 'border-transparent text-ink-500 hover:border-ink-300 hover:text-ink-700',
+                ? dark
+                  ? 'border-volt-400 text-white'
+                  : 'border-brand-700 text-brand-800'
+                : dark
+                  ? 'border-transparent text-white/45 hover:border-white/20 hover:text-white/80'
+                  : 'border-transparent text-ink-500 hover:border-ink-300 hover:text-ink-700',
             )}
           >
             {item.label}
@@ -77,7 +85,13 @@ export function Tabs({
               <span
                 className={cn(
                   'ml-2 rounded-full px-1.5 py-0.5 text-xs font-bold',
-                  selected ? 'bg-brand-100 text-brand-800' : 'bg-ink-100 text-ink-600',
+                  selected
+                    ? dark
+                      ? 'bg-volt-400 text-night-950'
+                      : 'bg-brand-100 text-brand-800'
+                    : dark
+                      ? 'bg-white/10 text-white/55'
+                      : 'bg-ink-100 text-ink-600',
                 )}
               >
                 {item.count}

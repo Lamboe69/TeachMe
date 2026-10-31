@@ -123,6 +123,7 @@ export function TutorsPageNew() {
                 return (
                   <div
                     key={tutor.id}
+                    data-testid="tutor-card"
                     className="rounded-2xl overflow-hidden"
                     style={{ ...cardStyle, transition: 'border 0.15s, box-shadow 0.15s, transform 0.15s' }}
                     onMouseEnter={(e) => {

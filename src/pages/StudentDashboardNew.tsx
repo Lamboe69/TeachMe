@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ArrowRight, BookOpen, Calendar, CheckCircle2,
+  ArrowRight, Calendar, CheckCircle2,
   Clock, Search, Sparkles, Star, TrendingUp, Wallet, Zap,
 } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';

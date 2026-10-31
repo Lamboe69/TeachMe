@@ -6,26 +6,41 @@ export function EmptyState({
   title,
   description,
   action,
+  theme = 'dark',
   className,
 }: {
   icon?: ReactNode;
   title: string;
   description?: string;
   action?: ReactNode;
+  theme?: 'dark' | 'light';
   className?: string;
 }) {
+  const dark = theme === 'dark';
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center gap-3 rounded-card border border-dashed border-ink-300 bg-white px-6 py-12 text-center',
+        'flex flex-col items-center justify-center gap-3 rounded-card border border-dashed px-6 py-12 text-center',
+        dark
+          ? 'border-[rgba(21,88,201,0.35)] bg-[rgba(21,88,201,0.06)]'
+          : 'border-ink-300 bg-white',
         className,
       )}
     >
-      {icon ? <div className="text-ink-400">{icon}</div> : null}
+      {icon ? <div className={dark ? 'text-white/25' : 'text-ink-400'}>{icon}</div> : null}
       <div>
-        <p className="text-base font-semibold text-ink-800">{title}</p>
+        <p className={cn('text-base font-semibold', dark ? 'text-white' : 'text-ink-800')}>
+          {title}
+        </p>
         {description ? (
-          <p className="mx-auto mt-1 max-w-md text-sm text-ink-500">{description}</p>
+          <p
+            className={cn(
+              'mx-auto mt-1 max-w-md text-sm',
+              dark ? 'text-white/50' : 'text-ink-500',
+            )}
+          >
+            {description}
+          </p>
         ) : null}
       </div>
       {action}

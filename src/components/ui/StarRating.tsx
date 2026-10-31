@@ -6,11 +6,13 @@ export function StarRating({
   value,
   size = 'sm',
   showValue = true,
+  theme = 'dark',
   className,
 }: {
   value: number | null | undefined;
   size?: 'xs' | 'sm' | 'md';
   showValue?: boolean;
+  theme?: 'dark' | 'light';
   className?: string;
 }) {
   const rating = value ?? 0;
@@ -25,13 +27,23 @@ export function StarRating({
             key={star}
             className={cn(
               starClass,
-              star <= Math.round(rating) ? 'fill-amber-400 text-amber-400' : 'text-ink-300',
+              star <= Math.round(rating)
+                ? 'fill-amber-400 text-amber-400'
+                : theme === 'dark'
+                  ? 'text-white/20'
+                  : 'text-ink-300',
             )}
           />
         ))}
       </span>
       {showValue ? (
-        <span className={cn('font-semibold text-ink-800', size === 'xs' ? 'text-xs' : 'text-sm')}>
+        <span
+          className={cn(
+            'font-semibold',
+            theme === 'dark' ? 'text-white' : 'text-ink-800',
+            size === 'xs' ? 'text-xs' : 'text-sm',
+          )}
+        >
           {rating > 0 ? rating.toFixed(1) : 'New'}
         </span>
       ) : null}
@@ -49,12 +61,14 @@ export function StarInput({
   error,
   name = 'rating',
   disabled = false,
+  theme = 'dark',
 }: {
   value: number;
   onChange: (value: number) => void;
   error?: string;
   name?: string;
   disabled?: boolean;
+  theme?: 'dark' | 'light';
 }) {
   return (
     <div>
@@ -96,14 +110,23 @@ export function StarInput({
               <Star
                 className={cn(
                   'h-7 w-7 transition',
-                  active ? 'fill-amber-400 text-amber-400' : 'text-ink-300',
+                  active
+                    ? 'fill-amber-400 text-amber-400'
+                    : theme === 'dark'
+                      ? 'text-white/20'
+                      : 'text-ink-300',
                 )}
                 aria-hidden="true"
               />
             </button>
           );
         })}
-        <span className="ml-2 text-sm font-medium text-ink-600">
+        <span
+          className={cn(
+            'ml-2 text-sm font-medium',
+            theme === 'dark' ? 'text-white/55' : 'text-ink-600',
+          )}
+        >
           {value > 0 ? `${value} / 5` : 'Select a rating'}
         </span>
       </div>

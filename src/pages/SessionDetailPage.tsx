@@ -10,6 +10,7 @@ import {
   Wallet,
 } from 'lucide-react';
 import { Alert } from '@/components/ui/Alert';
+import { AppShell } from '@/components/layout/AppShell';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { Button, ButtonLink } from '@/components/ui/Button';
@@ -40,16 +41,19 @@ export function SessionDetailPage() {
 
   if (loading) {
     return (
-      <div className="container-page py-10 sm:py-14">
-        <Skeleton className="h-4 w-32" />
-        <Skeleton className="mt-6 h-40 w-full rounded-card" />
-        <Skeleton className="mt-4 h-56 w-full rounded-card" />
-      </div>
+      <AppShell title="Session">
+        <div className="container-page py-10 sm:py-14">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="mt-6 h-40 w-full rounded-card" />
+          <Skeleton className="mt-4 h-56 w-full rounded-card" />
+        </div>
+      </AppShell>
     );
   }
 
   if (error) {
     return (
+      <AppShell title="Session">
       <div className="container-page py-10 sm:py-14">
         <Alert
           tone={error.isForbidden ? 'warning' : 'error'}
@@ -74,6 +78,7 @@ export function SessionDetailPage() {
           </ButtonLink>
         </div>
       </div>
+      </AppShell>
     );
   }
 
@@ -86,11 +91,12 @@ export function SessionDetailPage() {
   const otherConfirmed = isTutor ? !!session.studentConfirmedAt : !!session.tutorConfirmedAt;
 
   return (
+    <AppShell title="Session">
     <div className="container-page py-8 sm:py-12">
       <nav aria-label="Breadcrumb" className="mb-6">
         <Link
           to="/sessions"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-600 transition hover:text-brand-700"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-white/60 transition hover:text-[#7eb3ff]"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to my sessions
@@ -104,49 +110,49 @@ export function SessionDetailPage() {
               <div className="flex min-w-0 items-start gap-4">
                 <Avatar name={counterpart.fullName} src={counterpart.avatarUrl} size="lg" />
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-ink-500">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-white/45">
                     {isTutor ? 'Student' : 'Tutor'}
                   </p>
-                  <h1 className="truncate text-xl font-bold tracking-tight text-ink-900">
+                  <h1 className="truncate text-xl font-bold tracking-tight text-white">
                     {counterpart.fullName}
                   </h1>
-                  <p className="mt-1 text-sm text-brand-700">{session.subject}</p>
+                  <p className="mt-1 text-sm text-[#7eb3ff]">{session.subject}</p>
                 </div>
               </div>
               <SessionStatusBadge status={session.status} className="mt-1" />
             </div>
 
-            <dl className="mt-7 grid gap-5 border-t border-ink-100 pt-6 sm:grid-cols-2">
+            <dl className="mt-7 grid gap-5 border-t border-[rgba(21,88,201,0.2)] pt-6 sm:grid-cols-2">
               <div className="flex items-start gap-3">
-                <CalendarClock className="mt-0.5 h-5 w-5 shrink-0 text-brand-600" aria-hidden="true" />
+                <CalendarClock className="mt-0.5 h-5 w-5 shrink-0 text-[#7eb3ff]" aria-hidden="true" />
                 <div>
-                  <dt className="text-xs font-medium text-ink-500">Scheduled for</dt>
-                  <dd className="text-sm font-semibold text-ink-900">
+                  <dt className="text-xs font-medium text-white/45">Scheduled for</dt>
+                  <dd className="text-sm font-semibold text-white">
                     {formatDateTime(session.scheduledAt)}
                   </dd>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Clock className="mt-0.5 h-5 w-5 shrink-0 text-brand-600" aria-hidden="true" />
+                <Clock className="mt-0.5 h-5 w-5 shrink-0 text-[#7eb3ff]" aria-hidden="true" />
                 <div>
-                  <dt className="text-xs font-medium text-ink-500">Time and length</dt>
-                  <dd className="text-sm font-semibold text-ink-900">
+                  <dt className="text-xs font-medium text-white/45">Time and length</dt>
+                  <dd className="text-sm font-semibold text-white">
                     {formatTime(session.scheduledAt)} · {formatDuration(session.durationMinutes)}
                   </dd>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Wallet className="mt-0.5 h-5 w-5 shrink-0 text-brand-600" aria-hidden="true" />
+                <Wallet className="mt-0.5 h-5 w-5 shrink-0 text-[#7eb3ff]" aria-hidden="true" />
                 <div>
-                  <dt className="text-xs font-medium text-ink-500">Session fee</dt>
-                  <dd className="text-sm font-semibold text-ink-900">{formatUGX(session.fee)}</dd>
+                  <dt className="text-xs font-medium text-white/45">Session fee</dt>
+                  <dd className="text-sm font-semibold text-white">{formatUGX(session.fee)}</dd>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-brand-600" aria-hidden="true" />
+                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#7eb3ff]" aria-hidden="true" />
                 <div>
-                  <dt className="text-xs font-medium text-ink-500">Meeting place</dt>
-                  <dd className="text-sm font-semibold text-ink-900">
+                  <dt className="text-xs font-medium text-white/45">Meeting place</dt>
+                  <dd className="text-sm font-semibold text-white">
                     {isTutor ? session.tutor.location ?? 'Agreed with the student' : 'Agreed with your tutor'}
                   </dd>
                 </div>
@@ -154,24 +160,24 @@ export function SessionDetailPage() {
             </dl>
 
             {session.message ? (
-              <div className="mt-6 rounded-xl bg-ink-50 p-4">
-                <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-ink-500">
+              <div className="mt-6 rounded-xl bg-white/[0.04] p-4">
+                <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-white/45">
                   <MessageSquare className="h-3.5 w-3.5" aria-hidden="true" />
                   Message from the student
                 </p>
-                <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-ink-700">
+                <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-white/70">
                   {session.message}
                 </p>
               </div>
             ) : null}
 
             {session.notes ? (
-              <div className="mt-4 rounded-xl bg-brand-50 p-4">
-                <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-brand-700">
+              <div className="mt-4 rounded-xl bg-[rgba(21,88,201,0.15)] p-4">
+                <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[#7eb3ff]">
                   <NotebookPen className="h-3.5 w-3.5" aria-hidden="true" />
                   Tutor notes
                 </p>
-                <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-brand-900">
+                <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-white/80">
                   {session.notes}
                 </p>
               </div>
@@ -184,7 +190,7 @@ export function SessionDetailPage() {
 
           <section aria-labelledby="actions-heading" className="mt-6">
             <Card className="p-6 sm:p-8">
-              <h2 id="actions-heading" className="text-lg font-bold text-ink-900">
+              <h2 id="actions-heading" className="text-lg font-bold text-white">
                 What you can do
               </h2>
 
@@ -244,7 +250,7 @@ export function SessionDetailPage() {
               </div>
 
               {actions.canReview ? (
-                <div className="mt-5 border-t border-ink-100 pt-5">
+                <div className="mt-5 border-t border-[rgba(21,88,201,0.2)] pt-5">
                   <ButtonLink to={`/sessions/${session.id}/feedback`} leftIcon={Star}>
                     Write a review for {session.tutor.fullName}
                   </ButtonLink>
@@ -252,7 +258,7 @@ export function SessionDetailPage() {
               ) : null}
 
               {session.hasReview ? (
-                <p className="mt-5 flex items-center gap-2 border-t border-ink-100 pt-5 text-sm text-ink-500">
+                <p className="mt-5 flex items-center gap-2 border-t border-[rgba(21,88,201,0.2)] pt-5 text-sm text-white/45">
                   <Star className="h-4 w-4 fill-amber-400 text-amber-400" aria-hidden="true" />
                   You have already reviewed this session.
                 </p>
@@ -264,7 +270,7 @@ export function SessionDetailPage() {
         {/* ---------------------------------------------------- Sidebar */}
         <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
           <Card className="p-6">
-            <h2 className="text-sm font-bold text-ink-900">Session summary</h2>
+            <h2 className="text-sm font-bold text-white">Session summary</h2>
             <dl className="mt-4 space-y-3">
               {[
                 { label: 'Subject', value: session.subject },
@@ -280,21 +286,21 @@ export function SessionDetailPage() {
                 { label: 'Fee', value: formatUGX(session.fee) },
               ].map((item) => (
                 <div key={item.label} className="flex items-center justify-between gap-3">
-                  <dt className="text-sm text-ink-500">{item.label}</dt>
-                  <dd className="text-sm font-semibold capitalize text-ink-900">{item.value}</dd>
+                  <dt className="text-sm text-white/45">{item.label}</dt>
+                  <dd className="text-sm font-semibold capitalize text-white">{item.value}</dd>
                 </div>
               ))}
             </dl>
 
             {session.status === 'ACCEPTED' || session.status === 'COMPLETED' ? (
-              <div className="mt-4 space-y-2 border-t border-ink-100 pt-4">
+              <div className="mt-4 space-y-2 border-t border-[rgba(21,88,201,0.2)] pt-4">
                 {[
                   { label: 'Your confirmation', done: myConfirmed },
                   { label: `${isTutor ? 'Student' : 'Tutor'} confirmation`, done: otherConfirmed },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center justify-between gap-3">
-                    <span className="text-sm text-ink-500">{item.label}</span>
-                    <span className={`text-xs font-bold ${item.done ? 'text-green-700' : 'text-amber-700'}`}>
+                    <span className="text-sm text-white/45">{item.label}</span>
+                    <span className={`text-xs font-bold ${item.done ? 'text-volt-400' : 'text-amber-300'}`}>
                       {item.done ? 'Confirmed' : 'Pending'}
                     </span>
                   </div>
@@ -305,11 +311,11 @@ export function SessionDetailPage() {
 
           {!isTutor ? (
             <Card className="p-6">
-              <h2 className="text-sm font-bold text-ink-900">Your tutor</h2>
+              <h2 className="text-sm font-bold text-white">Your tutor</h2>
               <div className="mt-4 flex items-center gap-3">
                 <Avatar name={session.tutor.fullName} src={session.tutor.avatarUrl} size="md" />
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-ink-900">
+                  <p className="truncate text-sm font-semibold text-white">
                     {session.tutor.fullName}
                   </p>
                   <StarRating value={session.tutor.rating} size="xs" />
@@ -327,25 +333,25 @@ export function SessionDetailPage() {
             </Card>
           ) : (
             <Card className="p-6">
-              <h2 className="text-sm font-bold text-ink-900">Your student</h2>
+              <h2 className="text-sm font-bold text-white">Your student</h2>
               <div className="mt-4 flex items-center gap-3">
                 <Avatar name={session.student.fullName} src={session.student.avatarUrl} size="md" />
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-ink-900">
+                  <p className="truncate text-sm font-semibold text-white">
                     {session.student.fullName}
                   </p>
-                  <p className="truncate text-xs text-ink-500">{session.student.email}</p>
+                  <p className="truncate text-xs text-white/45">{session.student.email}</p>
                 </div>
               </div>
               {session.student.phone ? (
-                <p className="mt-3 text-sm text-ink-600">{session.student.phone}</p>
+                <p className="mt-3 text-sm text-white/60">{session.student.phone}</p>
               ) : null}
             </Card>
           )}
 
           <Card className="p-6">
-            <h2 className="text-sm font-bold text-ink-900">Payment protection</h2>
-            <p className="mt-2 text-sm text-ink-600">
+            <h2 className="text-sm font-bold text-white">Payment protection</h2>
+            <p className="mt-2 text-sm text-white/60">
               Your fee stays in escrow until both you and {isTutor ? 'the student' : 'the tutor'}{' '}
               confirm the session took place. If a request is declined or cancelled, the fee is
               refunded.
@@ -357,5 +363,6 @@ export function SessionDetailPage() {
         </aside>
       </div>
     </div>
+    </AppShell>
   );
 }

@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, CheckCircle2, ShieldAlert, Star } from 'lucide-react';
 import { Alert } from '@/components/ui/Alert';
+import { AppShell } from '@/components/layout/AppShell';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -67,15 +68,18 @@ export function FeedbackPage() {
 
   if (loading) {
     return (
-      <div className="container-page py-10 sm:py-14">
-        <Skeleton className="h-4 w-40" />
-        <Skeleton className="mt-6 h-96 w-full rounded-card" />
-      </div>
+      <AppShell title="Review session">
+        <div className="container-page py-10 sm:py-14">
+          <Skeleton className="h-4 w-40" />
+          <Skeleton className="mt-6 h-96 w-full rounded-card" />
+        </div>
+      </AppShell>
     );
   }
 
   if (error) {
     return (
+      <AppShell title="Review session">
       <div className="container-page py-10 sm:py-14">
         <Alert
           tone={error.isForbidden ? 'warning' : 'error'}
@@ -98,6 +102,7 @@ export function FeedbackPage() {
           </ButtonLink>
         </div>
       </div>
+      </AppShell>
     );
   }
 
@@ -106,14 +111,15 @@ export function FeedbackPage() {
   // ------------------------------------------------------------ Eligibility
   if (session.status !== 'COMPLETED') {
     return (
+      <AppShell title="Review session">
       <div className="container-page py-10 sm:py-14">
         <div className="container-narrow">
           <Card className="p-8 text-center">
-            <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-amber-50 text-amber-600">
+            <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-[rgba(251,191,36,0.12)] text-amber-300">
               <ShieldAlert className="h-6 w-6" aria-hidden="true" />
             </span>
-            <h1 className="mt-4 text-xl font-bold text-ink-900">This session is not complete yet</h1>
-            <p className="mx-auto mt-2 max-w-md text-sm text-ink-600">
+            <h1 className="mt-4 text-xl font-bold text-white">This session is not complete yet</h1>
+            <p className="mx-auto mt-2 max-w-md text-sm text-white/60">
               Reviews can only be left once a session has been completed. This session is currently{' '}
               <strong>{session.status.toLowerCase()}</strong>.
             </p>
@@ -123,19 +129,21 @@ export function FeedbackPage() {
           </Card>
         </div>
       </div>
+      </AppShell>
     );
   }
 
   if (session.hasReview) {
     return (
+      <AppShell title="Review session">
       <div className="container-page py-10 sm:py-14">
         <div className="container-narrow">
           <Card className="p-8 text-center">
-            <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-accent-50 text-accent-600">
+            <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-[rgba(212,255,36,0.12)] text-volt-400">
               <CheckCircle2 className="h-6 w-6" aria-hidden="true" />
             </span>
-            <h1 className="mt-4 text-xl font-bold text-ink-900">You already reviewed this session</h1>
-            <p className="mx-auto mt-2 max-w-md text-sm text-ink-600">
+            <h1 className="mt-4 text-xl font-bold text-white">You already reviewed this session</h1>
+            <p className="mx-auto mt-2 max-w-md text-sm text-white/60">
               Only one review can be submitted per session. Thank you for helping other learners.
             </p>
             <ButtonLink to={`/sessions/${session.id}`} className="mt-6">
@@ -144,16 +152,18 @@ export function FeedbackPage() {
           </Card>
         </div>
       </div>
+      </AppShell>
     );
   }
 
   // -------------------------------------------------------------- The form
   return (
+    <AppShell title="Review session">
     <div className="container-page py-8 sm:py-12">
       <nav aria-label="Breadcrumb" className="mb-6">
         <Link
           to={`/sessions/${session.id}`}
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-600 transition hover:text-brand-700"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-white/60 transition hover:text-[#7eb3ff]"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to the session
@@ -162,16 +172,16 @@ export function FeedbackPage() {
 
       <div className="container-narrow">
         <Card className="p-6 sm:p-8">
-          <h1 className="text-2xl font-bold tracking-tight text-ink-900">Rate your session</h1>
-          <p className="mt-2 text-sm text-ink-600">
+          <h1 className="text-2xl font-bold tracking-tight text-white">Rate your session</h1>
+          <p className="mt-2 text-sm text-white/60">
             Your review helps other learners choose a tutor and helps tutors improve.
           </p>
 
-          <div className="mt-5 flex items-center gap-3 rounded-xl bg-ink-50 p-4">
+          <div className="mt-5 flex items-center gap-3 rounded-xl bg-white/[0.04] p-4">
             <Avatar name={session.tutor.fullName} src={session.tutor.avatarUrl} size="md" />
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-ink-900">{session.tutor.fullName}</p>
-              <p className="truncate text-xs text-ink-500">
+              <p className="truncate text-sm font-semibold text-white">{session.tutor.fullName}</p>
+              <p className="truncate text-xs text-white/45">
                 {session.subject} · {formatDateTime(session.scheduledAt)}
               </p>
             </div>
@@ -185,7 +195,7 @@ export function FeedbackPage() {
             ) : null}
 
             <div className="space-y-2">
-              <p className="text-sm font-medium text-ink-800">
+              <p className="text-sm font-medium text-white/90">
                 How was your session?{' '}
                 <span className="text-red-600" aria-hidden="true">
                   *
@@ -207,8 +217,8 @@ export function FeedbackPage() {
               {...register('comment')}
             />
 
-            <div className="flex flex-col gap-3 border-t border-ink-100 pt-5 sm:flex-row sm:items-center sm:justify-between">
-              <p className="flex items-start gap-2 text-xs text-ink-500">
+            <div className="flex flex-col gap-3 border-t border-[rgba(21,88,201,0.2)] pt-5 sm:flex-row sm:items-center sm:justify-between">
+              <p className="flex items-start gap-2 text-xs text-white/45">
                 <Star className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                 Reviews are published against the tutor&apos;s profile.
               </p>
@@ -220,5 +230,6 @@ export function FeedbackPage() {
         </Card>
       </div>
     </div>
+    </AppShell>
   );
 }

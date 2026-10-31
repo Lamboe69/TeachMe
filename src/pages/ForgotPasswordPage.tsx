@@ -75,19 +75,20 @@ export function ForgotPasswordPage() {
       {PASSWORD_RESET_ENABLED ? (
         <form onSubmit={onSubmit} noValidate className="space-y-5">
           {submitError ? (
-            <Alert tone="error" title="We could not send the reset email">
+            <Alert theme="light" tone="error" title="We could not send the reset email">
               {submitError}
             </Alert>
           ) : null}
 
           {sent ? (
-            <Alert tone="success" title="Check your email">
+            <Alert theme="light" tone="success" title="Check your email">
               If an account exists for that address, a reset link is on its way. The link expires
               shortly for your security.
             </Alert>
           ) : null}
 
           <Input
+            theme="light"
             label="Email address"
             type="email"
             placeholder="you@example.com"
@@ -97,13 +98,13 @@ export function ForgotPasswordPage() {
             {...register('email')}
           />
 
-          <Button type="submit" fullWidth size="lg" loading={isSubmitting}>
+          <Button theme="light" type="submit" fullWidth size="lg" loading={isSubmitting}>
             {isSubmitting ? 'Sending request…' : 'Send reset link'}
           </Button>
         </form>
       ) : (
         <div className="space-y-5">
-          <Alert tone="warning" title="Password reset is not available yet">
+          <Alert theme="light" tone="warning" title="Password reset is not available yet">
             The TutorUG API does not currently expose a password reset endpoint, so we cannot send
             reset emails from this release. We would rather tell you plainly than pretend an email
             is on its way.
@@ -131,7 +132,7 @@ export function ForgotPasswordPage() {
             </ul>
           </div>
 
-          <ButtonLink to="/login" variant="outline" fullWidth>
+          <ButtonLink theme="light" to="/login" variant="outline" fullWidth>
             Back to log in
           </ButtonLink>
         </div>

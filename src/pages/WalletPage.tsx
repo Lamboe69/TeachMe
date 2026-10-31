@@ -238,7 +238,7 @@ export function WalletPage() {
               </div>
             ) : (
               <div className="overflow-hidden rounded-2xl" style={cardStyle}>
-                <ul style={{ divide: 'y' }}>
+                <ul>
                   {transactions.map((txn, idx) => {
                     const meta = TXN_META[txn.type] ?? TXN_META.TOP_UP;
                     const Icon = meta.icon;

@@ -20,7 +20,7 @@ const TABS = [
 const STATUS_STYLE: Record<string, { bg: string; color: string; border: string }> = {
   accepted:  { bg: 'rgba(21,88,201,0.18)',   color: '#7eb3ff',  border: '#1558C9' },
   pending:   { bg: 'rgba(212,255,36,0.12)',  color: '#D4FF24',  border: '#D4FF24' },
-  completed: { bg: 'rgba(34,197,94,0.12)',   color: '#4ade80',  border: '#22c55e' },
+  completed: { bg: 'rgba(212,255,36,0.12)',  color: '#D4FF24',  border: '#D4FF24' },
   cancelled: { bg: 'rgba(255,60,60,0.12)',   color: '#ff8080',  border: '#ef4444' },
   unknown:   { bg: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.4)', border: 'rgba(255,255,255,0.15)' },
 };

@@ -40,8 +40,23 @@ export function LoadingState({ label = 'Loading…' }: { label?: string }) {
 }
 
 /** Placeholder block used while content loads. */
-export function Skeleton({ className }: { className?: string }) {
-  return <div className={cn('animate-pulse rounded-lg bg-ink-200/70', className)} aria-hidden="true" />;
+export function Skeleton({
+  className,
+  theme = 'dark',
+}: {
+  className?: string;
+  theme?: 'dark' | 'light';
+}) {
+  return (
+    <div
+      className={cn(
+        'animate-pulse rounded-lg',
+        theme === 'dark' ? 'bg-[rgba(21,88,201,0.22)]' : 'bg-ink-200/70',
+        className,
+      )}
+      aria-hidden="true"
+    />
+  );
 }
 
 /** Full-screen loader used while a page chunk is being downloaded. */

@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn';
 
 export type AlertTone = 'info' | 'success' | 'warning' | 'error';
 
-const TONES: Record<AlertTone, { wrapper: string; icon: ReactNode }> = {
+const LIGHT_TONES: Record<AlertTone, { wrapper: string; icon: ReactNode }> = {
   info: {
     wrapper: 'border-brand-200 bg-brand-50 text-brand-900',
     icon: <Info className="h-5 w-5 shrink-0 text-brand-600" aria-hidden="true" />,
@@ -23,20 +23,41 @@ const TONES: Record<AlertTone, { wrapper: string; icon: ReactNode }> = {
   },
 };
 
+const DARK_TONES: Record<AlertTone, { wrapper: string; icon: ReactNode }> = {
+  info: {
+    wrapper: 'border-[rgba(21,88,201,0.4)] bg-[rgba(21,88,201,0.12)] text-white/75',
+    icon: <Info className="h-5 w-5 shrink-0 text-[#7eb3ff]" aria-hidden="true" />,
+  },
+  success: {
+    wrapper: 'border-[rgba(212,255,36,0.3)] bg-[rgba(212,255,36,0.08)] text-white/75',
+    icon: <CheckCircle2 className="h-5 w-5 shrink-0 text-volt-400" aria-hidden="true" />,
+  },
+  warning: {
+    wrapper: 'border-[rgba(251,191,36,0.3)] bg-[rgba(251,191,36,0.08)] text-white/75',
+    icon: <TriangleAlert className="h-5 w-5 shrink-0 text-amber-300" aria-hidden="true" />,
+  },
+  error: {
+    wrapper: 'border-[rgba(239,68,68,0.35)] bg-[rgba(239,68,68,0.1)] text-white/75',
+    icon: <AlertCircle className="h-5 w-5 shrink-0 text-red-300" aria-hidden="true" />,
+  },
+};
+
 export function Alert({
   tone = 'info',
+  theme = 'dark',
   title,
   children,
   action,
   className,
 }: {
   tone?: AlertTone;
+  theme?: 'dark' | 'light';
   title?: string;
   children?: ReactNode;
   action?: ReactNode;
   className?: string;
 }) {
-  const style = TONES[tone];
+  const style = (theme === 'dark' ? DARK_TONES : LIGHT_TONES)[tone];
   return (
     <div
       role={tone === 'error' ? 'alert' : 'status'}

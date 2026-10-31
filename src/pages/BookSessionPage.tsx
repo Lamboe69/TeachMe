@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { ArrowLeft, CalendarClock, Info, Lock, Wallet } from 'lucide-react';
 import { Alert } from '@/components/ui/Alert';
+import { AppShell } from '@/components/layout/AppShell';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { Button, ButtonLink } from '@/components/ui/Button';
@@ -129,18 +130,21 @@ export function BookSessionPage() {
 
   if (tutorLoading) {
     return (
-      <div className="container-page py-10 sm:py-14">
-        <Skeleton className="h-4 w-32" />
-        <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_360px]">
-          <Skeleton className="h-96 w-full" />
-          <Skeleton className="h-56 w-full" />
+      <AppShell title="Book a session">
+        <div className="container-page py-10 sm:py-14">
+          <Skeleton className="h-4 w-32" />
+          <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_360px]">
+            <Skeleton className="h-96 w-full" />
+            <Skeleton className="h-56 w-full" />
+          </div>
         </div>
-      </div>
+      </AppShell>
     );
   }
 
   if (tutorError) {
     return (
+      <AppShell title="Book a session">
       <div className="container-page py-10 sm:py-14">
         <Alert
           tone="error"
@@ -154,6 +158,7 @@ export function BookSessionPage() {
           </ButtonLink>
         </div>
       </div>
+      </AppShell>
     );
   }
 
@@ -165,11 +170,12 @@ export function BookSessionPage() {
   const noTimesForDate = hasSchedule && !!date && availableTimes.length === 0;
 
   return (
+    <AppShell title="Book a session">
     <div className="container-page py-8 sm:py-12">
       <nav aria-label="Breadcrumb" className="mb-6">
         <Link
           to={`/tutors/${tutor.id}`}
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-600 transition hover:text-brand-700"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-white/60 transition hover:text-[#7eb3ff]"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to {displayName}
@@ -179,8 +185,8 @@ export function BookSessionPage() {
       <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
         {/* ------------------------------------------------------- Form */}
         <Card className="p-6 sm:p-8">
-          <h1 className="text-2xl font-bold tracking-tight text-ink-900">Request a session</h1>
-          <p className="mt-2 text-sm text-ink-600">
+          <h1 className="text-2xl font-bold tracking-tight text-white">Request a session</h1>
+          <p className="mt-2 text-sm text-white/60">
             Choose one of {shortName}&apos;s available times. Paying holds the session fee in escrow
             and unlocks chat with {shortName}.
           </p>
@@ -229,7 +235,7 @@ export function BookSessionPage() {
               </Alert>
             ) : date && tutor.availability && tutor.availability.length > 0 ? (
               availableTimes.length > 0 ? (
-                <p className="flex items-start gap-2 text-xs text-green-700">
+                <p className="flex items-start gap-2 text-xs text-volt-400">
                   <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
                   Showing only times {shortName} is available on this day.
                 </p>
@@ -251,8 +257,8 @@ export function BookSessionPage() {
               {...register('message')}
             />
 
-            <div className="flex flex-col gap-3 border-t border-ink-100 pt-5 sm:flex-row sm:items-center sm:justify-between">
-              <p className="flex items-start gap-2 text-xs text-ink-500">
+            <div className="flex flex-col gap-3 border-t border-[rgba(21,88,201,0.2)] pt-5 sm:flex-row sm:items-center sm:justify-between">
+              <p className="flex items-start gap-2 text-xs text-white/45">
                 <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
                 Your wallet is charged now and the fee is held by TutorUG until the session is
                 completed. Cancel before then for a full refund.
@@ -284,9 +290,9 @@ export function BookSessionPage() {
             <div className="flex items-start gap-4">
               <Avatar name={tutor.fullName} src={tutor.avatarUrl} size="lg" />
               <div className="min-w-0">
-                <p className="truncate text-base font-bold text-ink-900">{displayName}</p>
+                <p className="truncate text-base font-bold text-white">{displayName}</p>
                 <StarRating value={tutor.rating} size="xs" className="mt-1" />
-                <p className="mt-1 flex items-center gap-1 text-xs font-medium text-amber-700">
+                <p className="mt-1 flex items-center gap-1 text-xs font-medium text-amber-300">
                   <Lock className="h-3 w-3" />
                   Chat unlocks after payment
                 </p>
@@ -303,22 +309,22 @@ export function BookSessionPage() {
               </ul>
             ) : null}
 
-            <div className="mt-5 border-t border-ink-100 pt-4">
-              <p className="text-sm text-ink-600">
-                <span className="block text-xs text-ink-500">Rate per session</span>
-                <span className="text-lg font-bold text-ink-900">{formatRate(tutor.hourlyRate)}</span>
+            <div className="mt-5 border-t border-[rgba(21,88,201,0.2)] pt-4">
+              <p className="text-sm text-white/60">
+                <span className="block text-xs text-white/45">Rate per session</span>
+                <span className="text-lg font-bold text-white">{formatRate(tutor.hourlyRate)}</span>
               </p>
-              <div className="mt-3 flex items-center justify-between rounded-xl bg-green-50 px-3 py-2.5 ring-1 ring-green-200">
-                <span className="flex items-center gap-1.5 text-xs font-semibold text-green-800">
+              <div className="mt-3 flex items-center justify-between rounded-xl bg-[rgba(212,255,36,0.08)] px-3 py-2.5 ring-1 ring-[rgba(212,255,36,0.25)]">
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-volt-400">
                   <Wallet className="h-4 w-4" />
                   Wallet balance
                 </span>
-                <span className="text-sm font-bold text-green-900">
+                <span className="text-sm font-bold text-volt-300">
                   {wallet ? formatUGX(wallet.availableBalance) : '—'}
                 </span>
               </div>
               {needsTopUp && (
-                <div className="mt-3 rounded-xl bg-amber-50 p-3 text-xs text-amber-900 ring-1 ring-amber-200">
+                <div className="mt-3 rounded-xl bg-[rgba(251,191,36,0.1)] p-3 text-xs text-amber-200 ring-1 ring-[rgba(251,191,36,0.3)]">
                   You need {formatUGX(sessionFee - (wallet?.availableBalance ?? 0))} more.{' '}
                   <Link to="/wallet" className="font-bold underline">
                     Top up your wallet
@@ -327,14 +333,14 @@ export function BookSessionPage() {
               )}
             </div>
 
-            <ol className="mt-5 space-y-3 border-t border-ink-100 pt-4">
+            <ol className="mt-5 space-y-3 border-t border-[rgba(21,88,201,0.2)] pt-4">
               {[
                 'You send this request and your wallet is charged.',
                 'The tutor accepts or declines.',
                 'TutorUG releases the fee after you both confirm the session.',
               ].map((step, index) => (
-                <li key={step} className="flex gap-3 text-sm text-ink-600">
-                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand-50 text-xs font-bold text-brand-700">
+                <li key={step} className="flex gap-3 text-sm text-white/60">
+                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[rgba(21,88,201,0.18)] text-xs font-bold text-[#7eb3ff]">
                     {index + 1}
                   </span>
                   {step}
@@ -345,5 +351,6 @@ export function BookSessionPage() {
         </aside>
       </div>
     </div>
+    </AppShell>
   );
 }

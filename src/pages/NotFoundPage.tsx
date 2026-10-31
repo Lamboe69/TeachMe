@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/Card';
 export function NotFoundPage() {
   return (
     <div className="container-page flex min-h-[70vh] items-center justify-center py-12">
-      <Card className="w-full max-w-xl p-8 text-center sm:p-10">
+      <Card theme="light" className="w-full max-w-xl p-8 text-center sm:p-10">
         <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-brand-50 text-brand-700">
           <Compass className="h-7 w-7" aria-hidden="true" />
         </span>
@@ -20,10 +20,10 @@ export function NotFoundPage() {
         </p>
 
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-          <ButtonLink to="/" leftIcon={Home}>
+          <ButtonLink theme="light" to="/" leftIcon={Home}>
             Back to home
           </ButtonLink>
-          <ButtonLink to="/tutors" variant="outline" leftIcon={Search}>
+          <ButtonLink theme="light" to="/tutors" variant="outline" leftIcon={Search}>
             Browse tutors
           </ButtonLink>
         </div>

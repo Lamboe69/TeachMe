@@ -22,7 +22,10 @@ function usesAppShell(pathname: string) {
   return (
     APP_SHELL_PATHS.has(pathname) ||
     pathname.startsWith('/tutor/profile') ||
-    pathname.startsWith('/tutors/')
+    pathname === '/tutor/sessions' ||
+    pathname.startsWith('/tutors/') ||
+    pathname === '/sessions' ||
+    pathname.startsWith('/sessions/')
   );
 }
 

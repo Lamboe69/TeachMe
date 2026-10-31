@@ -9,7 +9,7 @@ export function UnauthorizedPage() {
 
   return (
     <div className="container-page flex min-h-[70vh] items-center justify-center py-12">
-      <Card className="w-full max-w-lg p-8 text-center sm:p-10">
+      <Card theme="light" className="w-full max-w-lg p-8 text-center sm:p-10">
         <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-amber-50 text-amber-600">
           <Lock className="h-7 w-7" aria-hidden="true" />
         </span>
@@ -26,11 +26,11 @@ export function UnauthorizedPage() {
 
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
           {user ? (
-            <ButtonLink to={homePath}>Go to my dashboard</ButtonLink>
+            <ButtonLink theme="light" to={homePath}>Go to my dashboard</ButtonLink>
           ) : (
-            <ButtonLink to="/login">Log in</ButtonLink>
+            <ButtonLink theme="light" to="/login">Log in</ButtonLink>
           )}
-          <ButtonLink to="/" variant="outline">
+          <ButtonLink theme="light" to="/" variant="outline">
             Back to home
           </ButtonLink>
         </div>

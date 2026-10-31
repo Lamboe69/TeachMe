@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { CalendarX2, Inbox } from 'lucide-react';
 import { Alert } from '@/components/ui/Alert';
+import { AppShell } from '@/components/layout/AppShell';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -56,6 +57,7 @@ export function TutorSessionsPage() {
   };
 
   return (
+    <AppShell title="Session requests">
     <div className="container-page py-10 sm:py-14">
       <PageHeader
         eyebrow="Tutor sessions"
@@ -141,5 +143,6 @@ export function TutorSessionsPage() {
         ) : null}
       </div>
     </div>
+    </AppShell>
   );
 }

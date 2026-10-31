@@ -38,6 +38,29 @@
   --color-accent-800: #92400e;
   --color-accent-900: #78350f;
 
+  /* Cobalt / Volt / Night — premium dark product palette */
+  --color-cobalt-50: #eef4ff;
+  --color-cobalt-100: #dbe7ff;
+  --color-cobalt-200: #bfd3ff;
+  --color-cobalt-300: #93b6ff;
+  --color-cobalt-400: #5f8fff;
+  --color-cobalt-500: #1558c9;
+  --color-cobalt-600: #1147a6;
+  --color-cobalt-700: #0d3d8a;
+  --color-cobalt-800: #0c326e;
+  --color-cobalt-900: #0b2a58;
+  --color-cobalt-950: #061a3a;
+
+  --color-volt-300: #e4ff7a;
+  --color-volt-400: #d4ff24;
+  --color-volt-500: #b8e600;
+  --color-volt-600: #94bd00;
+
+  --color-night-700: #0a0c12;
+  --color-night-800: #0d1526;
+  --color-night-900: #080c18;
+  --color-night-950: #030407;
+
   /* Ink / neutral */
   --color-ink-50: #f9fafb;
   --color-ink-100: #f3f4f6;
@@ -147,18 +170,59 @@
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, var(--color-brand-600) 0%, var(--color-coral-500) 100%);
+    background: linear-gradient(135deg, var(--color-volt-400) 0%, var(--color-cobalt-400) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
   .bg-gradient-primary {
-    background: linear-gradient(135deg, var(--color-brand-600) 0%, var(--color-brand-700) 100%);
+    background: linear-gradient(135deg, var(--color-cobalt-500) 0%, var(--color-cobalt-700) 100%);
   }
 
   .bg-gradient-warm {
-    background: linear-gradient(135deg, var(--color-brand-600) 0%, var(--color-coral-500) 100%);
+    background: linear-gradient(135deg, var(--color-cobalt-500) 0%, var(--color-volt-500) 100%);
+  }
+
+  /* Premium dark surfaces used across authenticated screens. */
+  .surface {
+    background: rgba(21, 88, 201, 0.08);
+    border: 1px solid rgba(21, 88, 201, 0.25);
+  }
+
+  .surface-raised {
+    background: linear-gradient(135deg, rgba(21, 88, 201, 0.16) 0%, rgba(21, 88, 201, 0.06) 100%);
+    border: 1px solid rgba(21, 88, 201, 0.35);
+    box-shadow: 0 18px 50px -24px rgba(0, 0, 0, 0.8);
+  }
+
+  .glow-lime {
+    box-shadow: 0 0 24px -6px rgba(212, 255, 36, 0.45);
+  }
+
+  .glow-cobalt {
+    box-shadow: 0 0 28px -8px rgba(21, 88, 201, 0.7);
+  }
+
+  /* Native date/time pickers on dark inputs */
+  .scheme-dark {
+    color-scheme: dark;
+  }
+
+  /* Soft page entrance used by the authenticated shell */
+  .animate-rise {
+    animation: rise 0.35s cubic-bezier(0.22, 0.8, 0.24, 1) both;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .blob {
