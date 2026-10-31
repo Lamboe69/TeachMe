@@ -30,6 +30,9 @@ import {
  * Route guards are a UX convenience only — the Spring Boot API is the
  * authority on who may access which resource.
  */
+const baseUrl = import.meta.env.BASE_URL;
+const basename = baseUrl === '/' ? '/' : baseUrl.replace(/\/$/, '');
+
 export const router = createBrowserRouter([
   {
     element: <RootLayout />,
@@ -181,4 +184,4 @@ export const router = createBrowserRouter([
     path: '/forgot-password',
     element: <ForgotPasswordPage />,
   },
-]);
+], { basename });
