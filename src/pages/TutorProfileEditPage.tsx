@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   BadgeCheck,
   CheckCircle2,
+  ChevronDown,
   MapPin,
   Save,
   Star,
@@ -35,7 +36,7 @@ interface FormState {
 const cardStyle = { background: 'rgba(21,88,201,0.08)', border: '1px solid rgba(21,88,201,0.25)' };
 const inputClass = 'h-12 w-full rounded-xl px-4 text-sm font-medium text-white placeholder-white/25 outline-none transition focus:ring-2 focus:ring-[#1558C9]';
 const inputStyle = { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(21,88,201,0.4)' };
-const selectStyle = { background: '#0d1526', border: '1px solid rgba(21,88,201,0.4)', color: 'white' };
+const selectStyle = { border: '1px solid rgba(21,88,201,0.45)', color: 'white', background: 'rgba(21,88,201,0.08)' };
 
 export function TutorProfileEditPage() {
   const { user, refreshUser } = useAuth();
@@ -257,25 +258,31 @@ export function TutorProfileEditPage() {
                     </label>
                     {slot.enabled ? (
                       <div className="flex items-center gap-2">
-                        <select
-                          aria-label={`${slot.day} start time`}
-                          value={slot.start}
-                          onChange={(e) => updateAvailability(slot.day, { start: e.target.value })}
-                          className="h-10 rounded-lg px-2 text-sm outline-none focus:ring-2 focus:ring-[#1558C9]"
-                          style={selectStyle}
-                        >
-                          {TIME_OPTIONS.slice(0, -1).map((time) => <option key={time} value={time}>{time}</option>)}
-                        </select>
+                        <div className="relative">
+                          <select
+                            aria-label={`${slot.day} start time`}
+                            value={slot.start}
+                            onChange={(e) => updateAvailability(slot.day, { start: e.target.value })}
+                            className="h-10 appearance-none rounded-lg pl-3 pr-8 text-sm outline-none focus:ring-2 focus:ring-[#1558C9] focus:border-[#1558C9] transition cursor-pointer"
+                            style={selectStyle}
+                          >
+                            {TIME_OPTIONS.slice(0, -1).map((time) => <option key={time} value={time} style={{ background: '#0d1526' }}>{time}</option>)}
+                          </select>
+                          <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#1558C9]" aria-hidden="true" />
+                        </div>
                         <span className="text-white/40 text-sm">to</span>
-                        <select
-                          aria-label={`${slot.day} end time`}
-                          value={slot.end}
-                          onChange={(e) => updateAvailability(slot.day, { end: e.target.value })}
-                          className="h-10 rounded-lg px-2 text-sm outline-none focus:ring-2 focus:ring-[#1558C9]"
-                          style={selectStyle}
-                        >
-                          {TIME_OPTIONS.slice(1).map((time) => <option key={time} value={time}>{time}</option>)}
-                        </select>
+                        <div className="relative">
+                          <select
+                            aria-label={`${slot.day} end time`}
+                            value={slot.end}
+                            onChange={(e) => updateAvailability(slot.day, { end: e.target.value })}
+                            className="h-10 appearance-none rounded-lg pl-3 pr-8 text-sm outline-none focus:ring-2 focus:ring-[#1558C9] focus:border-[#1558C9] transition cursor-pointer"
+                            style={selectStyle}
+                          >
+                            {TIME_OPTIONS.slice(1).map((time) => <option key={time} value={time} style={{ background: '#0d1526' }}>{time}</option>)}
+                          </select>
+                          <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#1558C9]" aria-hidden="true" />
+                        </div>
                       </div>
                     ) : (
                       <span className="text-sm text-white/30">Unavailable</span>
