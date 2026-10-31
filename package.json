@@ -11,7 +11,8 @@
     "typecheck": "tsc -b",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "deploy": "bash scripts/deploy-pages.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
