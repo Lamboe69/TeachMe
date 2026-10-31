@@ -6,6 +6,7 @@ import {
   LayoutDashboard, Menu, Quote, Search, Shield,
   Sparkles, Star, TrendingUp, Wallet, X, XCircle,
 } from 'lucide-react';
+import { asset } from '@/utils/asset';
 
 /* ── Scroll-fade hook ── */
 function useFadeIn() {
@@ -221,7 +222,7 @@ function Hero() {
   return (
     <section className="relative overflow-hidden pt-24 pb-16 sm:pt-32 sm:pb-20 lg:pt-40 lg:pb-28">
       <div className="absolute inset-0">
-        <img src="/img/university-campus.jpg" alt="" aria-hidden="true" className="h-full w-full object-cover object-center" />
+        <img src={asset('/img/university-campus.jpg')} alt="" aria-hidden="true" className="h-full w-full object-cover object-center" />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(3,4,7,0.93) 0%, rgba(3,4,7,0.80) 50%, rgba(21,88,201,0.55) 100%)' }} />
       </div>
       {/* Particles */}
@@ -274,7 +275,7 @@ function Hero() {
           </div>
           <div className="relative">
             <div className="relative overflow-hidden rounded-3xl shadow-2xl" style={{ border: '1px solid rgba(21,88,201,0.4)' }}>
-              <img src="/img/tutor-teaching.jpg" alt="A student tutor explaining a concept" className="h-full w-full object-cover" style={{ minHeight: '420px' }} />
+              <img src={asset('/img/tutor-teaching.jpg')} alt="A student tutor explaining a concept" className="h-full w-full object-cover" style={{ minHeight: '420px' }} />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(3,4,7,0.85) 0%, rgba(3,4,7,0.2) 60%, transparent 100%)' }} />
               <div className="absolute bottom-6 left-6 right-6 rounded-2xl px-5 py-4" style={{ background: 'rgba(3,4,7,0.75)', backdropFilter: 'blur(12px)', border: '1px solid rgba(21,88,201,0.4)' }}>
                 <div className="flex items-center justify-between">
@@ -513,7 +514,7 @@ function EditorialBreak() {
       style={{ minHeight: '380px', opacity: visible ? 1 : 0 }}
     >
       <img
-        src="/img/students-learning.jpg"
+        src={asset('/img/students-learning.jpg')}
         alt="Students learning together"
         className="absolute inset-0 h-full w-full object-cover object-center"
       />
@@ -556,9 +557,9 @@ function EditorialBreak() {
 
 /* ── Featured tutors ── */
 const FEATURED_TUTORS = [
-  { name: 'Victor Tumwine', uni: 'Makerere · BSc Yr 4', subject: 'Calculus & Linear Algebra', rating: 4.9, sessions: 47, price: 10000, photo: '/img/tutor-1.jpg' },
-  { name: 'Grace Namukasa', uni: 'Kyambogo · BIT Yr 3', subject: 'Database Systems', rating: 4.8, sessions: 31, price: 8000, photo: '/img/tutor-2.jpg' },
-  { name: 'David Okello', uni: 'UCU · BSc Yr 4', subject: 'Organic Chemistry', rating: 5.0, sessions: 22, price: 12000, photo: '/img/tutor-3.jpg' },
+  { name: 'Victor Tumwine', uni: 'Makerere · BSc Yr 4', subject: 'Calculus & Linear Algebra', rating: 4.9, sessions: 47, price: 10000, photo: asset('/img/tutor-1.jpg') },
+  { name: 'Grace Namukasa', uni: 'Kyambogo · BIT Yr 3', subject: 'Database Systems', rating: 4.8, sessions: 31, price: 8000, photo: asset('/img/tutor-2.jpg') },
+  { name: 'David Okello', uni: 'UCU · BSc Yr 4', subject: 'Organic Chemistry', rating: 5.0, sessions: 22, price: 12000, photo: asset('/img/tutor-3.jpg') },
 ];
 
 function FeaturedTutors() {
@@ -619,9 +620,9 @@ function FeaturedTutors() {
 
 /* ── Testimonials ── */
 const TESTIMONIALS = [
-  { name: 'Nakato Aisha', uni: 'Makerere University · BBA Yr 2', subject: 'Calculus', rating: 5, photo: '/img/student-aisha.jpg', text: "I was failing Calculus and couldn't afford a private tutor. On TutorUG I found a Makerere Yr 4 student who sat the same MAT 1101 exam. Three sessions at UGX 8,000 each and I passed. Best money I ever spent." },
-  { name: 'Ssemwogerere Brian', uni: 'Kyambogo University · BIT Yr 3', subject: 'Database Systems', rating: 5, photo: '/img/student-brian.jpg', text: "I tutor Database Systems on Saturday mornings between 9 and 11. I've earned UGX 120,000 this semester — enough to cover my retake fees and buy data. The MoMo payment lands the same day the session ends." },
-  { name: 'Akello Patience', uni: 'UCU · BSc Nursing Yr 2', subject: 'Organic Chemistry', rating: 5, photo: '/img/student-patience.jpg', text: "CHE 1201 was going to make me repeat the year. My TutorUG tutor had done the same course at UCU the year before — she knew exactly which questions Ssekandi sets. Two sessions and I was sorted." },
+  { name: 'Nakato Aisha', uni: 'Makerere University · BBA Yr 2', subject: 'Calculus', rating: 5, photo: asset('/img/student-aisha.jpg'), text: "I was failing Calculus and couldn't afford a private tutor. On TutorUG I found a Makerere Yr 4 student who sat the same MAT 1101 exam. Three sessions at UGX 8,000 each and I passed. Best money I ever spent." },
+  { name: 'Ssemwogerere Brian', uni: 'Kyambogo University · BIT Yr 3', subject: 'Database Systems', rating: 5, photo: asset('/img/student-brian.jpg'), text: "I tutor Database Systems on Saturday mornings between 9 and 11. I've earned UGX 120,000 this semester — enough to cover my retake fees and buy data. The MoMo payment lands the same day the session ends." },
+  { name: 'Akello Patience', uni: 'UCU · BSc Nursing Yr 2', subject: 'Organic Chemistry', rating: 5, photo: asset('/img/student-patience.jpg'), text: "CHE 1201 was going to make me repeat the year. My TutorUG tutor had done the same course at UCU the year before — she knew exactly which questions Ssekandi sets. Two sessions and I was sorted." },
 ];
 
 function Testimonials() {
@@ -690,7 +691,7 @@ function BecomeTutor() {
             </Link>
           </div>
           <div className="relative overflow-hidden rounded-3xl shadow-2xl" style={{ minHeight: '380px', border: '1px solid rgba(212,255,36,0.2)' }}>
-            <img src="/img/library-study.jpg" alt="Students studying in a university library" className="absolute inset-0 h-full w-full object-cover" />
+            <img src={asset('/img/library-study.jpg')} alt="Students studying in a university library" className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(3,4,7,0.9) 0%, rgba(3,4,7,0.3) 60%, transparent 100%)' }} />
             <div className="absolute bottom-0 left-0 right-0 grid grid-cols-2 gap-3 p-6">
               {[

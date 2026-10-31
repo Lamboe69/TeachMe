@@ -12,6 +12,7 @@ import { toAppError } from '@/utils/apiError';
 import { loginSchema } from '@/utils/schemas';
 import type { LoginFormValues } from '@/utils/schemas';
 import { DEMO_MODE } from '@/app/config';
+import { asset } from '@/utils/asset';
 
 function firstName(fullName: string) {
   return fullName.trim().split(/\s+/)[0] || fullName;
@@ -63,7 +64,7 @@ function LeftPanel() {
     <div className="relative hidden lg:flex flex-col overflow-hidden" style={{ background: '#030407', minHeight: '100vh' }}>
       {/* Background photo */}
       <div className="absolute inset-0">
-        <img src="/img/tutor-teaching.jpg" alt="" aria-hidden="true" className="h-full w-full object-cover object-center" />
+        <img src={asset('/img/tutor-teaching.jpg')} alt="" aria-hidden="true" className="h-full w-full object-cover object-center" />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(3,4,7,0.93) 0%, rgba(3,4,7,0.78) 50%, rgba(21,88,201,0.6) 100%)' }} />
       </div>
       {/* Grid */}

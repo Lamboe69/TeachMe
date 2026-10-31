@@ -13,6 +13,7 @@ import { PASSWORD_RESET_ENABLED } from '@/app/config';
 import { toAppError } from '@/utils/apiError';
 import { forgotPasswordSchema } from '@/utils/schemas';
 import type { ForgotPasswordFormValues } from '@/utils/schemas';
+import { asset } from '@/utils/asset';
 
 /**
  * Password reset.
@@ -54,7 +55,7 @@ export function ForgotPasswordPage() {
     <div className="min-h-screen bg-gradient-to-br from-cream-50 via-green-50/30 to-emerald-50/40">
       <div className="absolute inset-0">
         <img
-          src="/img/library-study.jpg"
+          src={asset('/img/library-study.jpg')}
           alt=""
           className="h-full w-full object-cover opacity-5"
         />

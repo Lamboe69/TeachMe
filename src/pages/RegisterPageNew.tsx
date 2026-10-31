@@ -12,6 +12,7 @@ import { useToast } from '@/context/ToastContext';
 import { toAppError } from '@/utils/apiError';
 import { registerSchema } from '@/utils/schemas';
 import type { RegisterFormValues } from '@/utils/schemas';
+import { asset } from '@/utils/asset';
 
 /* ── Particles ── */
 function Particles() {
@@ -58,7 +59,7 @@ function LeftPanel() {
   return (
     <div className="relative hidden lg:flex flex-col overflow-hidden" style={{ background: '#030407', minHeight: '100vh' }}>
       <div className="absolute inset-0">
-        <img src="/img/tutor-teaching.jpg" alt="" aria-hidden="true" className="h-full w-full object-cover object-center" />
+        <img src={asset('/img/tutor-teaching.jpg')} alt="" aria-hidden="true" className="h-full w-full object-cover object-center" />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(3,4,7,0.93) 0%, rgba(3,4,7,0.78) 50%, rgba(21,88,201,0.6) 100%)' }} />
       </div>
       <div className="absolute inset-0 opacity-[0.04] pointer-events-none">
