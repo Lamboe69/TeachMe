@@ -129,7 +129,7 @@ export function AppShell({ children, title }: AppShellProps) {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: '#0a0c12' }}>
+    <div className="min-h-dvh overflow-x-hidden" style={{ background: '#0a0c12' }}>
       <aside className="hidden lg:flex lg:w-72 lg:flex-col lg:fixed lg:inset-y-0 z-30" style={{ borderRight: '1px solid rgba(21,88,201,0.25)', boxShadow: '4px 0 24px rgba(0,0,0,0.4)' }}>
         <SidebarContent user={user} isTutor={isTutor} navItems={navItems} onLogout={handleLogout} onClose={() => setMobileOpen(false)} />
       </aside>
@@ -146,7 +146,7 @@ export function AppShell({ children, title }: AppShellProps) {
         </div>
       )}
 
-      <div className="lg:pl-72 w-full">
+      <div className="lg:pl-72 min-w-0 w-full">
         <header className="sticky top-0 z-30 backdrop-blur-xl" style={{ background: 'rgba(10,12,18,0.95)', borderBottom: '1px solid rgba(21,88,201,0.2)' }}>
           <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3">
@@ -173,7 +173,7 @@ export function AppShell({ children, title }: AppShellProps) {
             </div>
           </div>
         </header>
-        <main className="animate-rise px-4 py-8 sm:px-6 lg:px-8">{children}</main>
+        <main className="animate-rise min-w-0 px-4 py-8 sm:px-6 lg:px-8">{children}</main>
       </div>
     </div>
   );
