@@ -1,0 +1,1 @@
+import{h as e,k as t}from"./index-CiE9YNNg.js";var n=t();function r({className:t,theme:r=`dark`,...i}){return(0,n.jsx)(`div`,{className:e(`min-w-0 rounded-card transition`,r===`dark`?`border border-[rgba(21,88,201,0.25)] bg-[rgba(21,88,201,0.08)] text-white shadow-[0_18px_50px_-28px_rgba(0,0,0,0.85)]`:`border border-ink-200/80 bg-white shadow-card`,t),...i})}export{r as t};
