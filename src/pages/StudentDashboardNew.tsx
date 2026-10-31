@@ -143,14 +143,14 @@ export function StudentDashboardNew() {
           { label: 'Hours learned', value: hoursLearned, icon: Clock, accent: '#1558C9', sub: `${hoursLearned >= 5 ? '🔥 Great progress' : 'Goal: 5 hrs/week'}` },
           { label: 'Tutors worked with', value: activeTutors, icon: Star, accent: '#D4FF24', sub: activeTutors > 0 ? 'Across subjects' : 'Find your first' },
         ].map((stat) => (
-          <div key={stat.label} className="rounded-2xl p-5 transition hover:scale-[1.02]" style={cardStyle}>
+          <div key={stat.label} className="rounded-2xl p-5 transition hover:scale-[1.02] hover:-translate-y-0.5" style={{ background: `linear-gradient(135deg, ${stat.accent}12 0%, rgba(21,88,201,0.06) 100%)`, border: `1px solid ${stat.accent}30` }}>
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs font-semibold text-white/50">{stat.label}</p>
                 <p className="mt-1.5 text-3xl font-black text-white">{stat.value}</p>
                 <p className="mt-1 text-xs text-white/40">{stat.sub}</p>
               </div>
-              <div className="grid h-11 w-11 place-items-center rounded-xl" style={{ background: `${stat.accent}18` }}>
+              <div className="grid h-11 w-11 place-items-center rounded-xl" style={{ background: `${stat.accent}22`, boxShadow: `0 0 16px ${stat.accent}30` }}>
                 <stat.icon className="h-5 w-5" style={{ color: stat.accent }} />
               </div>
             </div>
