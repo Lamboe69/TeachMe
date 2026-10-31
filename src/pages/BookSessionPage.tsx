@@ -248,7 +248,7 @@ export function BookSessionPage() {
               hint="Sharing the topic helps your tutor prepare. A couple of sentences is plenty."
               optional
               rows={5}
-              placeholder="e.g. I am stuck on quadratic equations and my CAT is next week."
+              placeholder="e.g. I am stuck on integration by parts and my MAT 1201 CAT is next week."
               error={errors.message?.message}
               {...register('message')}
             />

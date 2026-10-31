@@ -96,7 +96,7 @@ function Particles() {
 /* ── Live activity feed ── */
 const FEED_ITEMS = [
   { icon: '📚', msg: 'Nakato just booked a Calculus session', time: '2s ago' },
-  { icon: '💰', msg: 'Ssemwogerere earned UGX 8,000 from a session', time: '18s ago' },
+  { icon: '💰', msg: 'Ssemwogerere earned UGX 48,000 from a session', time: '18s ago' },
   { icon: '⭐', msg: 'Apio left a 5-star review', time: '45s ago' },
   { icon: '🎓', msg: 'New tutor joined — Database Systems', time: '1m ago' },
   { icon: '✅', msg: 'Session completed — Organic Chemistry', time: '2m ago' },
@@ -280,7 +280,7 @@ function Hero() {
               <div className="absolute bottom-6 left-6 right-6 rounded-2xl px-5 py-4" style={{ background: 'rgba(3,4,7,0.75)', backdropFilter: 'blur(12px)', border: '1px solid rgba(21,88,201,0.4)' }}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-bold text-white">UGX 5,000 – 15,000 / session</p>
+                    <p className="font-bold text-white">UGX 40,000 – 85,000 / session</p>
                     <p className="text-xs text-white/50">Held in escrow until complete</p>
                   </div>
                   <div className="rounded-xl px-4 py-2 text-sm font-bold" style={{ background: '#D4FF24', color: '#030407' }}>Book now</div>
@@ -426,14 +426,14 @@ function BeforeAfter() {
   const { ref, visible } = useFadeIn();
   const before = [
     'Studying alone with no guidance',
-    'Expensive private tutors (UGX 80k+)',
+    'Expensive private tutors (UGX 200k+)',
     'Lecturers too busy to explain again',
     'Failing exams, repeating course units',
     'No one who understands your syllabus',
   ];
   const after = [
     'Learn from a student who aced it',
-    'Affordable sessions from UGX 5,000',
+    'Affordable sessions from UGX 40,000',
     'Peer who explains it the right way',
     'Pass with confidence, move forward',
     'Tutor who sat the exact same exam',
@@ -557,9 +557,9 @@ function EditorialBreak() {
 
 /* ── Featured tutors ── */
 const FEATURED_TUTORS = [
-  { name: 'Victor Tumwine', uni: 'Makerere · BSc Yr 4', subject: 'Calculus & Linear Algebra', rating: 4.9, sessions: 47, price: 10000, photo: asset('/img/tutor-1.jpg') },
-  { name: 'Grace Namukasa', uni: 'Kyambogo · BIT Yr 3', subject: 'Database Systems', rating: 4.8, sessions: 31, price: 8000, photo: asset('/img/tutor-2.jpg') },
-  { name: 'David Okello', uni: 'UCU · BSc Yr 4', subject: 'Organic Chemistry', rating: 5.0, sessions: 22, price: 12000, photo: asset('/img/tutor-3.jpg') },
+  { name: 'Victor Tumwine', uni: 'Makerere · BSc Yr 4', subject: 'Calculus & Linear Algebra', rating: 4.9, sessions: 47, price: 85000, photo: asset('/img/tutor-1.jpg') },
+  { name: 'Grace Namukasa', uni: 'Kyambogo · BIT Yr 3', subject: 'Database Systems', rating: 4.8, sessions: 31, price: 60000, photo: asset('/img/tutor-2.jpg') },
+  { name: 'David Okello', uni: 'UCU · BSc Yr 4', subject: 'Organic Chemistry', rating: 5.0, sessions: 22, price: 75000, photo: asset('/img/tutor-3.jpg') },
 ];
 
 function FeaturedTutors() {
@@ -620,8 +620,8 @@ function FeaturedTutors() {
 
 /* ── Testimonials ── */
 const TESTIMONIALS = [
-  { name: 'Nakato Aisha', uni: 'Makerere University · BBA Yr 2', subject: 'Calculus', rating: 5, photo: asset('/img/student-aisha.jpg'), text: "I was failing Calculus and couldn't afford a private tutor. On TutorUG I found a Makerere Yr 4 student who sat the same MAT 1101 exam. Three sessions at UGX 8,000 each and I passed. Best money I ever spent." },
-  { name: 'Ssemwogerere Brian', uni: 'Kyambogo University · BIT Yr 3', subject: 'Database Systems', rating: 5, photo: asset('/img/student-brian.jpg'), text: "I tutor Database Systems on Saturday mornings between 9 and 11. I've earned UGX 120,000 this semester — enough to cover my retake fees and buy data. The MoMo payment lands the same day the session ends." },
+  { name: 'Nakato Aisha', uni: 'Makerere University · BBA Yr 2', subject: 'Calculus', rating: 5, photo: asset('/img/student-aisha.jpg'), text: "I was failing Calculus and couldn't afford a private tutor. On TutorUG I found a Makerere Yr 4 student who sat the same MAT 1101 exam. Three sessions at UGX 60,000 each and I passed. Best money I ever spent." },
+  { name: 'Ssemwogerere Brian', uni: 'Kyambogo University · BIT Yr 3', subject: 'Database Systems', rating: 5, photo: asset('/img/student-brian.jpg'), text: "I tutor Database Systems on Saturday mornings between 9 and 11. I've earned UGX 480,000 this semester — enough to cover my retake fees and buy data. The MoMo payment lands the same day the session ends." },
   { name: 'Akello Patience', uni: 'UCU · BSc Nursing Yr 2', subject: 'Organic Chemistry', rating: 5, photo: asset('/img/student-patience.jpg'), text: "CHE 1201 was going to make me repeat the year. My TutorUG tutor had done the same course at UCU the year before — she knew exactly which questions Ssekandi sets. Two sessions and I was sorted." },
 ];
 
