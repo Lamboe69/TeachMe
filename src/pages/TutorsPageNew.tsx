@@ -141,12 +141,15 @@ export function TutorsPageNew() {
                     <div className="p-6">
                       {/* Avatar + name */}
                       <div className="mb-4 flex items-start gap-4">
-                  <div
-                    className="grid h-14 w-14 shrink-0 place-items-center rounded-full text-base font-black"
-                    style={{ background: avatarBg(tutor.fullName), color: '#D4FF24' }}
-                  >
-                    {initials(tutor.fullName)}
-                  </div>
+                        <div
+                          className="relative grid h-16 w-16 shrink-0 place-items-center rounded-2xl text-lg font-black"
+                          style={{ background: `linear-gradient(135deg, ${avatarBg}, ${avatarBg}99)`, color: '#D4FF24', boxShadow: `0 0 20px ${avatarBg}55` }}
+                        >
+                          {initials(tutor.fullName)}
+                          {tutor.rating != null && tutor.rating >= 4.8 && (
+                            <span className="absolute -top-2 -right-2 rounded-full px-1.5 py-0.5 text-[9px] font-black" style={{ background: '#D4FF24', color: '#030407' }}>TOP</span>
+                          )}
+                        </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="truncate text-base font-bold text-white">{tutor.fullName}</h3>
                           <div className="mt-1 flex items-center gap-1.5">
@@ -202,8 +205,8 @@ export function TutorsPageNew() {
 
                       <Link
                         to={`/tutors/${tutor.id}`}
-                        className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition hover:opacity-90"
-                        style={{ background: '#D4FF24', color: '#030407' }}
+                        className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold transition-all duration-150 hover:opacity-90 hover:scale-[1.02]"
+                        style={{ background: 'linear-gradient(135deg, #D4FF24, #b8e600)', color: '#030407', boxShadow: '0 4px 16px rgba(212,255,36,0.25)' }}
                       >
                         View profile <ArrowRight className="h-4 w-4" />
                       </Link>

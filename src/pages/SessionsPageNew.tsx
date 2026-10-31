@@ -17,12 +17,12 @@ const TABS = [
   { id: 'REJECTED', label: 'Rejected' },
 ];
 
-const STATUS_STYLE: Record<string, { bg: string; color: string }> = {
-  accepted:  { bg: 'rgba(21,88,201,0.25)',   color: '#7eb3ff' },
-  pending:   { bg: 'rgba(212,255,36,0.15)',  color: '#D4FF24' },
-  completed: { bg: 'rgba(21,88,201,0.2)',    color: '#a0c4ff' },
-  cancelled: { bg: 'rgba(255,60,60,0.15)',   color: '#ff8080' },
-  unknown:   { bg: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)' },
+const STATUS_STYLE: Record<string, { bg: string; color: string; border: string }> = {
+  accepted:  { bg: 'rgba(21,88,201,0.18)',   color: '#7eb3ff',  border: '#1558C9' },
+  pending:   { bg: 'rgba(212,255,36,0.12)',  color: '#D4FF24',  border: '#D4FF24' },
+  completed: { bg: 'rgba(34,197,94,0.12)',   color: '#4ade80',  border: '#22c55e' },
+  cancelled: { bg: 'rgba(255,60,60,0.12)',   color: '#ff8080',  border: '#ef4444' },
+  unknown:   { bg: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.4)', border: 'rgba(255,255,255,0.15)' },
 };
 
 const cardStyle = { background: 'rgba(21,88,201,0.08)', border: '1px solid rgba(21,88,201,0.25)' };
@@ -104,31 +104,24 @@ export function SessionsPageNew() {
             const meta = SESSION_STATUS_META[session.status] ?? SESSION_STATUS_META.UNKNOWN;
             const counterpart = session.student.id === user?.id ? session.tutor : session.student;
             const statusStyle = STATUS_STYLE[meta.tone] ?? STATUS_STYLE.unknown;
-            const initials = counterpart?.fullName?.charAt(0) ?? 'U';
+            const rowInitials = (() => { const p = (counterpart?.fullName ?? 'U').trim().split(/\s+/); return p.length >= 2 ? (p[0][0] + p[1][0]).toUpperCase() : (counterpart?.fullName ?? 'U').slice(0, 2).toUpperCase(); })();
             const AVATAR_COLORS = ['#1558C9','#7c3aed','#0891b2','#b45309','#be185d'];
             const avatarBg = AVATAR_COLORS[(counterpart?.fullName?.charCodeAt(0) ?? 0) % AVATAR_COLORS.length];
             return (
               <Link
                 key={session.id}
                 to={`/sessions/${session.id}`}
-                className="flex flex-col gap-3 p-5 transition-all duration-150 sm:flex-row sm:items-center"
+                className="flex flex-col gap-3 p-5 transition-all duration-200 sm:flex-row sm:items-center"
                 style={{
-                  ...(idx > 0 ? { borderTop: '1px solid rgba(21,88,201,0.15)' } : {}),
+                  ...(idx > 0 ? { borderTop: '1px solid rgba(21,88,201,0.12)' } : {}),
+                  boxShadow: `inset 4px 0 0 ${statusStyle.border}`,
                 }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(21,88,201,0.08)';
-                  (e.currentTarget as HTMLAnchorElement).style.paddingLeft = '24px';
-                  (e.currentTarget as HTMLAnchorElement).style.boxShadow = 'inset 3px 0 0 #1558C9';
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLAnchorElement).style.background = 'transparent';
-                  (e.currentTarget as HTMLAnchorElement).style.paddingLeft = '20px';
-                  (e.currentTarget as HTMLAnchorElement).style.boxShadow = 'none';
-                }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = `${statusStyle.border}12`; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; }}
               >
                 {/* Avatar */}
                 <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-sm font-black" style={{ background: avatarBg, color: '#D4FF24' }}>
-                  {initials}
+                  {rowInitials}
                 </div>
                 {/* Name + subject pill */}
                 <div className="flex-1 min-w-0">
