@@ -62,6 +62,12 @@ export const WalletPage = lazy(() =>
 export const UnauthorizedPage = lazy(() =>
   import('@/pages/UnauthorizedPage').then((m) => ({ default: m.UnauthorizedPage })),
 );
+export const LegalPage = lazy(() =>
+  import('@/pages/LegalPage').then((m) => ({ default: m.LegalPage })),
+);
+export const ContactPage = lazy(() =>
+  import('@/pages/ContactPage').then((m) => ({ default: m.ContactPage })),
+);
 export const NotFoundPage = lazy(() =>
   import('@/pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })),
 );

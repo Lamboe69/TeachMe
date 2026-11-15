@@ -209,7 +209,7 @@ export function TutorProfilePageNew() {
                 </span>
               </div>
             </div>
-            <div className="px-6 pb-6 sm:px-8">
+            <div className="px-4 pb-6 sm:px-8">
               <div className="-mt-12 flex flex-col gap-5 sm:flex-row sm:items-end">
                 <div className="relative grid h-24 w-24 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-cobalt-500 to-cobalt-700 text-3xl font-black text-volt-400 ring-4 ring-night-800 shadow-[0_0_32px_-6px_rgba(21,88,201,0.8)]">
                   {getInitials(tutor.fullName)}
@@ -289,7 +289,7 @@ export function TutorProfilePageNew() {
           </section>
 
           {tutor.availability?.some((slot) => slot.enabled) ? (
-            <section className="rounded-2xl bg-[rgba(21,88,201,0.08)] p-6 shadow-lg ring-1 ring-[rgba(21,88,201,0.3)] sm:p-8">
+            <section className="rounded-2xl bg-[rgba(21,88,201,0.08)] p-5 shadow-lg ring-1 ring-[rgba(21,88,201,0.3)] sm:p-8">
               <div className="flex items-center justify-between gap-3">
                 <h2 className="text-xl font-bold text-white">Weekly availability</h2>
                 <span className="rounded-full bg-[rgba(21,88,201,0.15)] px-3 py-1 text-xs font-semibold text-volt-400 ring-1 ring-[rgba(21,88,201,0.3)]">
@@ -320,7 +320,7 @@ export function TutorProfilePageNew() {
             </section>
           ) : null}
 
-          <section className="rounded-2xl bg-[rgba(21,88,201,0.08)] p-6 shadow-lg ring-1 ring-[rgba(21,88,201,0.3)] sm:p-8">
+          <section className="rounded-2xl bg-[rgba(21,88,201,0.08)] p-5 shadow-lg ring-1 ring-[rgba(21,88,201,0.3)] sm:p-8">
             <h2 className="text-xl font-bold text-white">
               About {firstName(tutor.fullName)}
             </h2>
@@ -331,7 +331,7 @@ export function TutorProfilePageNew() {
             )}
           </section>
 
-          <section className="rounded-2xl bg-[rgba(21,88,201,0.08)] p-6 shadow-lg ring-1 ring-[rgba(21,88,201,0.3)] sm:p-8">
+          <section className="rounded-2xl bg-[rgba(21,88,201,0.08)] p-5 shadow-lg ring-1 ring-[rgba(21,88,201,0.3)] sm:p-8">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-bold text-white">Reviews ({tutor.reviewCount})</h2>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-[rgba(212,255,36,0.1)] px-3 py-1 text-sm font-bold text-volt-400 ring-1 ring-[rgba(212,255,36,0.3)]">
@@ -385,7 +385,7 @@ export function TutorProfilePageNew() {
           </section>
         </div>
 
-        <aside className="lg:sticky lg:top-28 lg:self-start">
+        <aside className="min-w-0 lg:sticky lg:top-28 lg:self-start">
           <div className="rounded-2xl bg-[rgba(21,88,201,0.08)] p-6 shadow-lg ring-1 ring-[rgba(21,88,201,0.3)]">
             <p className="text-sm text-white/55">Rate per session</p>
             <p className="mt-1 text-3xl font-black text-white">{formatRate(tutor.hourlyRate)}</p>

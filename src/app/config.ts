@@ -63,11 +63,11 @@ export const API_CREDENTIALS = AUTH_MODE === 'cookie';
 /**
  * Platform commission taken from each completed session before the tutor's
  * earnings are released to their wallet. Configurable so finance can adjust
- * it without a code change; defaults to 15%.
+ * it without a code change; defaults to 10%.
  */
 export const PLATFORM_FEE_PERCENT = Math.min(
   50,
-  Math.max(0, Number(readString(env.VITE_PLATFORM_FEE_PERCENT, '15')) || 15),
+  Math.max(0, Number(readString(env.VITE_PLATFORM_FEE_PERCENT, '10')) || 10),
 );
 
 export const APP_NAME = 'Tutor UG';

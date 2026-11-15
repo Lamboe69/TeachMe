@@ -107,14 +107,14 @@ export function WalletPage() {
         <>
           <div className="grid gap-5 lg:grid-cols-3">
             {/* Balance card */}
-            <div className="relative overflow-hidden rounded-3xl p-7 lg:col-span-2" style={{ background: 'linear-gradient(135deg, #1558C9 0%, #0d3d8a 60%, #030407 100%)' }}>
+            <div className="relative min-w-0 overflow-hidden rounded-3xl p-5 sm:p-7 lg:col-span-2" style={{ background: 'linear-gradient(135deg, #1558C9 0%, #0d3d8a 60%, #030407 100%)' }}>
               <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full" style={{ background: 'rgba(212,255,36,0.08)' }} />
               <div className="absolute -bottom-20 -left-10 h-56 w-56 rounded-full" style={{ background: 'rgba(255,255,255,0.04)' }} />
               <div className="relative">
                 <div className="flex items-center gap-2 text-sm font-semibold text-white/70">
                   <WalletIcon className="h-4 w-4" /> Available balance
                 </div>
-                <p className="mt-3 text-4xl font-black tracking-tight text-white sm:text-5xl">
+                <p className="mt-3 break-words text-3xl font-black tracking-tight text-white sm:text-5xl">
                   {state.loading ? 'UGX —' : formatUGX(wallet?.availableBalance ?? 0)}
                 </p>
                 <p className="mt-2 text-sm text-white/60">
@@ -132,7 +132,7 @@ export function WalletPage() {
             </div>
 
             {/* Side stats */}
-            <div className="space-y-4">
+            <div className="min-w-0 space-y-4">
               <div className="rounded-2xl p-5" style={cardStyle}>
                 <div className="flex items-center justify-between">
                   <p className="text-xs font-semibold text-white/50">{isTutor ? 'Pending earnings' : 'Held in escrow'}</p>
@@ -169,7 +169,7 @@ export function WalletPage() {
 
           {/* How it works + MoMo */}
           <div className="mt-5 grid gap-5 lg:grid-cols-3">
-            <div className="rounded-2xl p-6 lg:col-span-2" style={{ background: 'rgba(212,255,36,0.05)', border: '1px solid rgba(212,255,36,0.15)' }}>
+            <div className="min-w-0 rounded-2xl p-5 sm:p-6 lg:col-span-2" style={{ background: 'rgba(212,255,36,0.05)', border: '1px solid rgba(212,255,36,0.15)' }}>
               <div className="flex items-start gap-3">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl" style={{ background: 'rgba(212,255,36,0.12)' }}>
                   <Shield className="h-5 w-5" style={{ color: '#D4FF24' }} />

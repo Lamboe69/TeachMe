@@ -2,10 +2,11 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import {
-  ArrowRight, Calendar, Check, GraduationCap, Heart,
-  LayoutDashboard, Menu, Quote, Search, Shield,
+  ArrowRight, Calendar, Check, ChevronDown, GraduationCap, Heart,
+  LayoutDashboard, Menu, MessageCircle, Quote, Search, Shield,
   Sparkles, Star, TrendingUp, Wallet, X, XCircle,
 } from 'lucide-react';
+import { PLATFORM_FEE_PERCENT } from '@/app/config';
 import { asset } from '@/utils/asset';
 
 /* ── Scroll-fade hook ── */
@@ -167,8 +168,8 @@ function Navbar() {
       <nav className="container-page flex h-16 items-center justify-between gap-4 sm:h-20">
         <Logo />
         <div className="hidden items-center gap-8 lg:flex">
-          {['Find tutors','How it works','Become a tutor','FAQ'].map((label, i) => {
-            const hrefs = ['/tutors','#how-it-works','#become-tutor','#faq'];
+          {['Find tutors','How it works','Pricing','Become a tutor','FAQ'].map((label, i) => {
+            const hrefs = ['/tutors','#how-it-works','#pricing','#become-tutor','#faq'];
             return i === 0
               ? <Link key={label} to={hrefs[i]} className="text-sm font-semibold text-white/80 transition hover:text-[#D4FF24]">{label}</Link>
               : <a key={label} href={hrefs[i]} className="text-sm font-semibold text-white/80 transition hover:text-[#D4FF24]">{label}</a>;
@@ -199,7 +200,9 @@ function Navbar() {
           <div className="flex flex-1 flex-col gap-2 px-4 py-6">
             <Link to="/tutors" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 font-semibold text-white/80">Find tutors</Link>
             <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 font-semibold text-white/80">How it works</a>
+            <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 font-semibold text-white/80">Pricing</a>
             <a href="#become-tutor" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 font-semibold text-white/80">Become a tutor</a>
+            <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-4 py-3 font-semibold text-white/80">FAQ</a>
             <div className="mt-4 flex flex-col gap-3 border-t pt-4" style={{ borderColor: 'rgba(21,88,201,0.4)' }}>
               {isSignedIn ? (
                 <Link to={dashboardPath} onClick={() => setMobileMenuOpen(false)} className="rounded-xl px-6 py-3 text-center font-bold" style={{ background: '#D4FF24', color: '#030407' }}>Go to dashboard</Link>
@@ -253,7 +256,7 @@ function Hero() {
               <br />with a fellow student
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-white/70 sm:mt-6 sm:text-xl">
-              TutorUG connects university students to help each other succeed. Learn from someone who aced it, or earn by teaching what you know. All payments secured by MTN & Airtel Money.
+              TutorUG connects university students to help each other succeed. Learn from someone who aced it, or earn by teaching what you know. Pay from your wallet with MTN MoMo or Airtel Money — held safely in escrow until your session is done.
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:mt-10 sm:flex-row">
               <Link to="/tutors" className="group inline-flex items-center justify-center gap-3 rounded-xl px-6 py-3.5 text-base font-bold shadow-xl transition hover:opacity-90 hover:scale-105 sm:px-8 sm:py-4 sm:text-lg" style={{ background: '#D4FF24', color: '#030407' }}>
@@ -280,7 +283,7 @@ function Hero() {
               <div className="absolute bottom-6 left-6 right-6 rounded-2xl px-5 py-4" style={{ background: 'rgba(3,4,7,0.75)', backdropFilter: 'blur(12px)', border: '1px solid rgba(21,88,201,0.4)' }}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-bold text-white">UGX 40,000 – 85,000 / session</p>
+                    <p className="font-bold text-white">Set by your tutor · from UGX 1,000 / session</p>
                     <p className="text-xs text-white/50">Held in escrow until complete</p>
                   </div>
                   <div className="rounded-xl px-4 py-2 text-sm font-bold" style={{ background: '#D4FF24', color: '#030407' }}>Book now</div>
@@ -342,30 +345,43 @@ function StatsBar() {
       <div className="container-page">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           <StatItem target={480} suffix="+" label="Active students" />
-          <StatItem target={120} suffix="+" label="Verified tutors" />
+          <StatItem target={120} suffix="+" label="Peer tutors" />
           <StatItem target={890} suffix="+" label="Sessions completed" />
           <StatItem target={48} suffix="" label="Avg rating ★ 4.8" />
         </div>
+        <p className="mt-8 text-center text-xs text-white/35">
+          Illustrative figures while the community grows. Live numbers appear once you sign in.
+        </p>
       </div>
     </section>
   );
 }
 
 /* ── Universities strip ── */
-const UNIVERSITIES = ['Makerere University','Kyambogo University','Uganda Christian University','Mbarara University','Gulu University','MUST','Nkumba University','Busitema University','Kabale University','MUBS'];
+const UNIVERSITIES = [
+  { name: 'Makerere University', logo: '/img/universities/makerere.png' },
+  { name: 'Kyambogo University', logo: '/img/universities/kyambogo.png' },
+  { name: 'Uganda Christian University', logo: '/img/universities/ucu.png' },
+  { name: 'MUST', logo: '/img/universities/must.png' },
+  { name: 'Gulu University', logo: '/img/universities/gulu.png' },
+  { name: 'Nkumba University', logo: '/img/universities/nkumba.png' },
+  { name: 'Busitema University', logo: '/img/universities/busitema.png' },
+  { name: 'Kabale University', logo: '/img/universities/kabale.png' },
+  { name: 'MUBS', logo: '/img/universities/mubs.png' },
+];
 function UniversitiesStrip() {
   const { ref, visible } = useFadeIn();
   const items = [...UNIVERSITIES, ...UNIVERSITIES];
   return (
     <section ref={ref} className="py-10 transition-all duration-700" style={{ background: 'rgba(21,88,201,0.06)', borderTop: '1px solid rgba(21,88,201,0.2)', borderBottom: '1px solid rgba(21,88,201,0.2)', opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(20px)' }}>
       <div className="container-page mb-5 text-center">
-        <p className="text-xs font-bold uppercase tracking-widest text-white/40">Trusted by students from</p>
+        <p className="text-xs font-bold uppercase tracking-widest text-white/40">Built for students at</p>
       </div>
       <div className="overflow-hidden">
-        <div className="flex gap-10 whitespace-nowrap" style={{ animation: 'marquee 28s linear infinite', width: 'max-content' }}>
+        <div className="flex gap-12 whitespace-nowrap" style={{ animation: 'marquee 32s linear infinite', width: 'max-content' }}>
           {items.map((u, i) => (
-            <span key={i} className="inline-flex items-center gap-2.5 text-sm font-bold text-white/50 transition hover:text-white/80">
-              <span className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: i % 2 === 0 ? '#D4FF24' : '#1558C9' }} />{u}
+            <span key={i} className="inline-flex items-center gap-3 text-sm font-bold text-white/50 transition hover:text-white/80">
+              <img src={asset(u.logo)} alt="" aria-hidden="true" loading="lazy" className="h-8 w-auto shrink-0 object-contain" />{u.name}
             </span>
           ))}
         </div>
@@ -378,10 +394,10 @@ function UniversitiesStrip() {
 function HowItWorks() {
   const { ref, visible } = useFadeIn();
   const steps = [
-    { num: '01', title: 'Find a tutor', desc: 'Browse university students by course unit, see their rate and reviews.', icon: Search },
-    { num: '02', title: 'Book & agree', desc: 'Pick your time, explain what you need help with, send request.', icon: Calendar },
-    { num: '03', title: 'Pay securely', desc: 'Pay via MTN MoMo/Airtel Money. Money held by TutorUG until done.', icon: Shield },
-    { num: '04', title: 'Learn & review', desc: 'Have your session, mark complete, leave review. Tutor gets paid.', icon: Heart },
+    { num: '01', title: 'Find a tutor', desc: 'Browse fellow students by course unit, compare their rate, reviews and availability.', icon: Search },
+    { num: '02', title: 'Book & pay into escrow', desc: 'Pick a time and send a request. The fee leaves your wallet and is held by TutorUG — not the tutor.', icon: Calendar },
+    { num: '03', title: 'Tutor accepts', desc: 'Your tutor confirms the request. If they decline, the full amount is refunded to your wallet.', icon: Shield },
+    { num: '04', title: 'Learn, confirm & review', desc: 'Have your session, then both sides confirm completion. The tutor gets paid and you leave a review.', icon: Heart },
   ];
   return (
     <section id="how-it-works" className="py-20 sm:py-24 lg:py-32" style={{ background: '#030407' }}>
@@ -713,6 +729,188 @@ function BecomeTutor() {
   );
 }
 
+/* ── Pricing & fees ── */
+function Pricing() {
+  const { ref, visible } = useFadeIn();
+  const tutorExample = 4 * 50000;
+  const tutorFee = Math.round((tutorExample * PLATFORM_FEE_PERCENT) / 100);
+  const tutorKeeps = tutorExample - tutorFee;
+  return (
+    <section id="pricing" className="py-20 sm:py-24" style={{ background: '#030407' }}>
+      <div className="container-page">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="mb-3 text-xs font-bold uppercase tracking-widest" style={{ color: '#1558C9' }}>Transparent pricing</p>
+          <h2 className="text-4xl font-black tracking-tight text-white sm:text-5xl">
+            No surprises, <span style={{ color: '#D4FF24' }}>ever</span>
+          </h2>
+          <p className="mt-4 text-lg text-white/60">
+            Joining is free. You only pay for the sessions you book — and your money is protected until the session is done.
+          </p>
+        </div>
+        <div ref={ref} className="mt-14 grid gap-6 lg:grid-cols-2 transition-all duration-700" style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(32px)' }}>
+          {/* Student */}
+          <div className="rounded-3xl p-6 sm:p-8" style={{ background: 'rgba(21,88,201,0.1)', border: '1px solid rgba(21,88,201,0.35)' }}>
+            <div className="flex items-center gap-3">
+              <div className="grid h-12 w-12 place-items-center rounded-2xl" style={{ background: '#1558C9' }}>
+                <Search className="h-6 w-6" style={{ color: '#D4FF24' }} />
+              </div>
+              <div>
+                <h3 className="text-2xl font-extrabold text-white">For students</h3>
+                <p className="text-sm" style={{ color: '#D4FF24' }}>Free to join · pay per session</p>
+              </div>
+            </div>
+            <ul className="mt-6 flex flex-col gap-4">
+              {[
+                'No subscription and no joining fee — creating an account is free.',
+                'Your tutor sets the rate. Rates start from UGX 1,000 per session.',
+                'Top up your wallet with MTN MoMo or Airtel Money.',
+                'The session fee is held in escrow by TutorUG until the session is done.',
+                'Full refund to your wallet if the tutor declines or either side cancels.',
+              ].map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full" style={{ background: 'rgba(212,255,36,0.2)' }}>
+                    <Check className="h-3 w-3" style={{ color: '#D4FF24' }} />
+                  </span>
+                  <span className="text-white/80">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          {/* Tutor */}
+          <div className="rounded-3xl p-6 sm:p-8" style={{ background: 'rgba(21,88,201,0.1)', border: '1px solid rgba(212,255,36,0.25)' }}>
+            <div className="flex items-center gap-3">
+              <div className="grid h-12 w-12 place-items-center rounded-2xl" style={{ background: 'rgba(212,255,36,0.15)' }}>
+                <Wallet className="h-6 w-6" style={{ color: '#D4FF24' }} />
+              </div>
+              <div>
+                <h3 className="text-2xl font-extrabold text-white">For tutors</h3>
+                <p className="text-sm" style={{ color: '#D4FF24' }}>You set your rate · {PLATFORM_FEE_PERCENT}% service fee</p>
+              </div>
+            </div>
+            <ul className="mt-6 flex flex-col gap-4">
+              {[
+                'Choose your own rate, subjects and weekly availability.',
+                `TutorUG keeps a ${PLATFORM_FEE_PERCENT}% service fee from each completed session — nothing else.`,
+                'You are paid only after the session is completed and confirmed.',
+                'Withdraw your earnings straight to MTN MoMo or Airtel Money.',
+                'Every completed session builds your reviews and reputation.',
+              ].map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full" style={{ background: 'rgba(212,255,36,0.2)' }}>
+                    <Check className="h-3 w-3" style={{ color: '#D4FF24' }} />
+                  </span>
+                  <span className="text-white/80">{item}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 rounded-2xl p-4" style={{ background: 'rgba(3,4,7,0.6)', border: '1px solid rgba(21,88,201,0.4)' }}>
+              <p className="text-xs font-bold uppercase tracking-wide text-white/50">Example earnings</p>
+              <p className="mt-1.5 text-sm text-white/80">
+                4 sessions at UGX 50,000 = <span className="font-bold text-white">UGX {tutorExample.toLocaleString()}</span> gross.
+              </p>
+              <p className="text-sm text-white/80">
+                TutorUG fee ({PLATFORM_FEE_PERCENT}%) = <span className="font-bold" style={{ color: '#ff8a8a' }}>−UGX {tutorFee.toLocaleString()}</span>.
+              </p>
+              <p className="mt-1 text-sm font-bold" style={{ color: '#D4FF24' }}>
+                You keep UGX {tutorKeeps.toLocaleString()}.
+              </p>
+            </div>
+          </div>
+        </div>
+        <p className="mt-8 text-center text-sm text-white/45">
+          Read the full <Link to="/refund-policy" className="font-semibold underline" style={{ color: '#D4FF24' }}>Refund &amp; Cancellation Policy</Link>.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* ── FAQ ── */
+const FAQS = [
+  {
+    q: 'How much does TutorUG cost?',
+    a: `Joining is free for everyone. Students pay only for the sessions they book, at the rate their tutor sets (from UGX 1,000 per session). Tutors keep their earnings minus a ${PLATFORM_FEE_PERCENT}% TutorUG service fee on completed sessions.`,
+  },
+  {
+    q: 'How do payments work?',
+    a: 'You top up your TutorUG wallet using MTN MoMo or Airtel Money. When you book a session, the fee moves from your wallet into escrow — held by TutorUG, not by the tutor — and is only released once the session is done and confirmed.',
+  },
+  {
+    q: 'What if the session never happens?',
+    a: 'If a tutor declines your request, or either side cancels before the session is completed, the full escrowed amount is refunded to your wallet. See our Refund & Cancellation Policy for details.',
+  },
+  {
+    q: 'How do tutors get paid?',
+    a: `After a session is completed and both sides confirm, the escrowed amount is released to the tutor minus the ${PLATFORM_FEE_PERCENT}% service fee. Tutors can then withdraw their earnings to MTN MoMo or Airtel Money.`,
+  },
+  {
+    q: 'How do I know a tutor is any good?',
+    a: 'Every tutor profile shows the subjects they teach, their experience, how many sessions they have taught, their rate, their weekly availability and reviews left by other students.',
+  },
+  {
+    q: 'Are sessions online or in person?',
+    a: 'You agree the details with your tutor. Use the session chat to decide how and where you will meet, and message each other before the session.',
+  },
+  {
+    q: 'Who can join TutorUG?',
+    a: 'TutorUG is built for university students in Uganda. You must be at least 18, or have permission from a parent or guardian, and you must provide accurate details.',
+  },
+  {
+    q: 'How do I become a tutor?',
+    a: 'Create an account and choose "Become a tutor", then set the course units you teach, your rate and your weekly availability. You can start receiving booking requests right away.',
+  },
+  {
+    q: 'Something went wrong with a session. What do I do?',
+    a: 'Do not confirm the session if it did not happen as agreed. Contact support with your session details and we will look into it before any money is released.',
+  },
+];
+
+function Faq() {
+  const { ref, visible } = useFadeIn();
+  const [open, setOpen] = useState<number | null>(0);
+  return (
+    <section id="faq" className="py-20 sm:py-24" style={{ background: 'rgba(21,88,201,0.06)', borderTop: '1px solid rgba(21,88,201,0.2)' }}>
+      <div className="container-page">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-4xl font-black tracking-tight text-white sm:text-5xl">
+            Frequently asked <span style={{ color: '#D4FF24' }}>questions</span>
+          </h2>
+          <p className="mt-4 text-lg text-white/60">Everything you need to know before your first session</p>
+        </div>
+        <div ref={ref} className="mx-auto mt-12 max-w-3xl transition-all duration-700" style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)' }}>
+          <div className="flex flex-col gap-3">
+            {FAQS.map((item, i) => {
+              const isOpen = open === i;
+              return (
+                <div key={i} className="overflow-hidden rounded-2xl" style={{ background: 'rgba(21,88,201,0.1)', border: isOpen ? '1px solid rgba(212,255,36,0.35)' : '1px solid rgba(21,88,201,0.3)' }}>
+                  <button
+                    type="button"
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                    className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left sm:px-6"
+                  >
+                    <span className="font-bold text-white">{item.q}</span>
+                    <ChevronDown className="h-5 w-5 flex-shrink-0 transition-transform" style={{ color: '#D4FF24', transform: isOpen ? 'rotate(180deg)' : 'none' }} aria-hidden="true" />
+                  </button>
+                  {isOpen && (
+                    <p className="px-5 pb-5 text-sm leading-relaxed text-white/70 sm:px-6">{item.a}</p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 rounded-2xl p-5 sm:flex-row" style={{ background: 'rgba(21,88,201,0.12)', border: '1px solid rgba(21,88,201,0.3)' }}>
+            <p className="text-sm text-white/70">Still have a question?</p>
+            <Link to="/contact" className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition hover:opacity-90" style={{ background: '#D4FF24', color: '#030407' }}>
+              <MessageCircle className="h-4 w-4" /> Contact support
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ── CTA ── */
 function CTA() {
   const { ref, visible } = useFadeIn();
@@ -767,6 +965,7 @@ function Footer() {
               <ul className="flex flex-col gap-3">
                 <li><Link to="/tutors" className="text-sm text-white/55 transition hover:text-white">Find tutors</Link></li>
                 <li><a href="#how-it-works" className="text-sm text-white/55 transition hover:text-white">How it works</a></li>
+                <li><a href="#pricing" className="text-sm text-white/55 transition hover:text-white">Pricing</a></li>
                 <li><a href="#become-tutor" className="text-sm text-white/55 transition hover:text-white">Become a tutor</a></li>
                 <li><Link to="/tutors" className="text-sm text-white/55 transition hover:text-white">Browse subjects</Link></li>
               </ul>
@@ -794,7 +993,14 @@ function Footer() {
         </div>
       </div>
       <div style={{ borderTop: '1px solid rgba(21,88,201,0.2)' }}>
-        <div className="container-page flex flex-col items-center justify-between gap-3 py-5 sm:flex-row">
+        <div className="container-page flex flex-wrap items-center justify-center gap-x-6 gap-y-2 py-5">
+          <Link to="/terms" className="text-xs font-semibold text-white/55 transition hover:text-white">Terms of Service</Link>
+          <Link to="/privacy" className="text-xs font-semibold text-white/55 transition hover:text-white">Privacy Policy</Link>
+          <Link to="/refund-policy" className="text-xs font-semibold text-white/55 transition hover:text-white">Refund &amp; Cancellation</Link>
+          <a href="#faq" className="text-xs font-semibold text-white/55 transition hover:text-white">FAQ</a>
+          <Link to="/contact" className="text-xs font-semibold text-white/55 transition hover:text-white">Help &amp; support</Link>
+        </div>
+        <div className="container-page flex flex-col items-center justify-between gap-3 border-t py-5 sm:flex-row" style={{ borderColor: 'rgba(21,88,201,0.2)' }}>
           <p className="text-xs text-white/35">© 2026 TutorUG. Built for Ugandan university students.</p>
           <div className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full" style={{ background: '#D4FF24' }} />
@@ -818,11 +1024,13 @@ export function LandingPage() {
         <StatsBar />
         <UniversitiesStrip />
         <HowItWorks />
+        <Pricing />
         <BeforeAfter />
         <EditorialBreak />
         <FeaturedTutors />
         <Testimonials />
         <BecomeTutor />
+        <Faq />
         <CTA />
       </main>
       <Footer />

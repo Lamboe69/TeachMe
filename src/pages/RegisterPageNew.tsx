@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   ArrowRight, BookOpen, Eye, EyeOff, GraduationCap,
   Lock, Mail, Shield, ShieldCheck, Sparkles, Star, User, Wallet,
@@ -168,17 +168,20 @@ function PasswordStrength({ value }: { value: string }) {
 
 export function RegisterPageNew() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const initialRole: 'STUDENT' | 'TUTOR' =
+    searchParams.get('role')?.toUpperCase() === 'TUTOR' ? 'TUTOR' : 'STUDENT';
   const { register: registerUser, status, user } = useAuth();
   const toast = useToast();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [role, setRole] = useState<'STUDENT' | 'TUTOR'>('STUDENT');
+  const [role, setRole] = useState<'STUDENT' | 'TUTOR'>(initialRole);
 
   const { register, handleSubmit, watch, setValue, formState: { errors, isSubmitting } } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     mode: 'onBlur',
-    defaultValues: { fullName: '', email: '', password: '', confirmPassword: '', role: 'STUDENT', acceptTerms: false },
+    defaultValues: { fullName: '', email: '', password: '', confirmPassword: '', role: initialRole, acceptTerms: false },
   });
 
   const password = watch('password', '');
@@ -323,7 +326,11 @@ export function RegisterPageNew() {
               <label className="flex cursor-pointer items-start gap-3">
                 <input type="checkbox" className="mt-0.5 h-4 w-4 flex-shrink-0 rounded accent-[#D4FF24]" {...register('acceptTerms')} />
                 <span className="text-xs text-white/50">
-                  I agree to the Terms and Privacy Policy. TutorUG keeps a {PLATFORM_FEE_PERCENT}% service fee on tutor earnings.
+                  I agree to the{' '}
+                  <Link to="/terms" onClick={(e) => e.stopPropagation()} className="font-semibold underline" style={{ color: '#D4FF24' }}>Terms</Link>{' '}
+                  and{' '}
+                  <Link to="/privacy" onClick={(e) => e.stopPropagation()} className="font-semibold underline" style={{ color: '#D4FF24' }}>Privacy Policy</Link>.
+                  TutorUG keeps a {PLATFORM_FEE_PERCENT}% service fee on tutor earnings.
                 </span>
               </label>
               {errors.acceptTerms && <p className="text-xs font-medium" style={{ color: '#ff6b6b' }}>{errors.acceptTerms.message}</p>}

@@ -4,9 +4,11 @@ import { ErrorFallback } from '@/components/ErrorBoundary';
 import { PublicOnly, RequireAuth, RequireRole } from './guards';
 import {
   BookSessionPage,
+  ContactPage,
   FeedbackPage,
   ForgotPasswordPage,
   LandingPage,
+  LegalPage,
   LoginPage,
   NotFoundPage,
   RegisterPage,
@@ -43,6 +45,10 @@ export const router = createBrowserRouter([
       { path: '/tutors', element: <TutorsPage /> },
       { path: '/tutors/:id', element: <TutorProfilePage /> },
       { path: '/unauthorized', element: <UnauthorizedPage /> },
+      { path: '/terms', element: <LegalPage doc="terms" /> },
+      { path: '/privacy', element: <LegalPage doc="privacy" /> },
+      { path: '/refund-policy', element: <LegalPage doc="refunds" /> },
+      { path: '/contact', element: <ContactPage /> },
 
       /* ----------------------------------------- Student-only pages */
       {

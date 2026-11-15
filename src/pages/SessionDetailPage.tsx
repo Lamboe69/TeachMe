@@ -268,7 +268,7 @@ export function SessionDetailPage() {
         </div>
 
         {/* ---------------------------------------------------- Sidebar */}
-        <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+        <aside className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start">
           <Card className="p-6">
             <h2 className="text-sm font-bold text-white">Session summary</h2>
             <dl className="mt-4 space-y-3">

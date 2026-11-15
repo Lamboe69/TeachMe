@@ -10,7 +10,8 @@ const FOOTER_LINKS = [
     links: [
       { label: 'Find a tutor', to: '/tutors' },
       { label: 'How it works', to: '/#how-it-works' },
-      { label: 'Subjects', to: '/tutors' },
+      { label: 'Pricing & fees', to: '/#pricing' },
+      { label: 'FAQ', to: '/#faq' },
     ],
   },
 ];
@@ -40,8 +41,8 @@ export function Footer() {
           <div className="lg:col-span-2">
             <Logo />
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-ink-500">
-              Tutor UG connects Ugandan learners with vetted tutors for one-to-one lessons in
-              Mathematics, Sciences, English, ICT and more — at transparent prices in shillings.
+              Tutor UG is Uganda&apos;s peer-to-peer tutoring marketplace. University students help
+              each other succeed — at transparent prices in shillings, protected by escrow.
             </p>
           </div>
 
@@ -80,8 +81,14 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col items-start justify-between gap-3 border-t border-ink-100 pt-6 text-xs text-ink-500 sm:flex-row sm:items-center">
+        <div className="mt-8 flex flex-col items-start justify-between gap-4 border-t border-ink-100 pt-6 text-xs text-ink-500 sm:flex-row sm:items-center">
           <p>© {CURRENT_YEAR} TutorUG. Built for Ugandan university students.</p>
+          <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <Link to="/terms" className="transition hover:text-brand-700">Terms</Link>
+            <Link to="/privacy" className="transition hover:text-brand-700">Privacy</Link>
+            <Link to="/refund-policy" className="transition hover:text-brand-700">Refunds</Link>
+            <Link to="/contact" className="transition hover:text-brand-700">Help &amp; support</Link>
+          </nav>
         </div>
       </div>
     </footer>
