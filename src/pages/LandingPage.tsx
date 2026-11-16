@@ -286,7 +286,7 @@ function Hero() {
                     <p className="font-bold text-white">Set by your tutor · from UGX 2,000 / session</p>
                     <p className="text-xs text-white/50">Held in escrow until complete</p>
                   </div>
-                  <div className="rounded-xl px-4 py-2 text-sm font-bold" style={{ background: '#D4FF24', color: '#030407' }}>Book now</div>
+                  <Link to="/tutors" className="rounded-xl px-4 py-2 text-sm font-bold transition hover:opacity-90" style={{ background: '#D4FF24', color: '#030407' }}>Book now</Link>
                 </div>
               </div>
             </div>
