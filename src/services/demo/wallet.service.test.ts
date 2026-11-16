@@ -85,8 +85,8 @@ describe('demo wallet', () => {
     });
 
     const held = await wallet.getWallet();
-    expect(held.availableBalance).toBe(215000);
-    expect(held.escrowBalance).toBe(85000);
+    expect(held.availableBalance).toBe(280000);
+    expect(held.escrowBalance).toBe(20000);
 
     const cancelled = await sessions.updateStatus(session.id, 'CANCELLED');
     expect(cancelled.status).toBe('CANCELLED');
@@ -118,13 +118,13 @@ describe('demo wallet', () => {
 
     signInAs('tutor-001');
     const tutorWallet = await wallet.getWallet();
-    const net = 85000 - Math.round((85000 * PLATFORM_FEE_PERCENT) / 100);
+    const net = 20000 - Math.round((20000 * PLATFORM_FEE_PERCENT) / 100);
     expect(tutorWallet.escrowBalance).toBe(0);
-    expect(tutorWallet.availableBalance).toBe(185000 + net);
+    expect(tutorWallet.availableBalance).toBe(54000 + net);
 
     signInAs('student-mary');
     const studentWallet = await wallet.getWallet();
     expect(studentWallet.escrowBalance).toBe(0);
-    expect(studentWallet.availableBalance).toBe(215000);
+    expect(studentWallet.availableBalance).toBe(280000);
   });
 });

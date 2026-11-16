@@ -2,9 +2,9 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import {
-  ArrowRight, Calendar, Check, ChevronDown, GraduationCap, Heart,
-  LayoutDashboard, Menu, MessageCircle, Quote, Search, Shield,
-  Sparkles, Star, TrendingUp, Wallet, X, XCircle,
+  ArrowRight, BookOpen, Calendar, CalendarDays, Check, ChevronDown, Clock,
+  GraduationCap, Heart, LayoutDashboard, Menu, MessageCircle, Quote, Search,
+  Shield, Sparkles, Star, TrendingUp, Wallet, X, XCircle,
 } from 'lucide-react';
 import { PLATFORM_FEE_PERCENT } from '@/app/config';
 import { asset } from '@/utils/asset';
@@ -97,7 +97,7 @@ function Particles() {
 /* ── Live activity feed ── */
 const FEED_ITEMS = [
   { icon: '📚', msg: 'Nakato just booked a Calculus session', time: '2s ago' },
-  { icon: '💰', msg: 'Ssemwogerere earned UGX 48,000 from a session', time: '18s ago' },
+  { icon: '💰', msg: 'Ssemwogerere earned UGX 18,000 from a session', time: '18s ago' },
   { icon: '⭐', msg: 'Apio left a 5-star review', time: '45s ago' },
   { icon: '🎓', msg: 'New tutor joined — Database Systems', time: '1m ago' },
   { icon: '✅', msg: 'Session completed — Organic Chemistry', time: '2m ago' },
@@ -283,7 +283,7 @@ function Hero() {
               <div className="absolute bottom-6 left-6 right-6 rounded-2xl px-5 py-4" style={{ background: 'rgba(3,4,7,0.75)', backdropFilter: 'blur(12px)', border: '1px solid rgba(21,88,201,0.4)' }}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-bold text-white">Set by your tutor · from UGX 1,000 / session</p>
+                    <p className="font-bold text-white">Set by your tutor · from UGX 2,000 / session</p>
                     <p className="text-xs text-white/50">Held in escrow until complete</p>
                   </div>
                   <div className="rounded-xl px-4 py-2 text-sm font-bold" style={{ background: '#D4FF24', color: '#030407' }}>Book now</div>
@@ -442,14 +442,14 @@ function BeforeAfter() {
   const { ref, visible } = useFadeIn();
   const before = [
     'Studying alone with no guidance',
-    'Expensive private tutors (UGX 200k+)',
+    'Private tutors charging UGX 50k+ a session',
     'Lecturers too busy to explain again',
     'Failing exams, repeating course units',
     'No one who understands your syllabus',
   ];
   const after = [
     'Learn from a student who aced it',
-    'Affordable sessions from UGX 40,000',
+    'Affordable sessions from UGX 2,000',
     'Peer who explains it the right way',
     'Pass with confidence, move forward',
     'Tutor who sat the exact same exam',
@@ -573,9 +573,9 @@ function EditorialBreak() {
 
 /* ── Featured tutors ── */
 const FEATURED_TUTORS = [
-  { name: 'Victor Tumwine', uni: 'Makerere · BSc Yr 4', subject: 'Calculus & Linear Algebra', rating: 4.9, sessions: 47, price: 85000, photo: asset('/img/tutor-1.jpg') },
-  { name: 'Grace Namukasa', uni: 'Kyambogo · BIT Yr 3', subject: 'Database Systems', rating: 4.8, sessions: 31, price: 60000, photo: asset('/img/tutor-2.jpg') },
-  { name: 'David Okello', uni: 'UCU · BSc Yr 4', subject: 'Organic Chemistry', rating: 5.0, sessions: 22, price: 75000, photo: asset('/img/tutor-3.jpg') },
+  { name: 'Victor Tumwine', uni: 'Makerere · BSc Yr 4', subject: 'Calculus & Linear Algebra', rating: 4.9, sessions: 47, price: 20000, unitPrice: 90000, photo: asset('/img/tutor-1.jpg') },
+  { name: 'Grace Namukasa', uni: 'Kyambogo · BIT Yr 3', subject: 'Database Systems', rating: 4.8, sessions: 31, price: 12000, unitPrice: 60000, photo: asset('/img/tutor-2.jpg') },
+  { name: 'David Okello', uni: 'UCU · BSc Yr 4', subject: 'Organic Chemistry', rating: 5.0, sessions: 22, price: 15000, unitPrice: 75000, photo: asset('/img/tutor-3.jpg') },
 ];
 
 function FeaturedTutors() {
@@ -617,6 +617,7 @@ function FeaturedTutors() {
                   <div>
                     <p className="text-lg font-black text-white">UGX {t.price.toLocaleString()}</p>
                     <p className="text-xs text-white/40">per session · {t.sessions} done</p>
+                    <p className="mt-1 text-xs" style={{ color: '#D4FF24' }}>or UGX {t.unitPrice.toLocaleString()} / course unit</p>
                   </div>
                   <Link to="/tutors" className="rounded-xl px-4 py-2 text-sm font-bold transition hover:opacity-90" style={{ background: '#D4FF24', color: '#030407' }}>Book</Link>
                 </div>
@@ -636,8 +637,8 @@ function FeaturedTutors() {
 
 /* ── Testimonials ── */
 const TESTIMONIALS = [
-  { name: 'Nakato Aisha', uni: 'Makerere University · BBA Yr 2', subject: 'Calculus', rating: 5, photo: asset('/img/student-aisha.jpg'), text: "I was failing Calculus and couldn't afford a private tutor. On TutorUG I found a Makerere Yr 4 student who sat the same MAT 1101 exam. Three sessions at UGX 60,000 each and I passed. Best money I ever spent." },
-  { name: 'Ssemwogerere Brian', uni: 'Kyambogo University · BIT Yr 3', subject: 'Database Systems', rating: 5, photo: asset('/img/student-brian.jpg'), text: "I tutor Database Systems on Saturday mornings between 9 and 11. I've earned UGX 480,000 this semester — enough to cover my retake fees and buy data. The MoMo payment lands the same day the session ends." },
+  { name: 'Nakato Aisha', uni: 'Makerere University · BBA Yr 2', subject: 'Calculus', rating: 5, photo: asset('/img/student-aisha.jpg'), text: "I was failing Calculus and couldn't afford a private tutor. On TutorUG I found a Makerere Yr 4 student who sat the same MAT 1101 exam. Three sessions at UGX 10,000 each and I passed. Best money I ever spent." },
+  { name: 'Ssemwogerere Brian', uni: 'Kyambogo University · BIT Yr 3', subject: 'Database Systems', rating: 5, photo: asset('/img/student-brian.jpg'), text: "I tutor Database Systems on Saturday mornings between 9 and 11. I've earned over UGX 250,000 this semester — enough to cover my retake fees and buy data. The MoMo payment lands the same day the session ends." },
   { name: 'Akello Patience', uni: 'UCU · BSc Nursing Yr 2', subject: 'Organic Chemistry', rating: 5, photo: asset('/img/student-patience.jpg'), text: "CHE 1201 was going to make me repeat the year. My TutorUG tutor had done the same course at UCU the year before — she knew exactly which questions Ssekandi sets. Two sessions and I was sorted." },
 ];
 
@@ -732,7 +733,7 @@ function BecomeTutor() {
 /* ── Pricing & fees ── */
 function Pricing() {
   const { ref, visible } = useFadeIn();
-  const tutorExample = 4 * 50000;
+  const tutorExample = 10 * 10000;
   const tutorFee = Math.round((tutorExample * PLATFORM_FEE_PERCENT) / 100);
   const tutorKeeps = tutorExample - tutorFee;
   return (
@@ -762,7 +763,8 @@ function Pricing() {
             <ul className="mt-6 flex flex-col gap-4">
               {[
                 'No subscription and no joining fee — creating an account is free.',
-                'Your tutor sets the rate. Rates start from UGX 1,000 per session.',
+                'Your tutor sets the rate. Most sessions cost UGX 2,000–20,000.',
+                'Prefer a bundle? Agree one price for a whole course unit or your full semester.',
                 'Top up your wallet with MTN MoMo or Airtel Money.',
                 'The session fee is held in escrow by TutorUG until the session is done.',
                 'Full refund to your wallet if the tutor declines or either side cancels.',
@@ -790,6 +792,7 @@ function Pricing() {
             <ul className="mt-6 flex flex-col gap-4">
               {[
                 'Choose your own rate, subjects and weekly availability.',
+                'Charge per session, or set a package price for a whole course unit or semester.',
                 `TutorUG keeps a ${PLATFORM_FEE_PERCENT}% service fee from each completed session — nothing else.`,
                 'You are paid only after the session is completed and confirmed.',
                 'Withdraw your earnings straight to MTN MoMo or Airtel Money.',
@@ -806,7 +809,7 @@ function Pricing() {
             <div className="mt-6 rounded-2xl p-4" style={{ background: 'rgba(3,4,7,0.6)', border: '1px solid rgba(21,88,201,0.4)' }}>
               <p className="text-xs font-bold uppercase tracking-wide text-white/50">Example earnings</p>
               <p className="mt-1.5 text-sm text-white/80">
-                4 sessions at UGX 50,000 = <span className="font-bold text-white">UGX {tutorExample.toLocaleString()}</span> gross.
+                10 sessions at UGX 10,000 = <span className="font-bold text-white">UGX {tutorExample.toLocaleString()}</span> gross.
               </p>
               <p className="text-sm text-white/80">
                 TutorUG fee ({PLATFORM_FEE_PERCENT}%) = <span className="font-bold" style={{ color: '#ff8a8a' }}>−UGX {tutorFee.toLocaleString()}</span>.
@@ -816,6 +819,34 @@ function Pricing() {
               </p>
             </div>
           </div>
+        </div>
+        <div className="mt-12">
+          <div className="mx-auto max-w-2xl text-center">
+            <h3 className="text-xl font-extrabold text-white sm:text-2xl">Pick the way that suits you</h3>
+            <p className="mt-2 text-sm text-white/55">
+              Sessions are priced per session by default — but you and your tutor can agree a single
+              price for a whole course unit or your entire semester.
+            </p>
+          </div>
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {[
+              { icon: Clock, title: 'Per session', range: 'UGX 2,000 – 20,000', body: 'Pay as you go. Most sessions fall in this range.' },
+              { icon: BookOpen, title: 'Per course unit', range: 'UGX 30,000 – 80,000', body: 'One price for every session in a single course unit.' },
+              { icon: CalendarDays, title: 'Per semester', range: 'UGX 150,000 – 400,000', body: 'Cover several course units for the whole term.' },
+            ].map((format) => (
+              <div key={format.title} className="rounded-2xl p-5" style={{ background: 'rgba(21,88,201,0.08)', border: '1px solid rgba(21,88,201,0.3)' }}>
+                <span className="grid h-10 w-10 place-items-center rounded-xl" style={{ background: 'rgba(212,255,36,0.15)' }}>
+                  <format.icon className="h-5 w-5" style={{ color: '#D4FF24' }} />
+                </span>
+                <p className="mt-3 font-extrabold text-white">{format.title}</p>
+                <p className="mt-1 text-sm font-bold" style={{ color: '#D4FF24' }}>{format.range}</p>
+                <p className="mt-1 text-sm text-white/55">{format.body}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 text-center text-xs text-white/40">
+            Indicative ranges — your tutor sets the final price, and can go beyond these for specialist or exam-focused work.
+          </p>
         </div>
         <p className="mt-8 text-center text-sm text-white/45">
           Read the full <Link to="/refund-policy" className="font-semibold underline" style={{ color: '#D4FF24' }}>Refund &amp; Cancellation Policy</Link>.
@@ -829,7 +860,7 @@ function Pricing() {
 const FAQS = [
   {
     q: 'How much does TutorUG cost?',
-    a: `Joining is free for everyone. Students pay only for the sessions they book, at the rate their tutor sets (from UGX 1,000 per session). Tutors keep their earnings minus a ${PLATFORM_FEE_PERCENT}% TutorUG service fee on completed sessions.`,
+    a: `Joining is free for everyone. Students pay only for the sessions they book, at the rate their tutor sets — most sessions cost UGX 2,000–20,000. You can also agree a single price for a whole course unit or a full semester. Tutors keep their earnings minus a ${PLATFORM_FEE_PERCENT}% TutorUG service fee on completed sessions.`,
   },
   {
     q: 'How do payments work?',

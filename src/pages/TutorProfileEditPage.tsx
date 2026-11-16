@@ -98,7 +98,7 @@ export function TutorProfileEditPage() {
     event.preventDefault();
     setError(null); setSaved(false);
     if (!form.fullName.trim()) { setError('Enter your full name.'); return; }
-    if (form.hourlyRate && (!Number.isFinite(rate) || rate < 1000)) { setError('Enter a session rate of at least UGX 1,000, or leave it blank.'); return; }
+    if (form.hourlyRate && (!Number.isFinite(rate) || rate < 2000)) { setError('Enter a session rate of at least UGX 2,000, or leave it blank.'); return; }
     for (const slot of availability) {
       if (slot.enabled && slot.start >= slot.end) { setError(`${slot.day}: end time must be after start time.`); return; }
     }
@@ -223,7 +223,7 @@ export function TutorProfileEditPage() {
                 <div className="grid gap-5 sm:grid-cols-3">
                   <div>
                     <label className="mb-1.5 block text-sm font-semibold text-white/80">Rate per session (UGX)</label>
-                    <input inputMode="numeric" value={form.hourlyRate} onChange={(e) => setForm({ ...form, hourlyRate: e.target.value.replace(/[^\d]/g, '') })} placeholder="35000" className={inputClass} style={inputStyle} />
+                    <input inputMode="numeric" value={form.hourlyRate} onChange={(e) => setForm({ ...form, hourlyRate: e.target.value.replace(/[^\d]/g, '') })} placeholder="15000" className={inputClass} style={inputStyle} />
                   </div>
                   <div>
                     <label className="mb-1.5 block text-sm font-semibold text-white/80">Campus / location</label>
