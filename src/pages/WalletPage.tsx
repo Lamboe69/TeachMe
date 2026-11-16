@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import {
-  ArrowDownLeft, ArrowUpRight, Banknote, CheckCircle2,
-  Clock, Info, Plus, Receipt, Shield, Smartphone, Wallet as WalletIcon,
+  ArrowDownLeft, ArrowUpRight, Banknote, CheckCircle2, Clock, Download,
+  Info, Plus, Receipt, Search, Shield, Smartphone, Wallet as WalletIcon,
 } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { Dialog } from '@/components/ui/Dialog';
@@ -11,7 +11,7 @@ import { useAsyncData } from '@/hooks/useAsyncData';
 import { services } from '@/services';
 import { PLATFORM_FEE_PERCENT } from '@/app/config';
 import { toAppError } from '@/utils/apiError';
-import { formatUGX } from '@/utils/format';
+import { formatRelative, formatUGX } from '@/utils/format';
 import type { MobileMoneyNetwork, WalletTransaction } from '@/types';
 
 type Mode = 'topup' | 'withdraw' | null;
@@ -31,6 +31,21 @@ function formatTxnDate(value: string | null): string {
   if (Number.isNaN(date.getTime())) return '—';
   return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 }
+
+function txnTime(value: string | null): number {
+  if (!value) return 0;
+  const time = new Date(value).getTime();
+  return Number.isFinite(time) ? time : 0;
+}
+
+const TXN_TABS: Array<{ id: 'ALL' | WalletTransaction['type']; label: string }> = [
+  { id: 'ALL', label: 'All' },
+  { id: 'TOP_UP', label: 'Top-ups' },
+  { id: 'SESSION_PAYMENT', label: 'Payments' },
+  { id: 'REFUND', label: 'Refunds' },
+  { id: 'SESSION_EARNING', label: 'Earnings' },
+  { id: 'WITHDRAWAL', label: 'Withdrawals' },
+];
 
 const cardStyle = { background: 'rgba(21,88,201,0.08)', border: '1px solid rgba(21,88,201,0.25)' };
 const inputClass = 'h-12 w-full rounded-xl px-4 text-sm font-medium text-white placeholder-white/25 outline-none transition focus:ring-2 focus:ring-[#1558C9]';
@@ -57,6 +72,49 @@ export function WalletPage() {
 
   const totalIn  = useMemo(() => transactions.filter((t) => t.amount > 0).reduce((s, t) => s + t.amount, 0), [transactions]);
   const totalOut = useMemo(() => transactions.filter((t) => t.amount < 0).reduce((s, t) => s + Math.abs(t.amount), 0), [transactions]);
+
+  const [txnTab, setTxnTab] = useState<'ALL' | WalletTransaction['type']>('ALL');
+  const [txnSearch, setTxnSearch] = useState('');
+  const [txnSort, setTxnSort] = useState('newest');
+
+  const txnCounts = useMemo(() => {
+    const counts: Record<string, number> = { ALL: transactions.length };
+    transactions.forEach((t) => { counts[t.type] = (counts[t.type] ?? 0) + 1; });
+    return counts;
+  }, [transactions]);
+
+  const visibleTxns = useMemo(() => {
+    const byType = txnTab === 'ALL' ? transactions : transactions.filter((t) => t.type === txnTab);
+    const needle = txnSearch.trim().toLowerCase();
+    const searched = needle
+      ? byType.filter((t) => `${TXN_META[t.type]?.label ?? ''} ${t.description} ${t.reference ?? ''}`.toLowerCase().includes(needle))
+      : byType;
+    return [...searched].sort((a, b) => (txnSort === 'oldest'
+      ? txnTime(a.createdAt) - txnTime(b.createdAt)
+      : txnTime(b.createdAt) - txnTime(a.createdAt)));
+  }, [transactions, txnTab, txnSearch, txnSort]);
+
+  function exportStatement() {
+    const header = ['Date', 'Type', 'Description', 'Reference', 'Amount (UGX)', 'Balance after (UGX)'];
+    const rows = transactions.map((t) => [
+      t.createdAt ?? '',
+      TXN_META[t.type]?.label ?? t.type,
+      t.description,
+      t.reference ?? '',
+      String(t.amount),
+      String(t.balanceAfter),
+    ]);
+    const csv = [header, ...rows]
+      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'tutorug-statement.csv';
+    link.click();
+    URL.revokeObjectURL(url);
+  }
 
   function openModal(next: Exclude<Mode, null>) {
     setMode(next); setAmount(''); setPhone(user?.phone ?? ''); setNetwork('MTN'); setFormError(null);
@@ -219,10 +277,80 @@ export function WalletPage() {
 
           {/* Transactions */}
           <section className="mt-8">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-bold text-white">Transactions</h3>
-              <span className="text-sm text-white/40">{transactions.length} total</span>
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h3 className="text-lg font-bold text-white">Transactions</h3>
+                <p aria-live="polite" className="text-sm text-white/40">
+                  {visibleTxns.length} of {transactions.length} shown
+                </p>
+              </div>
+              {transactions.length > 0 && (
+                <button
+                  type="button"
+                  onClick={exportStatement}
+                  className="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold text-white transition hover:bg-white/10"
+                  style={{ border: '1px solid rgba(21,88,201,0.4)' }}
+                >
+                  <Download className="h-4 w-4" /> Download statement
+                </button>
+              )}
             </div>
+
+            {transactions.length > 0 && (
+              <>
+                <div className="mb-4 flex flex-col gap-3 sm:flex-row">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+                    <input
+                      type="search"
+                      value={txnSearch}
+                      onChange={(e) => setTxnSearch(e.target.value)}
+                      placeholder="Search transactions…"
+                      aria-label="Search transactions"
+                      className="h-11 w-full rounded-xl pl-10 pr-4 text-sm font-medium text-white placeholder-white/25 outline-none transition focus:ring-2 focus:ring-[#1558C9]"
+                      style={inputStyle}
+                    />
+                  </div>
+                  <select
+                    aria-label="Sort transactions"
+                    value={txnSort}
+                    onChange={(e) => setTxnSort(e.target.value)}
+                    className="h-11 rounded-xl px-4 text-sm font-semibold text-white outline-none transition focus:ring-2 focus:ring-[#1558C9] sm:w-44"
+                    style={{ ...inputStyle, colorScheme: 'dark' }}
+                  >
+                    <option value="newest">Newest first</option>
+                    <option value="oldest">Oldest first</option>
+                  </select>
+                </div>
+
+                <div role="tablist" aria-label="Filter transactions by type" className="mb-4 flex flex-wrap gap-2">
+                  {TXN_TABS.map((tab) => {
+                    const count = txnCounts[tab.id] ?? 0;
+                    const selected = txnTab === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        role="tab"
+                        aria-selected={selected}
+                        onClick={() => setTxnTab(tab.id)}
+                        disabled={count === 0 && tab.id !== 'ALL'}
+                        className="flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-30"
+                        style={selected
+                          ? { background: '#D4FF24', color: '#030407' }
+                          : { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(21,88,201,0.35)', color: 'rgba(255,255,255,0.6)' }
+                        }
+                      >
+                        {tab.label}
+                        <span className="rounded-full px-1.5 py-0.5 text-xs" style={selected ? { background: 'rgba(3,4,7,0.2)', color: '#030407' } : { background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.4)' }}>
+                          {count}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
+            )}
 
             {state.loading ? (
               <div className="space-y-3">
@@ -236,13 +364,28 @@ export function WalletPage() {
                   {isTutor ? 'Complete sessions to earn. Transactions will appear here.' : 'Top up your wallet to start booking sessions.'}
                 </p>
               </div>
+            ) : visibleTxns.length === 0 ? (
+              <div className="rounded-2xl p-12 text-center" style={cardStyle}>
+                <Search className="mx-auto h-12 w-12 text-white/20" />
+                <p className="mt-4 font-semibold text-white">No matching transactions</p>
+                <p className="mt-1 text-sm text-white/50">Try a different search term or filter.</p>
+                <button
+                  type="button"
+                  onClick={() => { setTxnSearch(''); setTxnTab('ALL'); }}
+                  className="mt-5 rounded-xl px-6 py-2 text-sm font-semibold transition hover:opacity-80"
+                  style={{ background: 'rgba(21,88,201,0.3)', border: '1px solid rgba(21,88,201,0.5)', color: 'white' }}
+                >
+                  Show all transactions
+                </button>
+              </div>
             ) : (
               <div className="overflow-hidden rounded-2xl" style={cardStyle}>
                 <ul>
-                  {transactions.map((txn, idx) => {
+                  {visibleTxns.map((txn, idx) => {
                     const meta = TXN_META[txn.type] ?? TXN_META.TOP_UP;
                     const Icon = meta.icon;
                     const positive = txn.amount > 0;
+                    const relative = formatRelative(txn.createdAt);
                     return (
                       <li key={txn.id} className="flex items-center gap-4 p-5" style={idx > 0 ? { borderTop: '1px solid rgba(21,88,201,0.15)' } : {}}>
                         <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl" style={{ background: positive ? 'rgba(212,255,36,0.12)' : 'rgba(21,88,201,0.2)' }}>
@@ -252,7 +395,9 @@ export function WalletPage() {
                           <p className="truncate font-semibold text-white text-sm">{meta.label}</p>
                           <p className="truncate text-xs text-white/50">{txn.description}</p>
                           <p className="mt-0.5 text-xs text-white/30">
-                            {formatTxnDate(txn.createdAt)}{txn.reference ? ` · ${txn.reference}` : ''}
+                            {formatTxnDate(txn.createdAt)}
+                            {relative ? ` · ${relative}` : ''}
+                            {txn.reference ? ` · ${txn.reference}` : ''}
                           </p>
                         </div>
                         <div className="text-right">
