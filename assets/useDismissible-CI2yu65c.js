@@ -1,0 +1,1 @@
+import{K as e,q as t}from"./index-BOjCf-pi.js";var n=t(e(),1);function r(e){let[t,r]=(0,n.useState)(()=>{try{return window.localStorage.getItem(e)===`1`}catch{return!1}});return{dismissed:t,dismiss:(0,n.useCallback)(()=>{try{window.localStorage.setItem(e,`1`)}catch{}r(!0)},[e])}}export{r as t};
