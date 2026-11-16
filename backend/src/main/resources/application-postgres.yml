@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/tutorug}
+    driver-class-name: org.postgresql.Driver
+    username: ${JDBC_DATABASE_USERNAME:tutorug}
+    password: ${JDBC_DATABASE_PASSWORD:tutorug}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  h2:
+    console:
+      enabled: false
