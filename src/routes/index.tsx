@@ -7,6 +7,7 @@ import {
   ContactPage,
   FeedbackPage,
   ForgotPasswordPage,
+  HelpPage,
   LandingPage,
   LegalPage,
   LoginPage,
@@ -119,6 +120,16 @@ export const router = createBrowserRouter([
         element: (
           <RequireAuth>
             <WalletPage />
+          </RequireAuth>
+        ),
+      },
+
+      /* --------------------------------------------------------- Help */
+      {
+        path: '/help',
+        element: (
+          <RequireAuth>
+            <HelpPage />
           </RequireAuth>
         ),
       },

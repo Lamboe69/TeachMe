@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowRight, BookOpen, CalendarClock, Lock, MapPin, Search, Star } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { useAsyncData } from '@/hooks/useAsyncData';
@@ -28,8 +28,12 @@ function initials(name: string) {
 }
 
 export function TutorsPageNew() {
-  const [searchInput, setSearchInput] = useState('');
-  const [subjectFilter, setSubjectFilter] = useState('All');
+  const [searchParams] = useSearchParams();
+  const [searchInput, setSearchInput] = useState(() => searchParams.get('search') ?? '');
+  const [subjectFilter, setSubjectFilter] = useState(() => {
+    const subject = searchParams.get('subject');
+    return subject && SUBJECTS.includes(subject) ? subject : 'All';
+  });
   const search = useDebouncedValue(searchInput, 300);
 
   const query = useMemo(() => ({

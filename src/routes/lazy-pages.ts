@@ -59,6 +59,10 @@ export const WalletPage = lazy(() =>
   import('@/pages/WalletPage').then((m) => ({ default: m.WalletPage })),
 );
 
+export const HelpPage = lazy(() =>
+  import('@/pages/HelpPage').then((m) => ({ default: m.HelpPage })),
+);
+
 export const UnauthorizedPage = lazy(() =>
   import('@/pages/UnauthorizedPage').then((m) => ({ default: m.UnauthorizedPage })),
 );

@@ -1,14 +1,17 @@
-import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import type { FormEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
-  ArrowDownLeft, ArrowRight, ArrowUpRight, BookOpen, Calendar, CheckCircle2,
-  Clock, Flame, Search, Sparkles, Star, TrendingUp, Wallet, XCircle, Zap,
+  ArrowDownLeft, ArrowRight, ArrowUpRight, BookOpen, Calendar, CalendarPlus,
+  CheckCircle2, Clock, Flame, Search, Sparkles, Star, TrendingUp, Wallet, XCircle, Zap,
 } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
+import { GettingStarted } from '@/components/dashboard/GettingStarted';
 import { Skeleton } from '@/components/ui/Spinner';
 import { useAuth } from '@/context/AuthContext';
 import { useAsyncData } from '@/hooks/useAsyncData';
 import { services } from '@/services';
+import { sessionIcsFilename, sessionIcsHref } from '@/utils/calendar';
 import { firstName, formatRating, formatUGX } from '@/utils/format';
 import { isUpcoming } from '@/utils/sessionPermissions';
 import type { Session, WalletTransaction } from '@/types';
@@ -141,6 +144,15 @@ function buildActivity(sessions: Session[], transactions: WalletTransaction[]): 
 
 export function StudentDashboardNew() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const submitSearch = (event: FormEvent) => {
+    event.preventDefault();
+    const query = searchTerm.trim();
+    navigate(query ? `/tutors?search=${encodeURIComponent(query)}` : '/tutors');
+  };
+
   const sessionsState = useAsyncData(() => services.sessions.listMine(), []);
   const walletState = useAsyncData(() => services.wallet.getWallet(), []);
   const transactionsState = useAsyncData(() => services.wallet.listTransactions(), []);
@@ -252,7 +264,25 @@ export function StudentDashboardNew() {
                 )}
               </div>
             </div>
+            <form onSubmit={submitSearch} className="relative mt-5 flex max-w-xl gap-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+                <input
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                  placeholder="Search a course unit, e.g. Mathematics"
+                  aria-label="Search for a tutor by course unit"
+                  className="h-11 w-full rounded-xl pl-10 pr-3 text-sm text-white placeholder-white/40 outline-none transition focus:border-white/40"
+                  style={{ background: 'rgba(3,4,7,0.4)', border: '1px solid rgba(255,255,255,0.2)' }}
+                />
+              </div>
+              <button type="submit" className="rounded-xl px-5 text-sm font-bold transition hover:opacity-90" style={{ background: VOLT, color: NIGHT }}>
+                Search
+              </button>
+            </form>
           </div>
+
+          <GettingStarted sessions={sessions} wallet={walletState.data} userId={user?.id} />
 
           {/* Action prompts */}
           {(pendingRequests.length > 0 || reviewable.length > 0) && (
@@ -303,9 +333,19 @@ export function StudentDashboardNew() {
                   {new Date(nextSession.scheduledAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} · {timeUntil(nextSession.scheduledAt)}
                 </p>
               </div>
-              <Link to={`/sessions/${nextSession.id}`} className="shrink-0 rounded-xl px-4 py-2 text-sm font-bold transition hover:opacity-90" style={{ background: VOLT, color: NIGHT }}>
-                View →
-              </Link>
+              <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+                <a
+                  href={sessionIcsHref(nextSession)}
+                  download={sessionIcsFilename(nextSession)}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-bold text-white transition hover:bg-white/10"
+                  style={{ border: '1.5px solid rgba(255,255,255,0.3)' }}
+                >
+                  <CalendarPlus className="h-4 w-4" /> Add
+                </a>
+                <Link to={`/sessions/${nextSession.id}`} className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-bold transition hover:opacity-90" style={{ background: VOLT, color: NIGHT }}>
+                  View →
+                </Link>
+              </div>
             </div>
           )}
 
@@ -536,8 +576,13 @@ export function StudentDashboardNew() {
               )}
 
               <div className="mt-3 rounded-2xl p-4" style={{ background: 'rgba(21,88,201,0.08)', border: '1px solid rgba(21,88,201,0.2)' }}>
-                <p className="text-xs font-bold text-white/60">Payments secured</p>
-                <p className="mt-1 text-xs text-white/35">MTN MoMo & Airtel Money. Money held by TutorUG until session is complete.</p>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-bold text-white/60">Payments secured</p>
+                  <span className="text-xs font-bold" style={{ color: VOLT }}>{formatUGX(walletState.data?.escrowBalance ?? 0)} in escrow</span>
+                </div>
+                <p className="mt-1 text-xs text-white/40">
+                  Pay with MTN MoMo or Airtel Money. Your fee is held in escrow by TutorUG and only released to the tutor after the session is completed and confirmed.
+                </p>
               </div>
             </div>
           </div>

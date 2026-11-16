@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import {
-  Bell, Calendar, Clock, GraduationCap, Home,
+  Calendar, Clock, GraduationCap, HelpCircle, Home,
   LogOut, Menu, Search, User, Wallet, X,
 } from 'lucide-react';
+import { NotificationsMenu } from '@/components/layout/NotificationsMenu';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { useAsyncData } from '@/hooks/useAsyncData';
@@ -114,6 +115,7 @@ export function AppShell({ children, title }: AppShellProps) {
         { to: '/wallet', label: 'Wallet', icon: Wallet },
         { to: '/tutor/profile/edit', label: 'My profile', icon: User },
         { to: '/tutor/availability', label: 'Availability', icon: Clock },
+        { to: '/help', label: 'Help', icon: HelpCircle },
       ]
     : [
         { to: '/student/dashboard', label: 'Dashboard', icon: Home },
@@ -121,6 +123,7 @@ export function AppShell({ children, title }: AppShellProps) {
         { to: '/sessions', label: 'My sessions', icon: Calendar, badge: upcomingCount },
         { to: '/wallet', label: 'Wallet', icon: Wallet },
         { to: '/student/profile', label: 'Profile', icon: User },
+        { to: '/help', label: 'Help', icon: HelpCircle },
       ];
 
   const handleLogout = async () => {
@@ -156,14 +159,7 @@ export function AppShell({ children, title }: AppShellProps) {
               <h1 className="text-lg font-bold text-white">{title}</h1>
             </div>
             <div className="flex items-center gap-3">
-              <button type="button" className="relative grid h-10 w-10 place-items-center rounded-xl text-white/50 transition hover:text-white" style={{ border: '1px solid rgba(21,88,201,0.3)' }} aria-label="Notifications">
-                <Bell className="h-5 w-5" />
-                {(pendingCount + upcomingCount) > 0 && (
-                  <span className="absolute -right-1 -top-1 grid h-4 w-4 place-items-center rounded-full text-[10px] font-black" style={{ background: '#D4FF24', color: '#030407' }}>
-                    {pendingCount + upcomingCount}
-                  </span>
-                )}
-              </button>
+              <NotificationsMenu sessions={sessions} isTutor={isTutor} />
               <div className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: 'rgba(21,88,201,0.15)', border: '1px solid rgba(21,88,201,0.3)' }}>
                 <div className="grid h-8 w-8 place-items-center rounded-full text-sm font-black" style={{ background: '#1558C9', color: '#D4FF24' }}>
                   {user?.fullName?.charAt(0)}
