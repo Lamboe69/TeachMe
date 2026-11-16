@@ -52,96 +52,106 @@ export function ForgotPasswordPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cream-50 via-green-50/30 to-emerald-50/40">
+    <div className="relative min-h-screen overflow-hidden" style={{ background: '#030407' }}>
       <div className="absolute inset-0">
         <img
           src={asset('/img/library-study.jpg')}
           alt=""
-          className="h-full w-full object-cover opacity-5"
+          aria-hidden="true"
+          className="h-full w-full object-cover opacity-10"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(135deg, rgba(3,4,7,0.95) 0%, rgba(3,4,7,0.85) 50%, rgba(21,88,201,0.5) 100%)',
+          }}
         />
       </div>
       <div className="relative flex min-h-screen items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
           <div className="mb-8 text-center">
             <Link to="/" className="mb-6 inline-flex items-center gap-2.5">
-              <div className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-green-600 to-emerald-600 shadow-soft">
-                <GraduationCap className="h-7 w-7 text-white" aria-hidden="true" />
+              <div className="grid h-12 w-12 place-items-center rounded-xl" style={{ background: '#D4FF24' }}>
+                <GraduationCap className="h-7 w-7" style={{ color: '#030407' }} aria-hidden="true" />
               </div>
-              <span className="font-display text-2xl font-extrabold tracking-tight text-ink-950">TutorUG</span>
+              <span className="font-display text-2xl font-extrabold tracking-tight text-white">TutorUG</span>
             </Link>
-            <h1 className="mt-6 text-3xl font-black tracking-tight text-ink-950">Reset your password</h1>
-            <p className="mt-2 text-ink-700">Enter the email address you registered with</p>
+            <h1 className="mt-6 text-3xl font-black tracking-tight text-white">Reset your password</h1>
+            <p className="mt-2 text-white/60">Enter the email address you registered with</p>
           </div>
-          <div className="rounded-2xl bg-white p-6 shadow-soft ring-1 ring-ink-200 sm:p-8">
-      {PASSWORD_RESET_ENABLED ? (
-        <form onSubmit={onSubmit} noValidate className="space-y-5">
-          {submitError ? (
-            <Alert theme="light" tone="error" title="We could not send the reset email">
-              {submitError}
-            </Alert>
-          ) : null}
+          <div
+            className="rounded-3xl p-6 sm:p-8"
+            style={{ background: 'rgba(21,88,201,0.08)', border: '1px solid rgba(21,88,201,0.3)' }}
+          >
+            {PASSWORD_RESET_ENABLED ? (
+              <form onSubmit={onSubmit} noValidate className="space-y-5">
+                {submitError ? (
+                  <Alert tone="error" title="We could not send the reset email">
+                    {submitError}
+                  </Alert>
+                ) : null}
 
-          {sent ? (
-            <Alert theme="light" tone="success" title="Check your email">
-              If an account exists for that address, a reset link is on its way. The link expires
-              shortly for your security.
-            </Alert>
-          ) : null}
+                {sent ? (
+                  <Alert tone="success" title="Check your email">
+                    If an account exists for that address, a reset link is on its way. The link
+                    expires shortly for your security.
+                  </Alert>
+                ) : null}
 
-          <Input
-            theme="light"
-            label="Email address"
-            type="email"
-            placeholder="you@example.com"
-            autoComplete="email"
-            error={errors.email?.message}
-            required
-            {...register('email')}
-          />
+                <Input
+                  label="Email address"
+                  type="email"
+                  placeholder="you@university.ac.ug"
+                  autoComplete="email"
+                  error={errors.email?.message}
+                  required
+                  {...register('email')}
+                />
 
-          <Button theme="light" type="submit" fullWidth size="lg" loading={isSubmitting}>
-            {isSubmitting ? 'Sending request…' : 'Send reset link'}
-          </Button>
-        </form>
-      ) : (
-        <div className="space-y-5">
-          <Alert theme="light" tone="warning" title="Password reset is not available yet">
-            The TutorUG API does not currently expose a password reset endpoint, so we cannot send
-            reset emails from this release. We would rather tell you plainly than pretend an email
-            is on its way.
-          </Alert>
+                <Button type="submit" fullWidth size="lg" loading={isSubmitting}>
+                  {isSubmitting ? 'Sending request…' : 'Send reset link'}
+                </Button>
+              </form>
+            ) : (
+              <div className="space-y-5">
+                <Alert tone="warning" title="Password reset is not available yet">
+                  The TutorUG API does not currently expose a password reset endpoint, so we cannot
+                  send reset emails from this release. We would rather tell you plainly than pretend
+                  an email is on its way.
+                </Alert>
 
-          <div className="rounded-xl border border-ink-200 bg-ink-50 p-4">
-            <p className="flex items-center gap-2 text-sm font-semibold text-ink-800">
-              <LifeBuoy className="h-4 w-4 text-brand-600" aria-hidden="true" />
-              How to recover access right now
-            </p>
-            <ul className="mt-3 space-y-2 text-sm text-ink-600">
-              <li className="flex gap-2">
-                <MailCheck className="mt-0.5 h-4 w-4 shrink-0 text-ink-400" aria-hidden="true" />
-                Contact support at{' '}
-                <a href="mailto:support@tutorug.ug" className="font-medium text-brand-700 underline">
-                  support@tutorug.ug
-                </a>{' '}
-                with your full name and the email you registered with.
-              </li>
-              <li className="flex gap-2">
-                <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-ink-400" aria-hidden="true" />
-                If you are a tutor with an existing session, your coordinator can verify your
-                identity and reset the password for you.
-              </li>
-            </ul>
+                <div className="rounded-xl border border-[rgba(21,88,201,0.3)] bg-[rgba(21,88,201,0.06)] p-4">
+                  <p className="flex items-center gap-2 text-sm font-semibold text-white">
+                    <LifeBuoy className="h-4 w-4 text-[#D4FF24]" aria-hidden="true" />
+                    How to recover access right now
+                  </p>
+                  <ul className="mt-3 space-y-2 text-sm text-white/60">
+                    <li className="flex gap-2">
+                      <MailCheck className="mt-0.5 h-4 w-4 shrink-0 text-white/40" aria-hidden="true" />
+                      Contact support at{' '}
+                      <a href="mailto:support@tutorug.ug" className="font-medium text-[#D4FF24] underline">
+                        support@tutorug.ug
+                      </a>{' '}
+                      with your full name and the email you registered with.
+                    </li>
+                    <li className="flex gap-2">
+                      <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-white/40" aria-hidden="true" />
+                      If you are a tutor with an existing session, your coordinator can verify your
+                      identity and reset the password for you.
+                    </li>
+                  </ul>
+                </div>
+
+                <ButtonLink to="/login" variant="outline" fullWidth>
+                  Back to log in
+                </ButtonLink>
+              </div>
+            )}
           </div>
-
-          <ButtonLink theme="light" to="/login" variant="outline" fullWidth>
-            Back to log in
-          </ButtonLink>
-        </div>
-      )}
-          </div>
-          <p className="mt-6 text-center text-sm text-ink-700">
+          <p className="mt-6 text-center text-sm text-white/50">
             Remembered it?{' '}
-            <Link to="/login" className="font-bold text-green-700 hover:underline">
+            <Link to="/login" className="font-bold text-[#D4FF24] hover:underline">
               Back to log in
             </Link>
           </p>

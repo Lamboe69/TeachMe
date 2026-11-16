@@ -96,7 +96,7 @@ export function Header() {
   const dashboardPath = isTutor ? '/tutor/dashboard' : '/student/dashboard';
 
   return (
-    <header className="sticky top-0 z-40 border-b border-ink-200/80 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
+    <header className="sticky top-0 z-40 border-b border-[rgba(21,88,201,0.3)] bg-[#030407]/95 backdrop-blur supports-[backdrop-filter]:bg-[#030407]/85">
       <div className="container-page flex h-16 items-center justify-between gap-4">
         <Logo />
 
@@ -109,8 +109,8 @@ export function Header() {
                 cn(
                   'rounded-lg px-3 py-2 text-sm font-medium transition',
                   isActive
-                    ? 'bg-green-50 text-green-800'
-                    : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900',
+                    ? 'bg-[rgba(212,255,36,0.12)] text-[#D4FF24]'
+                    : 'text-white/70 hover:bg-white/5 hover:text-white',
                 )
               }
             >
@@ -127,31 +127,31 @@ export function Header() {
                 onClick={() => setMenuOpen((open) => !open)}
                 aria-haspopup="menu"
                 aria-expanded={menuOpen}
-                className="flex items-center gap-2 rounded-xl border border-ink-200 py-1.5 pl-1.5 pr-3 text-sm font-semibold text-ink-700 transition hover:bg-ink-50"
+                className="flex items-center gap-2 rounded-xl border border-[rgba(21,88,201,0.4)] py-1.5 pl-1.5 pr-3 text-sm font-semibold text-white/80 transition hover:bg-white/5"
               >
-                <span className="grid h-8 w-8 place-items-center rounded-lg bg-green-700 text-xs font-bold text-white">
+                <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#1558C9] text-xs font-bold text-white">
                   {getInitials(user?.fullName)}
                 </span>
                 <span className="max-w-[9rem] truncate">{user?.fullName}</span>
-                <ChevronDown className="h-4 w-4 text-ink-400" aria-hidden="true" />
+                <ChevronDown className="h-4 w-4 text-white/40" aria-hidden="true" />
               </button>
 
               {menuOpen ? (
                 <div
                   role="menu"
-                  className="absolute right-0 z-50 mt-2 w-60 overflow-hidden rounded-xl border border-ink-200 bg-white py-1 shadow-lg"
+                  className="absolute right-0 z-50 mt-2 w-60 overflow-hidden rounded-xl border border-[rgba(21,88,201,0.35)] bg-[#0d1526] py-1 shadow-xl"
                 >
-                  <div className="border-b border-ink-100 px-4 py-3">
-                    <p className="truncate text-sm font-semibold text-ink-900">{user?.fullName}</p>
-                    <p className="truncate text-xs text-ink-500">{user?.email}</p>
-                    <p className="mt-1 inline-flex rounded-full bg-green-50 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-green-700">
+                  <div className="border-b border-[rgba(21,88,201,0.25)] px-4 py-3">
+                    <p className="truncate text-sm font-semibold text-white">{user?.fullName}</p>
+                    <p className="truncate text-xs text-white/50">{user?.email}</p>
+                    <p className="mt-1 inline-flex rounded-full bg-[rgba(212,255,36,0.15)] px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-[#D4FF24]">
                       {user?.role === 'TUTOR' ? 'Tutor' : 'Student'}
                     </p>
                   </div>
                   <Link
                     role="menuitem"
                     to={dashboardPath}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-ink-700 transition hover:bg-ink-50"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-white/70 transition hover:bg-white/5 hover:text-white"
                   >
                     <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
                     Dashboard
@@ -159,7 +159,7 @@ export function Header() {
                   <Link
                     role="menuitem"
                     to={isTutor ? '/tutor/sessions' : '/sessions'}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-ink-700 transition hover:bg-ink-50"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-white/70 transition hover:bg-white/5 hover:text-white"
                   >
                     <CalendarDays className="h-4 w-4" aria-hidden="true" />
                     Sessions
@@ -167,7 +167,7 @@ export function Header() {
                   <Link
                     role="menuitem"
                     to="/wallet"
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-ink-700 transition hover:bg-ink-50"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-white/70 transition hover:bg-white/5 hover:text-white"
                   >
                     <Wallet className="h-4 w-4" aria-hidden="true" />
                     Wallet
@@ -176,7 +176,7 @@ export function Header() {
                     <Link
                       role="menuitem"
                       to="/student/profile"
-                      className="flex items-center gap-2 px-4 py-2 text-sm text-ink-700 transition hover:bg-ink-50"
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-white/70 transition hover:bg-white/5 hover:text-white"
                     >
                       <UserCircle className="h-4 w-4" aria-hidden="true" />
                       My profile
@@ -186,7 +186,7 @@ export function Header() {
                     role="menuitem"
                     type="button"
                     onClick={handleLogout}
-                    className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 transition hover:bg-red-50"
+                    className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-300 transition hover:bg-red-500/10"
                   >
                     <LogOut className="h-4 w-4" aria-hidden="true" />
                     Log out
@@ -208,7 +208,7 @@ export function Header() {
 
         <button
           type="button"
-          className="rounded-lg p-2 text-ink-700 transition hover:bg-ink-100 md:hidden"
+          className="rounded-lg p-2 text-white/80 transition hover:bg-white/5 md:hidden"
           onClick={() => setMobileOpen((open) => !open)}
           aria-expanded={mobileOpen}
           aria-controls="mobile-navigation"
@@ -223,7 +223,7 @@ export function Header() {
       </div>
 
       {mobileOpen ? (
-        <div id="mobile-navigation" className="border-t border-ink-200 bg-white md:hidden">
+        <div id="mobile-navigation" className="border-t border-[rgba(21,88,201,0.3)] bg-[#030407] md:hidden">
           <nav aria-label="Mobile" className="container-page flex flex-col gap-1 py-4">
             {navItems.map((item) => (
               <NavLink
@@ -233,8 +233,8 @@ export function Header() {
                   cn(
                     'flex items-center gap-3 rounded-xl px-3 py-3 text-base font-medium transition',
                     isActive
-                      ? 'bg-green-50 text-green-800'
-                      : 'text-ink-700 hover:bg-ink-100',
+                      ? 'bg-[rgba(212,255,36,0.12)] text-[#D4FF24]'
+                      : 'text-white/70 hover:bg-white/5 hover:text-white',
                   )
                 }
               >
@@ -243,17 +243,17 @@ export function Header() {
               </NavLink>
             ))}
 
-            <div className="my-2 h-px bg-ink-200" />
+            <div className="my-2 h-px bg-[rgba(21,88,201,0.3)]" />
 
             {isAuthenticated ? (
               <>
-                <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-ink-400">
+                <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-white/40">
                   Signed in as {user?.fullName}
                 </p>
                 {!isTutor ? (
                   <NavLink
                     to="/student/profile"
-                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-base font-medium text-ink-700 transition hover:bg-ink-100"
+                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-base font-medium text-white/70 transition hover:bg-white/5 hover:text-white"
                   >
                     <UserCircle className="h-5 w-5" aria-hidden="true" />
                     My profile

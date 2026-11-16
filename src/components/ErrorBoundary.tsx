@@ -13,10 +13,10 @@ interface ErrorBoundaryState {
 /** Shared fallback UI used by the router's `errorElement` and the boundary. */
 export function ErrorFallback() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-ink-50 p-6">
-      <div className="w-full max-w-lg rounded-card border border-ink-200 bg-white p-8 text-center shadow-card">
-        <h1 className="text-xl font-bold text-ink-900">Something went wrong</h1>
-        <p className="mt-2 text-sm text-ink-600">
+    <div className="flex min-h-screen items-center justify-center p-6" style={{ background: '#030407' }}>
+      <div className="w-full max-w-lg rounded-card border border-[rgba(21,88,201,0.3)] bg-[rgba(21,88,201,0.08)] p-8 text-center shadow-[0_18px_50px_-28px_rgba(0,0,0,0.85)]">
+        <h1 className="text-xl font-bold text-white">Something went wrong</h1>
+        <p className="mt-2 text-sm text-white/60">
           An unexpected error stopped the page from rendering. Reloading usually fixes it.
         </p>
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">

@@ -25,20 +25,20 @@ const ToastContext = createContext<ToastContextValue | null>(null);
 
 const TONE_STYLES: Record<ToastTone, { wrapper: string; icon: ReactNode }> = {
   success: {
-    wrapper: 'border-accent-200 bg-accent-50 text-accent-900',
-    icon: <CheckCircle2 className="h-5 w-5 text-accent-600" aria-hidden="true" />,
+    wrapper: 'border-[rgba(212,255,36,0.35)] bg-[#0d1526] text-white/85',
+    icon: <CheckCircle2 className="h-5 w-5 text-volt-400" aria-hidden="true" />,
   },
   error: {
-    wrapper: 'border-red-200 bg-red-50 text-red-900',
-    icon: <XCircle className="h-5 w-5 text-red-600" aria-hidden="true" />,
+    wrapper: 'border-[rgba(239,68,68,0.4)] bg-[#0d1526] text-white/85',
+    icon: <XCircle className="h-5 w-5 text-red-300" aria-hidden="true" />,
   },
   warning: {
-    wrapper: 'border-amber-200 bg-amber-50 text-amber-900',
-    icon: <AlertTriangle className="h-5 w-5 text-amber-600" aria-hidden="true" />,
+    wrapper: 'border-[rgba(251,191,36,0.35)] bg-[#0d1526] text-white/85',
+    icon: <AlertTriangle className="h-5 w-5 text-amber-300" aria-hidden="true" />,
   },
   info: {
-    wrapper: 'border-brand-200 bg-brand-50 text-brand-900',
-    icon: <Info className="h-5 w-5 text-brand-600" aria-hidden="true" />,
+    wrapper: 'border-[rgba(21,88,201,0.5)] bg-[#0d1526] text-white/85',
+    icon: <Info className="h-5 w-5 text-[#7eb3ff]" aria-hidden="true" />,
   },
 };
 
@@ -102,7 +102,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               <button
                 type="button"
                 onClick={() => dismiss(toast.id)}
-                className="shrink-0 rounded-md p-1 transition hover:bg-black/5"
+                className="shrink-0 rounded-md p-1 transition hover:bg-white/10"
                 aria-label="Dismiss notification"
               >
                 <X className="h-4 w-4" aria-hidden="true" />
